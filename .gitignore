@@ -2,14 +2,34 @@
 .env
 .env.*
 !.env.example
+*.pem
 
-# beroenden och byggen (Next.js-scaffold fyller på)
+# beroenden
 node_modules/
+/.pnp
+.pnp.*
+
+# byggen och cache
 .next/
 out/
+build/
 dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# test
+/coverage
 
 # diverse
 .DS_Store
 *.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# vercel
 .vercel
+
+# lokala verktygsinstallningar
+.claude/settings.local.json
