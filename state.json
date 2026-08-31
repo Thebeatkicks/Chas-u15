@@ -1,0 +1,18 @@
+{
+  "wave": 0,
+  "updated": "2026-08-31",
+  "packets": [
+    { "id": 1,  "owner": "henrik", "title": "Init repo + Next.js-scaffold", "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 2,  "owner": "henrik", "title": "Vercel-projekt + deploy",      "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 3,  "owner": "henrik", "title": "Wave 1-issues + projektbräda", "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 4,  "owner": "yasmin", "title": "Supabase-schema",              "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 5,  "owner": "yasmin", "title": "MDN-urval",                    "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 6,  "owner": "yasmin", "title": "Embedding-spike",              "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 7,  "owner": "fastuo", "title": "API-kontrakt /api/chat",       "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 8,  "owner": "fastuo", "title": "Mock-route",                   "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 9,  "owner": "fastuo", "title": "OpenRouter chat-spike",        "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 10, "owner": "ernest", "title": "UI-skiss",                     "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 11, "owner": "ernest", "title": "Chatkomponent mot mock",       "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 12, "owner": "ernest", "title": "Nivåväljare i request",        "lifecycle": "planned", "commit": null, "proof": null }
+  ]
+}

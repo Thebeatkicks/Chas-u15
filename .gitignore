@@ -1,0 +1,15 @@
+# hemligheter — repot är publikt, detta får ALDRIG committas
+.env
+.env.*
+!.env.example
+
+# beroenden och byggen (Next.js-scaffold fyller på)
+node_modules/
+.next/
+out/
+dist/
+
+# diverse
+.DS_Store
+*.log
+.vercel
