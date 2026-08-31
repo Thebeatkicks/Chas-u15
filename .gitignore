@@ -33,3 +33,5 @@ yarn-error.log*
 
 # lokala verktygsinstallningar
 .claude/settings.local.json
+
+.vercel
