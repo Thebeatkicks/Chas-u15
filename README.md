@@ -15,6 +15,10 @@ grundat i MDN:s dokumentation — med källhänvisningar.
 - **Supabase + pgvector** — vektorlagring och semantisk sökning (RAG)
 - **Data:** [MDN Web Docs](https://github.com/mdn/content) (CC-BY-SA 2.5) — kurerat urval av JavaScript-dokumentationen
 
+## Deploy
+
+Live på Vercel: https://chas-u15.vercel.app — auto-deploy från `main`.
+
 ## Kom igång
 
 ```bash
