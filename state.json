@@ -3,7 +3,7 @@
   "updated": "2026-08-31",
   "packets": [
     { "id": 1,  "owner": "henrik", "title": "Init repo + Next.js-scaffold", "lifecycle": "proven", "commit": "be9c0d4", "proof": "docs/handoffs/session-1-scaffold.md" },
-    { "id": 2,  "owner": "henrik", "title": "Vercel-projekt + deploy",      "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 2,  "owner": "henrik", "title": "Vercel-projekt + deploy",      "lifecycle": "proven", "commit": "89d09cb", "proof": "https://chas-u15.vercel.app (200, auto-deploy ~16s)" },
     { "id": 3,  "owner": "henrik", "title": "Wave 1-issues + projektbräda", "lifecycle": "planned", "commit": null, "proof": null },
     { "id": 4,  "owner": "yasmin", "title": "Supabase-schema",              "lifecycle": "planned", "commit": null, "proof": null },
     { "id": 5,  "owner": "yasmin", "title": "MDN-urval",                    "lifecycle": "planned", "commit": null, "proof": null },

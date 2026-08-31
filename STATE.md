@@ -16,8 +16,8 @@ Tailwind 4.3.3 · TS 5.9.3 · pnpm 10.12.2 · Node 24.13.1 · ingen `src/`-katal
 | Issue | Ägare | Lifecycle | Bevis |
 |---|---|---|---|
 | #1 scaffold | Henrik | **proven** | `be9c0d4`, rent klon → dev/build/lint OK, `docs/handoffs/session-1-scaffold.md` |
-| #2 Vercel-deploy | Henrik | planned | — |
-| #3 wave1-issues + bräda | Henrik | planned | — |
+| #2 Vercel-deploy | Henrik | **proven** | `89d09cb` → auto-deploy Ready ~16s, https://chas-u15.vercel.app = 200, `vercel env ls` visar 5 variabler |
+| #3 wave1-issues + bräda | Henrik | delvis | Bräda: https://github.com/users/Thebeatkicks/projects/2 · collaborators + nycklar klart · wave1-issues väntar på tis-handoffs |
 | #4 Supabase-schema | Yasmin | planned | — |
 | #5 MDN-urval | Yasmin | planned | — |
 | #6 embedding-spike | Yasmin | planned | — |
@@ -34,7 +34,8 @@ Tailwind 4.3.3 · TS 5.9.3 · pnpm 10.12.2 · Node 24.13.1 · ingen `src/`-katal
 - `main`-skyddet är tekniskt tvingande: medlemmars push avvisas med
   "Changes must be made through a pull request" — detta är förväntat, inte
   ett fel. Endast Henrik (admin) kan pusha direkt.
-- Projektbrädan väntar på `gh auth refresh -s project,read:project` (ingår i #3).
+- ~~Projektbrädan väntar på gh-scope~~ **Löst 31/8** — brädan finns (publik) med alla 12 issues.
+- Live-URL: https://chas-u15.vercel.app (auto-deploy från `main`).
 
 ## Beslut noterade från #1 (kandidater till PLAN.md §3 vid wave-slut)
 
