@@ -35,8 +35,9 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 
 ## Kända blockeringar
 
-- **#6 väntar på `SUPABASE_SERVICE_ROLE_KEY`** (Yasmin delar → Henrik lägger i
-  Vercel). Enda kvarvarande grind-punkten; allt annat är oblockerat.
+- Inga. ~~Service role-nyckeln~~ **Löst ons 3/9**: nyckeln ligger i Vercel
+  (Production + Preview) och alla fyra startprompts är utskickade —
+  wave-open-grinden är passerad, alla spår rullar.
 
 ## Wave-gräns-integration (orchestratorns lista, tors kväll)
 
