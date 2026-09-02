@@ -20,11 +20,11 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 
 | Issue | Ägare | Lifecycle | Not |
 |---|---|---|---|
-| #6 embedding-spike (c/o) | Yasmin | planned | **GRIND: service role-nyckel — Henrik jagar** |
+| #6 embedding-spike (c/o) | Yasmin | **proven** | PR #27 (`57e2f6e`), match_documents rankar rätt, similarity 0.4220 |
 | #17 ingestion 528 | Yasmin | planned | efter #6 |
 | #18 retrieval-sanity | Yasmin | planned | efter #17 |
-| #9 chat-spike (c/o) | Fastuo | planned | oblockerad |
-| #19 riktig RAG-route | Fastuo | planned | efter #9; utvecklas mot #6:s testrader |
+| #9 chat-spike (c/o) | Fastuo | **proven** | PR #25 (`5a8c4d9`), streaming verifierad, "förklara-inte-lösa" demonstrerad |
+| #19 riktig RAG-route | Fastuo | planned | ⚠️ similarity_threshold: rätt träff = 0.42 — sätt 0.0–0.2 (kommentar i issuen) |
 | #20 system-prompts | Fastuo | planned | efter #19 |
 | #11 chatkomponent (c/o) | Ernest | planned | oblockerad — mocken på main (`fc490e5`) |
 | #12 nivåväljare (c/o) | Ernest | planned | efter #11; skicka "beginner", inte "nybörjare" |
@@ -54,3 +54,10 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 ## Nästa reconciliation
 
 Tors 4/9 kväll: wave-slut, smoke-test, wave 2 planeras (fre + mån).
+
+## Kända egenheter (inte blockerande)
+
+- `npx tsc --noEmit` på main klagar på `LayoutProps` tills en build körts
+  (Next 16 genererar typerna) — kör `pnpm build` först. Vercel-byggen påverkas ej.
+- Node varnar `MODULE_TYPELESS_PACKAGE_JSON` vid spike-scripten; `"type": "module"`
+  i package.json vore fixen men rörs inte utan Henrik (kan påverka bygget).
