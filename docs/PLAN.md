@@ -64,6 +64,25 @@ Browser ──► Next.js /api/chat ── embedding av frågan ┘
    sparas som `docs/handoffs/wave-N-<namn>.md` i en PR).
 5. Henrik reconcilar alla handoffs, mergar, löser knutar, öppnar nästa wave.
 
+### Sveprincipen (regel från wave 1, beslutad ons 3/9 efter wave 0-lärdom)
+
+En wave ska gå att **bränna av i ett svep**, oavsett när på dygnet man jobbar:
+
+1. **Wave-open-grind (orchestratorns ansvar):** innan startprompterna skickas
+   ska ALLT en person behöver för ALLA sina issues finnas — nycklar delade och
+   i Vercel, paket installerade, kontrakt/stubbar mergade på `main`. En wave
+   med odelade nycklar eller ommergade beroenden får inte öppnas.
+2. **Vertikala spår:** inom en wave får en persons issues bara bero på
+   (a) det som låg på `main` när waven öppnade, och (b) personens egna
+   tidigare issues. Beroenden MELLAN personer läggs alltid på wave-gränsen —
+   aldrig inuti en wave.
+3. **Integration sker på wave-gränsen:** orchestratorn mergar, integrerar och
+   löser krockar mellan spåren vid reconciliation — inte personerna mitt i.
+4. **Reviews blockerar aldrig flödet:** öppna PR:en, pinga en namngiven
+   reviewer i gruppkanalen, och **börja direkt på nästa issue** (stacka på
+   egen branch om den bygger på din väntande PR — båda PR:arna mot `main`).
+   Orchestratorn är fallback-reviewer med en halv dags SLA.
+
 ### Git-regler
 - Feature-branch per issue → PR mot `main` → **minst en review av annan
   gruppmedlem** → merge. Endast Henrik har direktpush.
