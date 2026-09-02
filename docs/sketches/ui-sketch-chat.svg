@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" role="img" aria-labelledby="title-chat">
+  <title id="title-chat">JS Sensei &#8212; chatt med k&#228;llor</title>
+  <rect width="720" height="960" fill="#f4f1ea"/>
+  <text x="24" y="36" fill="#6b7280" font-family="Georgia, serif" font-size="13">Samma skal &#8212; nu med konversation</text>
+
+  <rect x="48" y="52" width="624" height="860" rx="20" fill="#fffef9" stroke="#1f2937" stroke-width="2"/>
+
+  <rect x="48" y="52" width="624" height="88" rx="20" fill="#fffef9"/>
+  <rect x="48" y="120" width="624" height="20" fill="#fffef9"/>
+  <line x1="48" y1="140" x2="672" y2="140" stroke="#e5e7eb"/>
+  <text x="72" y="88" fill="#111827" font-family="Georgia, serif" font-size="26">JS Sensei</text>
+  <text x="72" y="110" fill="#6b7280" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">F&#246;rklarar, l&#246;ser inte</text>
+
+  <rect x="368" y="78" width="272" height="36" rx="18" fill="#f3f4f6" stroke="#d1d5db"/>
+  <text x="414" y="101" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">Nyb&#246;rjare</text>
+  <rect x="458" y="80" width="88" height="32" rx="16" fill="#0f766e"/>
+  <text x="502" y="101" text-anchor="middle" fill="#ffffff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600">Student</text>
+  <text x="596" y="101" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">Utvecklare</text>
+
+  <text x="80" y="176" fill="#6b7280" font-family="Georgia, serif" font-size="13">D &#183; Anv&#228;ndarbubbla (h&#246;ger)</text>
+  <rect x="318" y="190" width="322" height="52" rx="18" fill="#d1fae5"/>
+  <text x="338" y="222" fill="#064e3b" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Vad &#228;r en closure i JavaScript?</text>
+
+  <text x="80" y="278" fill="#6b7280" font-family="Georgia, serif" font-size="13">E &#183; Svar + k&#228;llor under</text>
+  <text x="80" y="312" fill="#111827" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="600">En closure minns sin omgivning</text>
+  <text x="80" y="336" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">En funktion som kommer ih&#229;g variabler fr&#229;n</text>
+  <text x="80" y="354" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">scope:et d&#228;r den skapades, &#228;ven efter att den</text>
+  <text x="80" y="372" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">yttre funktionen har returnerat.</text>
+  <rect x="80" y="388" width="420" height="56" rx="10" fill="#111827"/>
+  <text x="96" y="412" fill="#86efac" font-family="ui-monospace, Consolas, monospace" font-size="12">function yttre() {</text>
+  <text x="96" y="430" fill="#d1d5db" font-family="ui-monospace, Consolas, monospace" font-size="12">  const hemlighet = 42; return () =&gt; hemlighet;</text>
+  <text x="80" y="468" fill="#6b7280" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600">K&#196;LLOR</text>
+  <rect x="80" y="478" width="132" height="26" rx="13" fill="#fff" stroke="#0f766e"/>
+  <text x="146" y="496" text-anchor="middle" fill="#0f766e" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">MDN &#183; Closures</text>
+  <rect x="220" y="478" width="138" height="26" rx="13" fill="#fff" stroke="#0f766e"/>
+  <text x="289" y="496" text-anchor="middle" fill="#0f766e" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">MDN &#183; Functions</text>
+
+  <text x="80" y="544" fill="#6b7280" font-family="Georgia, serif" font-size="13">F &#183; Streaming &#8212; k&#228;llor n&#228;r svaret &#228;r klart</text>
+  <rect x="318" y="558" width="322" height="44" rx="18" fill="#d1fae5"/>
+  <text x="338" y="586" fill="#064e3b" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Kan du visa ett litet exempel?</text>
+  <text x="80" y="630" fill="#111827" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Ett vanligt m&#246;nster &#228;r en r&#228;knare som</text>
+  <text x="80" y="650" fill="#111827" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">kapslar in sitt tillst&#229;nd&#8230; &#9612;</text>
+
+  <text x="80" y="790" fill="#6b7280" font-family="Georgia, serif" font-size="13">C &#183; Input (alltid l&#228;ngst ner)</text>
+  <rect x="72" y="808" width="480" height="48" rx="24" fill="#fff" stroke="#d1d5db"/>
+  <text x="96" y="838" fill="#9ca3af" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Fr&#229;ga om JavaScript&#8230;</text>
+  <circle cx="612" cy="832" r="24" fill="#0f766e"/>
+  <path d="M602 832 L612 822 L622 832 L612 826 Z" fill="#fff"/>
+  <text x="360" y="888" text-anchor="middle" fill="#9ca3af" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">K&#228;llor: MDN Web Docs &#183; CC-BY-SA</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 960" role="img" aria-labelledby="title-empty">
+  <title id="title-empty">JS Sensei &#8212; tomt l&#228;ge</title>
+  <rect width="720" height="960" fill="#f4f1ea"/>
+  <text x="24" y="36" fill="#6b7280" font-family="Georgia, serif" font-size="13">A &#183; Header + niv&#229;v&#228;ljare</text>
+
+  <rect x="48" y="52" width="624" height="860" rx="20" fill="#fffef9" stroke="#1f2937" stroke-width="2"/>
+
+  <rect x="48" y="52" width="624" height="88" rx="20" fill="#fffef9"/>
+  <rect x="48" y="120" width="624" height="20" fill="#fffef9"/>
+  <line x1="48" y1="140" x2="672" y2="140" stroke="#e5e7eb"/>
+  <text x="72" y="88" fill="#111827" font-family="Georgia, serif" font-size="26">JS Sensei</text>
+  <text x="72" y="110" fill="#6b7280" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">F&#246;rklarar, l&#246;ser inte</text>
+
+  <rect x="368" y="78" width="272" height="36" rx="18" fill="#f3f4f6" stroke="#d1d5db"/>
+  <rect x="370" y="80" width="88" height="32" rx="16" fill="#0f766e"/>
+  <text x="414" y="101" text-anchor="middle" fill="#ffffff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="600">Nyb&#246;rjare</text>
+  <text x="504" y="101" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">Student</text>
+  <text x="596" y="101" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">Utvecklare</text>
+
+  <text x="80" y="188" fill="#6b7280" font-family="Georgia, serif" font-size="13">B &#183; Tomt l&#228;ge</text>
+  <circle cx="360" cy="360" r="36" fill="#ecfdf5" stroke="#0f766e" stroke-width="2"/>
+  <text x="360" y="368" text-anchor="middle" fill="#0f766e" font-family="Georgia, serif" font-size="28">JS</text>
+  <text x="360" y="430" text-anchor="middle" fill="#111827" font-family="Georgia, serif" font-size="28">St&#228;ll din f&#246;rsta fr&#229;ga</text>
+  <text x="360" y="458" text-anchor="middle" fill="#4b5563" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">V&#228;lj niv&#229; ovan. Jag f&#246;rklarar JavaScript med MDN</text>
+  <text x="360" y="478" text-anchor="middle" fill="#4b5563" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">som k&#228;lla &#8212; jag skriver inte f&#228;rdig kod &#229;t dig.</text>
+
+  <rect x="118" y="508" width="156" height="32" rx="16" fill="#fff" stroke="#d1d5db"/>
+  <text x="196" y="529" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Vad &#228;r en closure?</text>
+  <rect x="286" y="508" width="168" height="32" rx="16" fill="#fff" stroke="#d1d5db"/>
+  <text x="370" y="529" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Skillnad let vs const</text>
+  <rect x="466" y="508" width="148" height="32" rx="16" fill="#fff" stroke="#d1d5db"/>
+  <text x="540" y="529" text-anchor="middle" fill="#374151" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Hur fungerar map()?</text>
+
+  <text x="80" y="790" fill="#6b7280" font-family="Georgia, serif" font-size="13">C &#183; Input</text>
+  <rect x="72" y="808" width="480" height="48" rx="24" fill="#fff" stroke="#d1d5db"/>
+  <text x="96" y="838" fill="#9ca3af" font-family="ui-sans-serif, system-ui, sans-serif" font-size="14">Fr&#229;ga om JavaScript&#8230;</text>
+  <circle cx="612" cy="832" r="24" fill="#0f766e"/>
+  <path d="M602 832 L612 822 L622 832 L612 826 Z" fill="#fff"/>
+  <text x="360" y="888" text-anchor="middle" fill="#9ca3af" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11">K&#228;llor: MDN Web Docs &#183; CC-BY-SA</text>
+</svg>
