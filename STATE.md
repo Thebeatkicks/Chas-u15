@@ -31,7 +31,7 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 | #21 UI mot riktig route | Ernest | planned | efter #12; ska kräva NOLL kodändring |
 | #22 tomt läge + chips | Ernest | planned | efter #21 |
 | #23 smoke-test + live | Henrik | **del A proven** | `9803bf6`: checklista + mock-detektor på main, §4-felfall körda mot live; del B (körningen) tors kväll → `docs/smoke-runs/wave-1.md` |
-| #24 README-reflektion v1 | Henrik | **klar, väntar merge** | PR #26 faktakontrollerad; kräver Henriks merge-klick (självgodkännande + admin-merge via CLI blockerat) |
+| #24 README-reflektion v1 | Henrik | **proven** | PR #26 mergad (`f51b14e`), faktakontrollerad mot källdokumenten |
 
 ## Kända blockeringar
 
