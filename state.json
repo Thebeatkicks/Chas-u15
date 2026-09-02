@@ -1,102 +1,19 @@
 {
-  "wave": 0,
-  "updated": "2026-09-01",
+  "wave": 1,
+  "updated": "2026-09-03",
+  "archive": "docs/state-archive/wave-0.md",
   "packets": [
-    {
-      "id": 1,
-      "owner": "henrik",
-      "title": "Init repo + Next.js-scaffold",
-      "lifecycle": "proven",
-      "commit": "be9c0d4",
-      "proof": "docs/handoffs/session-1-scaffold.md"
-    },
-    {
-      "id": 2,
-      "owner": "henrik",
-      "title": "Vercel-projekt + deploy",
-      "lifecycle": "proven",
-      "commit": "89d09cb",
-      "proof": "https://chas-u15.vercel.app (200, auto-deploy ~16s)"
-    },
-    {
-      "id": 3,
-      "owner": "henrik",
-      "title": "Wave 1-issues + projektbräda",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    },
-    {
-      "id": 4,
-      "owner": "yasmin",
-      "title": "Supabase-schema",
-      "lifecycle": "proven",
-      "commit": "a9d2da5",
-      "proof": "PR #15, självtest similarity 1.0"
-    },
-    {
-      "id": 5,
-      "owner": "yasmin",
-      "title": "MDN-urval",
-      "lifecycle": "proven",
-      "commit": "907d0b9",
-      "proof": "PR #14, 528 sidor + script"
-    },
-    {
-      "id": 6,
-      "owner": "yasmin",
-      "title": "Embedding-spike",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    },
-    {
-      "id": 7,
-      "owner": "fastuo",
-      "title": "API-kontrakt /api/chat",
-      "lifecycle": "proven",
-      "commit": "f9cff5c",
-      "proof": "PR #16, verifierat mot readUIMessageStream"
-    },
-    {
-      "id": 8,
-      "owner": "fastuo",
-      "title": "Mock-route",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    },
-    {
-      "id": 9,
-      "owner": "fastuo",
-      "title": "OpenRouter chat-spike",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    },
-    {
-      "id": 10,
-      "owner": "ernest",
-      "title": "UI-skiss",
-      "lifecycle": "proven",
-      "commit": "3ed9658",
-      "proof": "PR #13, skiss + kanonisk copy"
-    },
-    {
-      "id": 11,
-      "owner": "ernest",
-      "title": "Chatkomponent mot mock",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    },
-    {
-      "id": 12,
-      "owner": "ernest",
-      "title": "Nivåväljare i request",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
-    }
+    { "id": 6,  "owner": "yasmin", "title": "Embedding-spike (carry-over)",   "lifecycle": "planned", "commit": null, "proof": null, "note": "GRIND: service role-nyckel" },
+    { "id": 17, "owner": "yasmin", "title": "Ingestion v1 — 528 sidor",       "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 18, "owner": "yasmin", "title": "Retrieval-sanity 10 frågor",     "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 9,  "owner": "fastuo", "title": "OpenRouter chat-spike (c/o)",    "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 19, "owner": "fastuo", "title": "Riktig RAG-route",               "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 20, "owner": "fastuo", "title": "System-prompts per nivå",        "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 11, "owner": "ernest", "title": "Chatkomponent mot mock (c/o)",   "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 12, "owner": "ernest", "title": "Nivåväljare i request (c/o)",    "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 21, "owner": "ernest", "title": "UI mot riktig route + källchips","lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 22, "owner": "ernest", "title": "Tomt läge + förslagschips",      "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 23, "owner": "henrik", "title": "Smoke-test + live-verifiering",  "lifecycle": "planned", "commit": null, "proof": null },
+    { "id": 24, "owner": "henrik", "title": "README-reflektion v1",           "lifecycle": "planned", "commit": null, "proof": null }
   ]
 }
