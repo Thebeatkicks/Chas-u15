@@ -30,14 +30,20 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 | #12 nivåväljare (c/o) | Ernest | planned | efter #11; skicka "beginner", inte "nybörjare" |
 | #21 UI mot riktig route | Ernest | planned | efter #12; ska kräva NOLL kodändring |
 | #22 tomt läge + chips | Ernest | planned | efter #21 |
-| #23 smoke-test + live | Henrik | planned | grind för wavens proven |
-| #24 README-reflektion v1 | Henrik | planned | — |
+| #23 smoke-test + live | Henrik | **del A proven** | `9803bf6`: checklista + mock-detektor på main, §4-felfall körda mot live; del B (körningen) tors kväll → `docs/smoke-runs/wave-1.md` |
+| #24 README-reflektion v1 | Henrik | **klar, väntar merge** | PR #26 faktakontrollerad; kräver Henriks merge-klick (självgodkännande + admin-merge via CLI blockerat) |
 
 ## Kända blockeringar
 
 - Inga. ~~Service role-nyckeln~~ **Löst ons 3/9**: nyckeln ligger i Vercel
   (Production + Preview) och alla fyra startprompts är utskickade —
   wave-open-grinden är passerad, alla spår rullar.
+
+## Wave 2-kandidater (upptäckta under wave 1)
+
+- Kontraktsförtydligande §6: 405 kommer från Next utan JSON-kropp
+  (routen exporterar bara POST) — statuskod är krav, felkroppen önskvärd.
+- Mock-detektorn i smoke-test §0 kan tas bort när mocken pensioneras.
 
 ## Wave-gräns-integration (orchestratorns lista, tors kväll)
 
