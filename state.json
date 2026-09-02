@@ -1,19 +1,104 @@
 {
   "wave": 1,
-  "updated": "2026-09-03",
+  "updated": "2026-09-02",
   "archive": "docs/state-archive/wave-0.md",
   "packets": [
-    { "id": 6,  "owner": "yasmin", "title": "Embedding-spike (carry-over)",   "lifecycle": "planned", "commit": null, "proof": null, "note": "GRIND: service role-nyckel" },
-    { "id": 17, "owner": "yasmin", "title": "Ingestion v1 — 528 sidor",       "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 18, "owner": "yasmin", "title": "Retrieval-sanity 10 frågor",     "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 9,  "owner": "fastuo", "title": "OpenRouter chat-spike (c/o)",    "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 19, "owner": "fastuo", "title": "Riktig RAG-route",               "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 20, "owner": "fastuo", "title": "System-prompts per nivå",        "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 11, "owner": "ernest", "title": "Chatkomponent mot mock (c/o)",   "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 12, "owner": "ernest", "title": "Nivåväljare i request (c/o)",    "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 21, "owner": "ernest", "title": "UI mot riktig route + källchips","lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 22, "owner": "ernest", "title": "Tomt läge + förslagschips",      "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 23, "owner": "henrik", "title": "Smoke-test + live-verifiering",  "lifecycle": "planned", "commit": null, "proof": null },
-    { "id": 24, "owner": "henrik", "title": "README-reflektion v1",           "lifecycle": "planned", "commit": null, "proof": null }
+    {
+      "id": 6,
+      "owner": "yasmin",
+      "title": "Embedding-spike (carry-over)",
+      "lifecycle": "proven",
+      "commit": "57e2f6e",
+      "proof": "PR #27, match_documents rankar rätt, similarity 0.4220",
+      "note": "GRIND: service role-nyckel"
+    },
+    {
+      "id": 17,
+      "owner": "yasmin",
+      "title": "Ingestion v1 — 528 sidor",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 18,
+      "owner": "yasmin",
+      "title": "Retrieval-sanity 10 frågor",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 9,
+      "owner": "fastuo",
+      "title": "OpenRouter chat-spike (c/o)",
+      "lifecycle": "proven",
+      "commit": "5a8c4d9",
+      "proof": "PR #25, streaming + förklara-inte-lösa demonstrerat"
+    },
+    {
+      "id": 19,
+      "owner": "fastuo",
+      "title": "Riktig RAG-route",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 20,
+      "owner": "fastuo",
+      "title": "System-prompts per nivå",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 11,
+      "owner": "ernest",
+      "title": "Chatkomponent mot mock (c/o)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 12,
+      "owner": "ernest",
+      "title": "Nivåväljare i request (c/o)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 21,
+      "owner": "ernest",
+      "title": "UI mot riktig route + källchips",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 22,
+      "owner": "ernest",
+      "title": "Tomt läge + förslagschips",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 23,
+      "owner": "henrik",
+      "title": "Smoke-test + live-verifiering",
+      "lifecycle": "del A proven",
+      "commit": null,
+      "proof": "del A: 9803bf6 checklista+mock-detektor; del B tors kväll"
+    },
+    {
+      "id": 24,
+      "owner": "henrik",
+      "title": "README-reflektion v1",
+      "lifecycle": "proven",
+      "commit": "f51b14e",
+      "proof": "PR #26 mergad"
+    }
   ]
 }
