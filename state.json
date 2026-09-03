@@ -1,6 +1,6 @@
 {
   "wave": 1,
-  "updated": "2026-09-02",
+  "updated": "2026-09-03",
   "archive": "docs/state-archive/wave-0.md",
   "packets": [
     {
@@ -16,17 +16,17 @@
       "id": 17,
       "owner": "yasmin",
       "title": "Ingestion v1 — 528 sidor",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "09358bd",
+      "proof": "PR #30, körlogg 528 sidor"
     },
     {
       "id": 18,
       "owner": "yasmin",
       "title": "Retrieval-sanity 10 frågor",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "d5e359a",
+      "proof": "PR #31, baseline 6/10 + gap-analys"
     },
     {
       "id": 9,
@@ -40,9 +40,9 @@
       "id": 19,
       "owner": "fastuo",
       "title": "Riktig RAG-route",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "b53552e",
+      "proof": "PR #34 + live-verifierad, smoke-runs/wave-1.md"
     },
     {
       "id": 20,
@@ -56,41 +56,41 @@
       "id": 11,
       "owner": "ernest",
       "title": "Chatkomponent mot mock (c/o)",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28"
     },
     {
       "id": 12,
       "owner": "ernest",
       "title": "Nivåväljare i request (c/o)",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28, 400-fällan verifierad"
     },
     {
       "id": 21,
       "owner": "ernest",
       "title": "UI mot riktig route + källchips",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "b53552e",
+      "proof": "noll-ändringskoll live OK"
     },
     {
       "id": 22,
       "owner": "ernest",
       "title": "Tomt läge + förslagschips",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28, kanonisk copy"
     },
     {
       "id": 23,
       "owner": "henrik",
       "title": "Smoke-test + live-verifiering",
-      "lifecycle": "del A proven",
-      "commit": null,
-      "proof": "del A: 9803bf6 checklista+mock-detektor; del B tors kväll"
+      "lifecycle": "proven",
+      "commit": "9803bf6",
+      "proof": "smoke-runs/wave-1.md GODKÄND"
     },
     {
       "id": 24,
