@@ -13,7 +13,7 @@ export function SourceChips({ message }: { message: UIMessage }) {
 
   return (
     <div className="mt-3">
-      <p className="mb-1.5 text-[11px] font-semibold tracking-wide text-zinc-500 uppercase">
+      <p className="mb-1.5 text-[11px] font-semibold tracking-[0.16em] text-[var(--ink-soft)] uppercase">
         Källor
       </p>
       <ul className="flex flex-wrap gap-2">
@@ -23,7 +23,7 @@ export function SourceChips({ message }: { message: UIMessage }) {
               href={part.url}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex rounded-full border border-teal-700 px-2.5 py-1 text-xs text-teal-800 hover:bg-teal-50"
+              className="inline-flex rounded-full border border-[var(--seal)]/70 bg-[var(--paper-raised)] px-2.5 py-1 text-xs text-[var(--seal-deep)] hover:bg-[#f3e2d6]"
             >
               {part.title ?? part.url}
             </a>

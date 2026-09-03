@@ -3,7 +3,7 @@ export const COPY = {
   tagline: "Förklarar, löser inte",
   emptyTitle: "Ställ din första fråga",
   emptyBody:
-    "Välj nivå ovan. Jag förklarar JavaScript med MDN som källa — jag skriver inte färdig kod åt dig.",
+    "Din nivå syns alltid uppe till höger. Jag förklarar JavaScript med MDN som källa — jag skriver inte färdig kod åt dig.",
   suggestions: [
     "Vad är en closure?",
     "Skillnad let vs const",
@@ -13,5 +13,5 @@ export const COPY = {
   sourcesLabel: "Källor",
   footer: "Källor: MDN Web Docs · CC-BY-SA",
   send: "Skicka",
-  streaming: "Skriver…",
+  streaming: "Sensei skriver…",
 } as const;

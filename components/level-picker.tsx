@@ -9,7 +9,7 @@ export function LevelPicker({
 }) {
   return (
     <div
-      className="flex rounded-full bg-zinc-100 p-0.5 ring-1 ring-zinc-200"
+      className="flex rounded-full bg-[var(--paper-deep)] p-0.5 ring-1 ring-[var(--line)]"
       role="radiogroup"
       aria-label="Nivå"
     >
@@ -24,8 +24,8 @@ export function LevelPicker({
             onClick={() => onChange(level.id)}
             className={
               selected
-                ? "rounded-full bg-teal-700 px-2.5 py-1.5 text-xs font-semibold text-white sm:px-3"
-                : "rounded-full px-2.5 py-1.5 text-xs text-zinc-600 hover:text-zinc-900 sm:px-3"
+                ? "rounded-full bg-[var(--seal)] px-2.5 py-1.5 text-xs font-semibold text-[var(--paper-raised)] sm:px-3"
+                : "rounded-full px-2.5 py-1.5 text-xs text-[var(--ink-soft)] hover:text-[var(--ink)] sm:px-3"
             }
           >
             {level.label}

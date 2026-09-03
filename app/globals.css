@@ -1,8 +1,20 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f6f2;
-  --foreground: #18181b;
+  --ink: #16130f;
+  --ink-soft: #4a4036;
+  --paper: #efe7d6;
+  --paper-raised: #f7f1e4;
+  --paper-deep: #e4d8c2;
+  --seal: #9a3412;
+  --seal-deep: #7c2d12;
+  --moss: #2f4a3c;
+  --line: #d4c6ad;
+  --gold: #b8954c;
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --nav-collapsed: 56px;
+  --nav-expanded: 220px;
   color-scheme: light;
 }
 
@@ -11,10 +23,43 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-newsreader);
+}
+
+html,
+body,
+#__next {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #fbf6ea 0%, transparent 50%),
+    radial-gradient(900px 500px at 110% 10%, #e8dcc4 0%, transparent 45%),
+    var(--paper);
+  color: var(--ink);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  overflow: hidden;
 }
+
+.font-serif {
+  font-family: var(--font-newsreader), Georgia, serif;
+}
+
+::selection {
+  background: #e8c4b0;
+  color: var(--ink);
+}
+
+textarea {
+  field-sizing: content;
+}
+
+@keyframes caret-blink {
+  50% { opacity: 0; }
+}
+
+.sensei-caret {
+  animation: caret-blink 1s step-end infinite;
+}
+
