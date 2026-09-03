@@ -1,56 +1,56 @@
 /**
- * POST /api/chat — MOCK-implementation (wave 0/1, issue #8).
+ * POST /api/chat — riktig RAG-implementation (wave 1, issue #19).
  *
- * Följer docs/api-contract.md till punkt och pricka: samma request-validering,
- * samma streamformat (AI SDK UI Message Stream v1 över SSE) och samma
- * felkoder som den riktiga RAG-routen kommer ha. Frontenden (#11/#12) byggs
- * mot den här routen och ska inte behöva ändras när riktig RAG (wave 1)
- * byts in — det är kontraktets hela poäng.
+ * Ersätter mock-routen från #8. Kontraktet i `docs/api-contract.md` är
+ * OFÖRÄNDRAT (§9): samma request-validering, samma streamformat, samma
+ * felkoder, samma källformat. Frontenden (#21) ska inte behöva en enda
+ * kodändring — det är hela poängen med kontraktet.
  *
- * Streamen är handskriven (inte via `streamText`) med flit: mocken har ingen
- * modell att streama ifrån, och genom att skriva händelserna själva vet vi
- * att wire-formatet i kontraktets §4 faktiskt är det vi levererar.
+ * Kedjan: fråga → embedding → match_documents (pgvector) → kontext →
+ * streamText mot OpenRouter → source-url-händelser ur träffarnas metadata.
+ *
+ * Streamen skrivs för hand i stället för via `toUIMessageStreamResponse()`.
+ * Skälet är ordningen: kontraktets §5 kräver att källorna skickas EFTER
+ * `text-end` men FÖRE `finish`, så att de inte finns i `message.parts` medan
+ * texten strömmar (Ernests designbeslut 5). Med handskriven stream har vi
+ * exakt kontroll över den ordningen, och wire-formatet är detsamma som
+ * mocken levererade och som §4 specificerar.
  */
+import { streamText } from 'ai';
+import { getChatModel } from '@/lib/ai/openrouter';
+import { embedQuery, matchDocuments, toSources, type Match } from '@/lib/ai/retrieval';
 
 type Level = 'beginner' | 'student' | 'developer';
 
 const LEVELS: readonly Level[] = ['beginner', 'student', 'developer'] as const;
 
 /**
- * Mocksvaret varierar med nivån så att nivåväljaren (#12) går att verifiera
- * i UI:t utan riktig LLM: byt nivå → skicka samma fråga → få annan ton.
+ * Minimal nivåstyrning. De genomarbetade, versionerade prompterna per nivå
+ * byggs i #20 tillsammans med `docs/prompt-design.md` — den här raden finns
+ * bara för att inte tappa nivåbeteendet som mocken hade.
  */
-const MOCK_ANSWERS: Record<Level, string> = {
-  beginner:
-    '(mock · nybörjare) Tänk dig en ryggsäck: när en funktion skapas packar den ner ' +
-    'variablerna som fanns runt omkring den. En closure är funktionen plus den ryggsäcken — ' +
-    'den kan öppna ryggsäcken och använda variablerna långt senare, även när stället den ' +
-    'skapades på inte längre körs. Vill du att jag förklarar något steg långsammare?',
-  student:
-    '(mock · student) En closure är en funktion tillsammans med sitt lexikala scope: ' +
-    'funktionen behåller referenser till variabler från det yttre scope där den definierades, ' +
-    'även efter att den yttre funktionen har returnerat. Det är därför en callback kan läsa ' +
-    'variabler från sin omgivning. Fundera på: vad händer med en let-variabel i en loop?',
-  developer:
-    '(mock · utvecklare) Closures = funktionsvärde + captured environment record. Varje anrop ' +
-    'av den yttre funktionen skapar en ny environment record, så två closures från samma ' +
-    'fabrik delar ingenting. Vanliga fallgropar: loop-variabler med var (delad record) och ' +
-    'oavsiktlig retention av stora objekt via fångade referenser.',
+const LEVEL_HINT: Record<Level, string> = {
+  beginner: 'Användaren är nybörjare: undvik jargong, använd vardagliga liknelser.',
+  student: 'Användaren är student: använd korrekta termer och förklara dem.',
+  developer: 'Användaren är erfaren utvecklare: var precis och teknisk, hoppa över grunderna.',
 };
 
-/** Fejkkällor enligt kontraktets §5 — riktiga MDN-URL:er men statiskt valda. */
-const MOCK_SOURCES = [
-  {
-    sourceId: 'mdn-closures',
-    url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures',
-    title: 'Closures — MDN',
-  },
-  {
-    sourceId: 'mdn-scope',
-    url: 'https://developer.mozilla.org/en-US/docs/Glossary/Scope',
-    title: 'Scope — MDN',
-  },
-] as const;
+function systemPrompt(level: Level, context: string): string {
+  return [
+    'Du är JS Sensei, en lärarassistent för JavaScript.',
+    'Du FÖRKLARAR — du löser inte uppgifter åt användaren.',
+    'Om någon ber dig skriva färdig kod som löser deras uppgift: skriv den inte.',
+    'Förklara i stället begreppen som behövs och ställ en fråga som leder dem vidare.',
+    'Korta kodexempel som illustrerar ett begrepp är tillåtna — färdiga lösningar är det inte.',
+    LEVEL_HINT[level],
+    'Grunda svaret i utdragen från MDN nedan. Står svaret inte där: säg det',
+    'hellre än att gissa.',
+    'Svara på svenska.',
+    '',
+    '--- MDN-utdrag ---',
+    context || '(inga träffar — säg att du saknar underlag för just den frågan)',
+  ].join(' ');
+}
 
 /** Felsvar innan streamen börjat — vanlig JSON, kontraktets §6. */
 function jsonError(status: number, code: string, message: string): Response {
@@ -58,7 +58,7 @@ function jsonError(status: number, code: string, message: string): Response {
 }
 
 export async function POST(req: Request): Promise<Response> {
-  // --- Validering enligt kontraktets §2–§3 ---
+  // --- Validering enligt kontraktets §2–§3 (oförändrad från mocken) ---
   let body: unknown;
   try {
     body = await req.json();
@@ -72,8 +72,6 @@ export async function POST(req: Request): Promise<Response> {
     return jsonError(400, 'invalid_body', 'messages is required and must be non-empty');
   }
 
-  // level saknas → beginner (medvetet, se §3: låter #11 byggas före #12).
-  // level med ogiltigt värde → 400, felstavningar ska synas direkt.
   let lvl: Level = 'beginner';
   if (level !== undefined && level !== null) {
     if (typeof level !== 'string' || !LEVELS.includes(level as Level)) {
@@ -82,10 +80,36 @@ export async function POST(req: Request): Promise<Response> {
     lvl = level as Level;
   }
 
-  // --- Streamat svar enligt kontraktets §4 (UI Message Stream v1 / SSE) ---
+  // Frågan ligger i parts[], inte i content — se kontraktets §2.
+  const last = messages.at(-1) as { parts?: Array<{ type: string; text?: string }> } | undefined;
+  const question = last?.parts?.find((p) => p.type === 'text')?.text?.trim();
+
+  if (!question) {
+    return jsonError(400, 'invalid_body', 'last message must contain a text part');
+  }
+
+  // --- Retrieval. Sker före streamen, så fel här kan fortfarande bli
+  //     riktiga statuskoder (§6) i stället för ett fel mitt i strömmen. ---
+  let matches: Match[];
+  try {
+    matches = await matchDocuments(await embedQuery(question));
+  } catch (error) {
+    console.error('[chat] retrieval misslyckades:', error);
+    const isEmbedding = error instanceof Error && error.message.includes('Embedding');
+    return isEmbedding
+      ? jsonError(502, 'model_error', 'Kunde inte nå embedding-modellen.')
+      : jsonError(500, 'internal_error', 'Kunde inte söka i dokumentationen.');
+  }
+
+  const context = matches
+    .map((m) => `## ${m.metadata.title} (${m.metadata.url})\n${m.content}`)
+    .join('\n\n');
+
+  const sources = toSources(matches);
+
+  // --- Streamat svar enligt kontraktets §4 ---
   const encoder = new TextEncoder();
-  // Splitta på ordgräns med behållna mellanslag → deltas som känns som streaming.
-  const deltas = MOCK_ANSWERS[lvl].match(/\S+\s*/g) ?? [MOCK_ANSWERS[lvl]];
+  const { model } = getChatModel();
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
@@ -95,19 +119,31 @@ export async function POST(req: Request): Promise<Response> {
       send({ type: 'start' });
       send({ type: 'start-step' });
       send({ type: 'text-start', id: '0' });
-      for (const delta of deltas) {
-        send({ type: 'text-delta', id: '0', delta });
-        // Liten paus per ord så streamingen är synlig i UI:t (mock-lyx,
-        // riktiga routen får sin naturliga takt från modellen).
-        await new Promise((r) => setTimeout(r, 30));
-      }
-      send({ type: 'text-end', id: '0' });
 
-      // Källor efter text-end, före finish (§5) — då finns de inte i
-      // message.parts förrän svaret är färdigstreamat, vilket uppfyller
-      // designbeslut 5 i docs/ui-sketch.md utan klientlogik.
-      for (const source of MOCK_SOURCES) {
-        send({ type: 'source-url', ...source });
+      try {
+        const result = streamText({
+          model,
+          system: systemPrompt(lvl, context),
+          prompt: question,
+        });
+
+        for await (const delta of result.textStream) {
+          send({ type: 'text-delta', id: '0', delta });
+        }
+
+        send({ type: 'text-end', id: '0' });
+
+        // Källor efter text-end, före finish (§5).
+        for (const source of sources) {
+          send({ type: 'source-url', ...source });
+        }
+      } catch (error) {
+        // Fel MITT I streamen: statuskoden är redan skickad, så felet måste
+        // ut som en error-händelse. Streamen avslutas ändå med finish +
+        // [DONE], annars fastnar UI:t i status 'streaming' för alltid (§6).
+        console.error('[chat] fel under streaming:', error);
+        send({ type: 'text-end', id: '0' });
+        send({ type: 'error', errorText: 'Kunde inte slutföra svaret.' });
       }
 
       send({ type: 'finish-step' });
