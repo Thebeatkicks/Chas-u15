@@ -21,15 +21,15 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 | Issue | Ägare | Lifecycle | Not |
 |---|---|---|---|
 | #6 embedding-spike (c/o) | Yasmin | **proven** | PR #27 (`57e2f6e`), match_documents rankar rätt, similarity 0.4220 |
-| #17 ingestion 528 | Yasmin | planned | efter #6 |
+| #17 ingestion 528 | Yasmin | **proven** | PR #30 (`09358bd`), körlogg 528 sidor, ~1200+ chunks |
 | #18 retrieval-sanity | Yasmin | planned | efter #17 |
 | #9 chat-spike (c/o) | Fastuo | **proven** | PR #25 (`5a8c4d9`), streaming verifierad, "förklara-inte-lösa" demonstrerad |
 | #19 riktig RAG-route | Fastuo | planned | ⚠️ similarity_threshold: rätt träff = 0.42 — sätt 0.0–0.2 (kommentar i issuen) |
 | #20 system-prompts | Fastuo | planned | efter #19 |
-| #11 chatkomponent (c/o) | Ernest | planned | oblockerad — mocken på main (`fc490e5`) |
-| #12 nivåväljare (c/o) | Ernest | planned | efter #11; skicka "beginner", inte "nybörjare" |
-| #21 UI mot riktig route | Ernest | planned | efter #12; ska kräva NOLL kodändring |
-| #22 tomt läge + chips | Ernest | planned | efter #21 |
+| #11 chatkomponent (c/o) | Ernest | **proven** | PR #28 (`e1d208b`) |
+| #12 nivåväljare (c/o) | Ernest | **proven** | PR #28, 400-fällan verifierad |
+| #21 UI mot riktig route | Ernest | merged | öppen: noll-ändringskoll väntar på #19 |
+| #22 tomt läge + chips | Ernest | **proven** | PR #28, kanonisk copy |
 | #23 smoke-test + live | Henrik | **del A proven** | `9803bf6`: checklista + mock-detektor på main, §4-felfall körda mot live; del B (körningen) tors kväll → `docs/smoke-runs/wave-1.md` |
 | #24 README-reflektion v1 | Henrik | **proven** | PR #26 mergad (`f51b14e`), faktakontrollerad mot källdokumenten |
 
@@ -44,6 +44,8 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 - Kontraktsförtydligande §6: 405 kommer från Next utan JSON-kropp
   (routen exporterar bara POST) — statuskod är krav, felkroppen önskvärd.
 - Mock-detektorn i smoke-test §0 kan tas bort när mocken pensioneras.
+- #33: gruppbeslut om Ernests extra profil/trådar/hälsning (funktioner utanför issues).
+- Ernests scope-lärdom: en PR per issue, PR-body med bevis, inga funktioner utanför issuen (design är fri).
 
 ## Wave-gräns-integration (orchestratorns lista, tors kväll)
 
