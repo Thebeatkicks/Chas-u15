@@ -313,3 +313,119 @@ den sessionen istället.
 `MATCH_COUNT` (5 i produktion) är oförändrade — den här mätningen använder
 fortfarande topp-3/tröskel-0.0 för att vara direkt jämförbar med baseline,
 inte produktionens faktiska hämtningsparametrar.
+
+---
+
+# Slut-checkpoint wave 2 — issue #38 (2026-09-04)
+
+> Svarar på: stämmer sanity-baselinen fortfarande nu när både retrieval-
+> tuningen (#37) och Fastuos promptjusteringar (#39) ligger på `main`?
+> Samma metod som baseline och #37s efter-mätning (samma 10 frågor, samma
+> ordning, topp-3, `similarity_threshold=0.0`, embed → `match_documents()`
+> RPC). Testscriptet (`scratchpad/retrieval-sanity.ts`, ej committat — se
+> filägarskap i #38) återanvänder `embed()`/`matchDocuments()`-mönstret från
+> `scripts/embed-spike.ts` rakt av, precis som tidigare körningar.
+
+## Föregående verifiering
+
+Innan sviten kördes: `git log` bekräftade att både PR #51 (#37, hybrid-
+rubrik-chunkning i `scripts/ingest.ts`) och PR #49 (#39, `system-prompts v5`
+i `lib/ai/system-prompts.ts`) finns på `main`. `documents`-tabellens
+radantal verifierades oberoende via en egen REST-`HEAD`-fråga innan sviten
+kördes: `Content-Range: 0-0/3547` — identiskt med #37s efter-mätning, inget
+har rört tabellen sedan dess.
+
+## Resultat
+
+| # | Fråga | Topp-3 (titel — similarity) | Rätt sida bland träffarna? | Jämfört med #37s efter-mätning |
+|---|---|---|---|---|
+| 1 | vad är en closure | Closures — 0.6207 · Closures — 0.4746 · Closures — 0.4642 | **Ja** | Identiskt |
+| 2 | skillnaden mellan let och const | const — 0.3074 · const — 0.2813 · static — 0.2758 | **Nej** | Identiskt |
+| 3 | hur fungerar map() | Map — 0.5087 · Map() constructor — 0.4841 · Map — 0.4829 | **Nej** | Identiskt |
+| 4 | vad är async/await | await — 0.6089 · await — 0.5719 · async function — 0.5669 | **Ja** | Identiskt (0,5719 mot 0,5720 — fjärde decimalen, brus) |
+| 5 | hur använder man fetch för att hämta data | Using the Fetch API — 0.5339 · Fetch API — 0.5016 · Using the Fetch API — 0.4726 | **Ja** | Identiskt |
+| 6 | vad är en prototyp i JavaScript | "Function: prototype" ×3 (0.5712/0.5592/0.5585) | **Nej** | Identiskt |
+| 7 | vad är hoisting | function — 0.4254 · Grammar and types — 0.3604 · import — 0.3576 | **Ja** | Identiskt (0,3604 mot 0,3603 — fjärde decimalen, brus) |
+| 8 | skillnad på == och === | Expressions and operators — 0.4359 · Equality (==) — 0.4285 · Strict equality (===) — 0.4235 | **Ja** | Identiskt |
+| 9 | hur fungerar this | Functions — 0.2970 · Function.prototype.apply() — 0.2948 · Functions — 0.2921 | **Nej** | Identiskt |
+| 10 | vad gör reduce() | Array.prototype.reduce() ×3 (0.4981/0.4967/0.4847) | **Ja** | Identiskt |
+
+**Träffsäkerhet: 6/10 — oförändrat mot #37s efter-mätning, som förväntat.**
+
+Alla tio similarity-värden matchar #37s efter-mätning på tre decimaler; de
+två enda avvikelserna (fråga 4 och 7) skiljer sig på fjärde decimalen
+(0,0001), vilket är brus från embedding-API:ets flyttalsprecision mellan
+anrop, inte en verklig förändring. Samma sex frågor godkända (1, 4, 5, 7, 8,
+10), samma fyra underkända (2, 3, 6, 9) — inklusive #9 ("this"), som
+förblir den regression #37s efter-mätning identifierade (målsidan trängs
+fortfarande ut av `Function.prototype.apply()`).
+
+**Slutsats:** Fastuos promptjusteringar (#39) påverkar — precis som
+förväntat — inte retrieval-siffrorna. `match_documents()`-anropet i
+`lib/ai/retrieval.ts` sker före prompten någonsin används; en ändring i hur
+`system-prompts.ts` formulerar svaret runt de hämtade dokumenten kan inte
+ändra vilka dokument som hämtas. Sanity-baselinen från #37 står fast som
+slut-checkpoint för wave 2:s retrieval-arbete. #52 (query-normalisering) är
+den rekommenderade uppföljningen för #2/#3/#6/#9, redan dokumenterad ovan.
+
+## Terminalutdrag (fullständigt, från körningen)
+
+```
+=== FRÅGA: "vad är en closure" ===
+  #1 similarity=0.6207  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+  #2 similarity=0.4746  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+  #3 similarity=0.4642  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+
+=== FRÅGA: "skillnaden mellan let och const" ===
+  #1 similarity=0.3074  "const"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
+  #2 similarity=0.2813  "const"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
+  #3 similarity=0.2758  "static"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
+
+=== FRÅGA: "hur fungerar map()" ===
+  #1 similarity=0.5087  "Map"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+  #2 similarity=0.4841  "Map() constructor"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/Map
+  #3 similarity=0.4829  "Map"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+=== FRÅGA: "vad är async/await" ===
+  #1 similarity=0.6089  "await"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+  #2 similarity=0.5719  "await"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+  #3 similarity=0.5669  "async function"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+
+=== FRÅGA: "hur använder man fetch för att hämta data" ===
+  #1 similarity=0.5339  "Using the Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  #2 similarity=0.5016  "Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+  #3 similarity=0.4726  "Using the Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+=== FRÅGA: "vad är en prototyp i JavaScript" ===
+  #1 similarity=0.5712  "Function: prototype"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+  #2 similarity=0.5592  "Function: prototype"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+  #3 similarity=0.5585  "Function: prototype"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+
+=== FRÅGA: "vad är hoisting" ===
+  #1 similarity=0.4254  "function"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function
+  #2 similarity=0.3604  "Grammar and types"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types
+  #3 similarity=0.3576  "import"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+
+=== FRÅGA: "skillnad på == och ===" ===
+  #1 similarity=0.4359  "Expressions and operators"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators
+  #2 similarity=0.4285  "Equality (==)"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality
+  #3 similarity=0.4235  "Strict equality (===)"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
+
+=== FRÅGA: "hur fungerar this" ===
+  #1 similarity=0.2970  "Functions"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions
+  #2 similarity=0.2948  "Function.prototype.apply()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+  #3 similarity=0.2921  "Functions"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions
+
+=== FRÅGA: "vad gör reduce()" ===
+  #1 similarity=0.4981  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+  #2 similarity=0.4967  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+  #3 similarity=0.4847  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+```
+
+## Explicit icke-gjort (slut-checkpoint)
+
+Ingen ny tuning här — enligt filägarskapet i #38 rördes bara denna fil.
+`scripts/ingest.ts`, `lib/ai/retrieval.ts`, `lib/ai/system-prompts.ts` och
+`app/**` är oförändrade av den här sessionen. Query-time-normalisering
+(#52) är fortfarande rekommendationen för #2/#3/#6/#9, inte implementerad
+här.
