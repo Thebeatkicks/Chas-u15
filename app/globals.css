@@ -63,3 +63,179 @@ textarea {
   animation: caret-blink 1s step-end infinite;
 }
 
+/* ── Assistant markdown (#41) ─────────────────────────────────── */
+.sensei-md {
+  font-size: 0.875rem;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.sensei-md > *:first-child {
+  margin-top: 0;
+}
+
+.sensei-md > *:last-child {
+  margin-bottom: 0;
+}
+
+.sensei-md p {
+  margin: 0.55em 0;
+}
+
+.sensei-md strong {
+  font-weight: 650;
+}
+
+.sensei-md em {
+  font-style: italic;
+}
+
+.sensei-md a {
+  color: var(--seal);
+  text-underline-offset: 2px;
+}
+
+.sensei-md ul,
+.sensei-md ol {
+  margin: 0.45em 0;
+  padding-left: 1.25rem;
+}
+
+.sensei-md ul {
+  list-style: disc;
+}
+
+.sensei-md ol {
+  list-style: decimal;
+}
+
+.sensei-md li {
+  margin: 0.15em 0;
+}
+
+.sensei-md li > p {
+  margin: 0.15em 0;
+}
+
+.sensei-md blockquote {
+  margin: 0.6em 0;
+  border-left: 3px solid var(--gold);
+  padding-left: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.sensei-md :not(pre) > code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.82em;
+  background: var(--paper-deep);
+  border-radius: 4px;
+  padding: 0.12em 0.38em;
+}
+
+.sensei-md h1,
+.sensei-md h2,
+.sensei-md h3 {
+  font-family: var(--font-newsreader), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0.85em 0 0.35em;
+  line-height: 1.3;
+}
+
+.sensei-md h1 { font-size: 1.25rem; }
+.sensei-md h2 { font-size: 1.1rem; }
+.sensei-md h3 { font-size: 1rem; }
+
+/* Editor-feel code block */
+.sensei-code {
+  margin: 0.75rem 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #1c1917;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.sensei-code-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4rem 0.75rem;
+  background: #141210;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sensei-code-lang {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c4b5a5;
+}
+
+.sensei-code-copy {
+  font-size: 11px;
+  color: #c4b5a5;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.sensei-code-copy:hover {
+  color: #f7f1e4;
+}
+
+.sensei-code pre {
+  margin: 0;
+  overflow-x: auto;
+  padding: 0.85rem 1rem 1rem;
+}
+
+.sensei-code code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: #f5efe6;
+  background: transparent;
+}
+
+/* highlight.js tokens on the dark editor surface */
+.sensei-code .hljs-keyword,
+.sensei-code .hljs-selector-tag,
+.sensei-code .hljs-literal {
+  color: #f0ab8c;
+}
+
+.sensei-code .hljs-string,
+.sensei-code .hljs-attr {
+  color: #c5d4a8;
+}
+
+.sensei-code .hljs-number,
+.sensei-code .hljs-built_in {
+  color: #e6c07b;
+}
+
+.sensei-code .hljs-comment,
+.sensei-code .hljs-quote {
+  color: #8a7d70;
+  font-style: italic;
+}
+
+.sensei-code .hljs-title,
+.sensei-code .hljs-section,
+.sensei-code .hljs-name {
+  color: #9ec3e6;
+}
+
+.sensei-code .hljs-variable,
+.sensei-code .hljs-params {
+  color: #e8dcc4;
+}
+
+.sensei-code .hljs-function .hljs-title,
+.sensei-code .hljs-title.function_ {
+  color: #9ec3e6;
+}
+

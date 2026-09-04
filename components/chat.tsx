@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { COPY } from "./copy";
 import { EmptyState } from "./empty-state";
 import { LevelPicker } from "./level-picker";
+import { MarkdownMessage } from "./markdown-message";
 import { useProfile } from "./profile-store";
 import { SourceChips } from "./source-chips";
 
@@ -139,13 +140,13 @@ function ChatSession() {
                     </p>
                   ) : (
                     <div className="max-w-[40rem] rounded-3xl border border-[var(--line)] bg-[var(--paper-raised)]/80 px-4 py-4 shadow-[0_12px_40px_rgba(22,19,15,0.04)]">
-                      <p className="whitespace-pre-wrap text-sm leading-7 text-[var(--ink)]">
-                        {text}
-                        {status === "streaming" &&
-                        message.id === messages.at(-1)?.id ? (
-                          <span className="sensei-caret ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 bg-[var(--seal)] align-middle" />
-                        ) : null}
-                      </p>
+                      <MarkdownMessage
+                        text={text}
+                        streaming={
+                          status === "streaming" &&
+                          message.id === messages.at(-1)?.id
+                        }
+                      />
                       <SourceChips message={message} />
                       {text && status !== "streaming" ? (
                         <button
