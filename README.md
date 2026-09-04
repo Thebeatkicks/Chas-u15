@@ -30,17 +30,37 @@ pnpm dev
 ## Projektstruktur och arbetssätt
 
 Planen, arkitekturen och alla beslut finns i [docs/PLAN.md](docs/PLAN.md).
-Läget just nu indexeras i [STATE.md](STATE.md). Arbetet sker i 2-dagars *waves*
-med issues per person och handoffs i [docs/handoffs/](docs/handoffs/).
+Läget just nu indexeras i [STATE.md](STATE.md).
+
+Vi jobbade i en **orchestrator/session-modell** med fyra AI-verktyg parallellt
+— ett per person (Claude Code ×2, Codex, Cursor). Henrik som main
+orchestrator skickade **startprompts** i början av varje wave; var och en
+startade en **personlig orchestrator** i sitt eget verktyg, som i sin tur gav
+prompts för en session per issue. En avslutad session lämnade en
+session-handoff till den personliga orchestratorn, och en avslutad wave en
+wave-handoff till Henrik ([docs/handoffs/](docs/handoffs/)) — Henrik
+reconcilade, mergade och öppnade nästa wave.
+
+Arbetet gick i **2-dagars waves** med issues per person, styrda av
+**sveprincipen** ([docs/PLAN.md §4](docs/PLAN.md)): allt en person behöver
+för sina issues — delade nycklar, mergade kontrakt/stubbar, installerade
+paket — ska finnas *innan* waven öppnas, beroenden mellan personer läggs
+alltid på wave-gränsen (aldrig inuti en wave), och en öppnad PR blockerar
+aldrig arbetet — man pingar en namngiven reviewer och fortsätter direkt på
+nästa issue. Regeln kom av en lärdom från wave 0, där beroendekedjor mitt i
+waven serialiserade arbetet
+([docs/state-archive/wave-0.md](docs/state-archive/wave-0.md)).
 
 ## Reflektion (uppgiftens frågor)
 
-> **Version 1** (wave 1). Skriven ur det som redan är beslutat och byggt:
-> besluten i [docs/PLAN.md §3](docs/PLAN.md), lärdomarna i
-> [docs/state-archive/wave-0.md](docs/state-archive/wave-0.md) och
-> API-kontraktet i [docs/api-contract.md](docs/api-contract.md).
-> Personliga AI-reflektioner (4 personer × 4 waves) vävs in efterhand som
-> wave-handoffs kommer in; texten färdigställs i wave 3.
+> **Version 2** (wave 2). Besluten i [docs/PLAN.md §3](docs/PLAN.md),
+> lärdomarna i [docs/state-archive/wave-0.md](docs/state-archive/wave-0.md)
+> och API-kontraktet i [docs/api-contract.md](docs/api-contract.md). Alla
+> fyra personliga AI-reflektionerna från wave 0–1
+> ([docs/handoffs/](docs/handoffs/)) är nu invävda i "Vad var svårt?" nedan,
+> tillsammans med miljöbuggen och prompt-designens tre iterationer.
+> Modell-A/B-resultatet (#40) läggs till här när det landar. Text
+> färdigställs i wave 3.
 
 ### Vilken ny AI-teknik/bibliotek identifierade vi och hur tillämpade vi det?
 
@@ -80,8 +100,12 @@ verktyg parallellt (Claude Code ×2, Codex, Cursor) i en orchestrator/session-
 modell där varje avslutad session lämnar en skriftlig handoff med konkret bevis
 ([docs/handoffs/](docs/handoffs/)).
 
-*(Konkreta erfarenheter av den skarpa ingestion-körningen och RAG-routen
-kompletteras efter wave 1-handoffs.)*
+Den skarpa ingestion-körningen skrev **1 738 chunks** ur alla 528 sidor till
+`documents` (radantalet verifierat oberoende via en egen REST-`HEAD`-fråga,
+inte bara scriptets egen logg). Retrieval-baseline låg på **6/10** rätt sida
+i topp-3 över tio testfrågor ([docs/retrieval-sanity.md](docs/retrieval-sanity.md))
+— de fyra missarna är namngivna och verifierat att vara renodlade
+retrieval-gap, inte täckningsluckor, och är wave 2:s startlista (#37).
 
 ### Varför valde vi den AI-tekniken/det biblioteket?
 
@@ -171,9 +195,74 @@ man pingar en namngiven reviewer och fortsätter direkt.
 sparse checkout, och `main` är skyddad med PR-krav som bara syns som en varning
 för den som har admin-bypass.
 
-*(2–3 meningar per person och wave om vad som var svårt eller förvånande med
-AI-verktyget samlas i wave-handoffs — 16 stycken totalt. De vävs in här
-efterhand; nästa påfyllning sker efter wave 1-handoffs.)*
+### Personliga AI-reflektioner (wave 0–1)
+
+Fyra reflektioner ur [docs/handoffs/](docs/handoffs/), en per wave-handoff:
+
+**Yasmin** (wave 0 + wave 1): Det mest lärorika mönstret var att sessionerna
+byggde en vana av att verifiera *faktiskt tillstånd* i stället för att lita
+på ett kommandos egen "success"-rapport — i wave 0 upptäcktes en
+`CREATE TABLE` som Supabase SQL Editor tyst blockerat bakom en modal bara för
+att sessionen körde `select count(*)` efteråt, och samma mönster upprepades
+i wave 1 när #17:s radantal verifierades med en oberoende REST-`HEAD`-fråga i
+stället för att lita på scriptets egen logg. Störst friktion gav
+miljöbegränsningar utanför själva kodningen: `gh` CLI saknades i varje
+session, så PR:er fick öppnas manuellt via länk i wave 0 — tills en wave
+1-session löste det själv genom att återanvända git-autentiseringen
+(`git credential fill`) mot GitHub:s REST API för att öppna PR:er, sätta
+reviewers och posta ping-kommentarer, helt utan att exponera token i
+loggar. Windows-specifika problem (path-längd vid full klon av
+`mdn/content`) hittades och löstes av AI:n på egen hand.
+
+**Ernest**: Cursor ritade snygga PNG-skisser i wave 0 men förstörde svensk
+text, så SVG + kanonisk copy blev den riktiga sanningen i stället — en
+påminnelse om att inte lita på genererad UI-copy. I wave 1 var
+API-kontraktets §8 (`useChat` + `DefaultChatTransport` + `parts`) mer värt
+än googlad AI SDK-dokumentation, som fortfarande beskriver v4/v5; när UI:t
+byggdes strikt mot kontraktet passade mocken direkt, och den enda fällan var
+att råka skicka `"nybörjare"` i stället för `"beginner"`.
+
+**Fastuo**: Bytte verktyg från Codex till Claude Code mellan wave 0 och 1,
+och lärdomen höll över båda: AI:n är svag när den svarar ur minnet — den
+ville skriva API-kontraktet mot AI SDK v5, som var aktuell i dess
+träningsdata, vilket hade spräckt Ernests `useChat` vid första
+hopkopplingen — och stark när den läser det faktiska artefakten, som när
+kontraktet i stället verifierades genom att installera SDK:n, läsa typerna
+och köra streamformatet genom bibliotekets egen `readUIMessageStream`-parser.
+Samma mönster upprepades i wave 1: instinkten sa att similarity-tröskeln
+borde ligga runt 0,5, men Yasmins uppmätta data visade 0,22–0,58 — hade
+instinkten fått styra hade appen visat noll källor på de flesta frågor.
+
+### Miljöbuggen — "namn ≠ värde"
+
+Wave 1:s enda produktionsbugg fångades av smoke-testets pre-flight, inte av
+koden: alla sex env-variabler fanns till namnet i Vercels dashboard men hade
+tomma värden, vilket aldrig upptäcktes tidigare eftersom RAG-routen (#19)
+var den första deployade koden som faktiskt läste dem. Dokumenterat i
+[docs/smoke-runs/wave-1.md](docs/smoke-runs/wave-1.md): att en variabel
+*finns* i Production säger inget om att den har ett *värde* — checklistan
+kollar nu båda.
+
+### Prompt-designens tre iterationer
+
+Nivåprompterna gick genom tre versioner innan de höll
+([docs/prompt-design.md](docs/prompt-design.md)). **v1** — sex rader inbakade
+i routen — gav fyra synliga problem: nivåskillnaden var bara ordval,
+`developer` förklarade grunderna ändå, vägran läckte lösningen som ett
+numrerat recept, och irrelevant MDN-kontext citerades ändå. **v2** — egen
+modul, längdtak per nivå, hårdare vägransregel — fixade tre av fyra, men
+`developer` öppnade fortfarande med en definition; en negativ regel om
+*innehåll* ("förklara inte grunderna") räckte inte. **v3**:s enda ändring
+var att i stället styra **formen** på första meningen: förbjudna
+inledningsfraser som "X är en kombination av", och första meningen ska
+handla om beteende eller fallgrop i stället för definition. Lärdomen: när
+modellen har en stark stilmässig vana slår en regel om form en regel om
+innehåll.
+
+### Modell-A/B
+
+Läggs till här när Fastuos jämförelse mellan `gpt-4o-mini` och en
+utmanarmodell (#40, wave 2) landar i `docs/model-ab.md`.
 
 ## Licens och attribution
 
