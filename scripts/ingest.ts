@@ -45,22 +45,42 @@ for (const [name, val] of Object.entries({
 
 const SELECTION_LIST_PATH = join(import.meta.dirname, "mdn-selection-list.txt");
 
-// Fast storlek + overlap (docs/mdn-selection.md §Chunkningsstrategi — enklaste
-// alternativet, vald för att få en fungerande pipeline i wave 1). Tecken,
-// inte tokens — ingen tokenizer-dependency för ett engångsscript.
-// ~2800 tecken ≈ 700 tokens (grov 4-tecken/token-tumregel), inom
-// rekommendationens 500–800 tokens/chunk. Overlap 350 tecken ≈ 12,5%,
-// inom rekommenderade 10–15%. Wave 2 tunar dessa siffror mot faktisk
-// retrieval-kvalitet (se STATE.md-tröskelvarningen till #19).
+// Wave 2 / #37 — bytt från ren fast storlek till hybrid: rubrik (##) som
+// primärregel, ###-underrubrik som fallback för för-stora sektioner, fast
+// delning+overlap som sista utväg (docs/mdn-selection.md §Chunkningsstrategi,
+// "Hybrid: rubrik + max-storlek-tak" — rekommenderat där redan i #6 men inte
+// valt förrän retrieval-gapen i docs/retrieval-sanity.md krävde det).
+//
+// Anledning: baseline (6/10) visade att "vad är hoisting" floppade totalt
+// (similarity 0.22–0.29) eftersom `grammar_and_types`-guidens
+// hoisting-förklaring låg begravd mitt i en 2800-tecken fast-storlek-chunk
+// tillsammans med orelaterat innehåll om variabelscope. Med rubrik-baserad
+// delning blir "### Variable hoisting" sin egen chunk (rubriktexten är
+// chunkens första rad) — verifierat i ett scratchpad-delmängdstest att det
+// lyfte frågan till topprankad träff. Se docs/retrieval-sanity.md, avsnittet
+// daterat efter baseline, för fullständig efter-mätning.
+//
+// CHUNK_SIZE/CHUNK_OVERLAP är oförändrade (samma tumregel som tidigare) och
+// används bara som fallback när en rubriksektion är för stor för att
+// embeddas som en enda chunk.
 const CHUNK_SIZE = 2800;
 const CHUNK_OVERLAP = 350;
+
+// "See also", "Specifications" och "Browser compatibility" är near-identiska
+// länklistor/tabeller på nästan varje referens-sida — ingen prosa, inget
+// retrieval-värde, bara brus (och onödig embedding-kostnad). Filtreras bort
+// helt oavsett storlek. Verifierat i scratchpad-testet att det här ensamt
+// löste "skillnaden mellan let och const" (#2): en identisk "See also"-chunk
+// på både let- och const-sidorna konkurrerade annars ut let-sidans egna
+// beskrivande innehåll ur topp-3.
+const BOILERPLATE_HEADINGS = /^(see also|specifications|browser compatibility)$/i;
 
 type Chunk = {
   content: string;
   metadata: { source: string; url: string; title: string };
 };
 
-function splitIntoChunks(text: string): string[] {
+function splitFixedSize(text: string): string[] {
   if (text.length <= CHUNK_SIZE) return [text];
   const chunks: string[] = [];
   let start = 0;
@@ -69,6 +89,61 @@ function splitIntoChunks(text: string): string[] {
     chunks.push(text.slice(start, end));
     if (end === text.length) break;
     start = end - CHUNK_OVERLAP;
+  }
+  return chunks;
+}
+
+/** Delar text vid varje rad som matchar en rubrik-regex. Text före första
+ * träffen (om någon) blir en egen "intro"-sektion. Returnerar null om texten
+ * inte har någon rubrik alls på den nivån. */
+function splitAtHeadings(text: string, headingRe: RegExp): string[] | null {
+  const indices: number[] = [];
+  const re = new RegExp(headingRe.source, "gm");
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text))) {
+    indices.push(match.index);
+  }
+  if (indices.length === 0) return null;
+
+  const sections: string[] = [];
+  if (indices[0] > 0) {
+    const intro = text.slice(0, indices[0]).trim();
+    if (intro) sections.push(intro);
+  }
+  for (let i = 0; i < indices.length; i++) {
+    const start = indices[i];
+    const end = i + 1 < indices.length ? indices[i + 1] : text.length;
+    sections.push(text.slice(start, end).trim());
+  }
+  return sections;
+}
+
+function isBoilerplateSection(section: string): boolean {
+  const headingMatch = section.match(/^#{2,3}\s+(.+)$/m);
+  return !!headingMatch && BOILERPLATE_HEADINGS.test(headingMatch[1].trim());
+}
+
+function splitIntoChunks(text: string): string[] {
+  const h2Sections = (splitAtHeadings(text, /^##\s+.+$/) ?? [text]).filter(
+    (section) => !isBoilerplateSection(section),
+  );
+
+  const chunks: string[] = [];
+  for (const section of h2Sections) {
+    if (section.length <= CHUNK_SIZE) {
+      chunks.push(section);
+      continue;
+    }
+    // Sektionen är för stor — försök dela vid ###-underrubriker inom den
+    // innan vi ger upp och kör blind fast delning.
+    const h3Sections = splitAtHeadings(section, /^###\s+.+$/);
+    if (h3Sections) {
+      for (const h3 of h3Sections) {
+        chunks.push(...(h3.length <= CHUNK_SIZE ? [h3] : splitFixedSize(h3)));
+      }
+    } else {
+      chunks.push(...splitFixedSize(section));
+    }
   }
   return chunks;
 }
@@ -182,7 +257,14 @@ async function main() {
     try {
       const chunks = loadChunks(relPath);
       for (const chunk of chunks) {
-        const embedding = await embed(chunk.content);
+        // Sidtiteln prependas ENDAST i texten som embeddas, inte i `content`
+        // som lagras (issue #37, adresserar #3/#6: "Array.prototype.map()"
+        // vs bara "Map" som rubrik, "Function: prototype" vs den konceptuella
+        // guide-sidan). `content` hålls orört eftersom
+        // app/api/chat/route.ts redan prependar "## title" runt content vid
+        // promptbygge — att duplicera titeln i lagrad content vore redundant
+        // för den konsumenten och inte vårt filägarskap att ändra.
+        const embedding = await embed(`${chunk.metadata.title}\n\n${chunk.content}`);
         batch.push({ content: chunk.content, metadata: chunk.metadata, embedding });
         totalChunks++;
         if (batch.length >= INSERT_BATCH_SIZE) {
