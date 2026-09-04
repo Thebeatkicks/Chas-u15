@@ -160,7 +160,8 @@ function WelcomeModal() {
 /* ══════════════════════════════════════════════════════════════ */
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { profile, ready, greeted } = useProfile();
+  const router = useRouter();
+  const { profile, ready, greeted, threads, activeThreadId, openThread, removeThread } = useProfile();
   const displayName = profile.name.trim() || "Gäst";
   const [open, setOpen] = useState(false);
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -241,6 +242,63 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             );
           })}
         </nav>
+
+        {threads.length > 0 ? (
+          <div className="mt-4 min-h-0 px-2">
+            <p
+              className={`px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--ink-soft)] transition-opacity duration-150 ${
+                open ? "opacity-100 delay-75" : "opacity-0"
+              }`}
+            >
+              Trådar
+            </p>
+            <ul className="mt-1 max-h-56 space-y-0.5 overflow-y-auto">
+              {threads.map((thread) => {
+                const active = thread.id === activeThreadId;
+                return (
+                  <li key={thread.id} className="flex items-center gap-0.5">
+                    <button
+                      type="button"
+                      title={thread.title}
+                      onClick={() => {
+                        openThread(thread.id);
+                        if (pathname !== "/") router.push("/");
+                      }}
+                      className={`flex min-w-0 flex-1 items-center gap-3 rounded-xl px-2.5 py-2 text-left transition-colors ${
+                        active
+                          ? "bg-[var(--paper-deep)] text-[var(--ink)]"
+                          : "text-[var(--ink-soft)] hover:bg-[var(--paper-deep)] hover:text-[var(--ink)]"
+                      }`}
+                    >
+                      <span
+                        className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                          active ? "bg-[var(--seal)]" : "bg-[var(--gold)]"
+                        }`}
+                      />
+                      <span
+                        className={`truncate text-sm transition-opacity duration-150 ${
+                          open ? "opacity-100 delay-75" : "opacity-0"
+                        }`}
+                      >
+                        {thread.title}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`Ta bort ${thread.title}`}
+                      onClick={() => removeThread(thread.id)}
+                      className={`shrink-0 px-1.5 text-xs text-[var(--ink-soft)] hover:text-[var(--seal)] transition-opacity duration-150 ${
+                        open ? "opacity-100 delay-75" : "opacity-0 pointer-events-none"
+                      }`}
+                    >
+                      ×
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        ) : null}
 
         {/* Spacer */}
         <div className="flex-1" />

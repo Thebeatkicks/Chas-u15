@@ -38,10 +38,19 @@ export function Chat() {
 }
 
 function ChatSession() {
-  const { profile, setLevel, threads, saveThread, removeThread } = useProfile();
+  const {
+    profile,
+    setLevel,
+    threads,
+    saveThread,
+    activeThreadId,
+    openThread,
+    startNewThread,
+  } = useProfile();
   const [input, setInput] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [exported, setExported] = useState(false);
+  const [sessionId, setSessionId] = useState(() => crypto.randomUUID());
   const transport = useMemo(
     () => new DefaultChatTransport({ api: "/api/chat" }),
     [],
@@ -56,17 +65,39 @@ function ChatSession() {
   const questionCount = messages.filter((message) => message.role === "user")
     .length;
 
-  const archiveCurrent = () => {
+  useEffect(() => {
+    if (!activeThreadId || activeThreadId === sessionId) return;
+    const thread = threads.find((item) => item.id === activeThreadId);
+    if (!thread) return;
+    setSessionId(thread.id);
+    setMessages(thread.messages as UIMessage[]);
+    setInput("");
+    clearError();
+  }, [activeThreadId, sessionId, threads, setMessages, clearError]);
+
+  useEffect(() => {
     if (messages.length === 0) return;
     const last = messages.at(-1);
     saveThread({
-      id: crypto.randomUUID(),
+      id: sessionId,
       title: asThreadTitle(messages),
       updatedAt: new Date().toISOString(),
       preview: last ? messageText(last).slice(0, 80) : "",
       messages,
     });
-  };
+    if (activeThreadId !== sessionId) openThread(sessionId);
+  }, [messages, saveThread, sessionId, activeThreadId, openThread]);
+
+  useEffect(() => {
+    if (activeThreadId !== null) return;
+    const stillHere = threads.some((item) => item.id === sessionId);
+    if (!stillHere && messages.length > 0) {
+      setMessages([]);
+      setSessionId(crypto.randomUUID());
+      setInput("");
+      clearError();
+    }
+  }, [activeThreadId, threads, sessionId, messages.length, setMessages, clearError]);
 
   const submit = () => {
     const text = input.trim();
@@ -169,42 +200,6 @@ function ChatSession() {
             })}
           </ol>
         )}
-
-        {threads.length > 0 && messages.length === 0 ? (
-          <section className="mt-8 border-t border-[var(--line)] pt-5">
-            <p className="text-[11px] font-semibold tracking-[0.16em] text-[var(--ink-soft)] uppercase">
-              Tidigare i den här webbläsaren
-            </p>
-            <ul className="mt-3 space-y-2">
-              {threads.map((thread) => (
-                <li
-                  key={thread.id}
-                  className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--line)] bg-[var(--paper-raised)] px-3 py-2"
-                >
-                  <button
-                    type="button"
-                    className="min-w-0 text-left"
-                    onClick={() =>
-                      setMessages(thread.messages as UIMessage[])
-                    }
-                  >
-                    <span className="block truncate text-sm">{thread.title}</span>
-                    <span className="block truncate text-xs text-[var(--ink-soft)]">
-                      {thread.preview}
-                    </span>
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removeThread(thread.id)}
-                    className="text-xs text-[var(--ink-soft)] hover:text-[var(--seal)]"
-                  >
-                    Ta bort
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ) : null}
       </main>
 
       <footer className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
@@ -229,10 +224,11 @@ function ChatSession() {
               type="button"
               disabled={busy || messages.length === 0}
               onClick={() => {
-                archiveCurrent();
                 setMessages([]);
                 setInput("");
                 clearError();
+                setSessionId(crypto.randomUUID());
+                startNewThread();
               }}
               className="rounded-full border border-[var(--line)] px-3 py-1 text-[var(--ink-soft)] hover:border-[var(--ink)] disabled:opacity-40"
             >
