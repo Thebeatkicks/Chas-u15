@@ -18,8 +18,11 @@ efter Fastuos #20 (svaren ändras). Dokumentera i samma fil, daterat.
 
 ## Fastuo (AI/backend) — svarskvalitet
 
-**#20 (carry-over): System-prompts per nivå** + `docs/prompt-design.md` med
-iterationer. Rutan i routen är medvetet minimal — ersätt den.
+**W2-F0: Prompt-svagheterna ur `docs/prompt-design.md`** (#20 blev KLAR i
+wave 1 — detta är uppföljningen den själv listar): vägran räknar upp metoder
+i användningsordning (halva lösningen), developer-inledningen är inte
+deterministisk (live-regression 4/9: v3-stil i ~1 av flera körningar),
+längdtaken är inte hårda.
 
 **W2-F1: Modell-A/B** — samma 5 frågor genom `CHAT_MODEL=openai/gpt-4o-mini`
 vs en utmanare (t.ex. `anthropic/claude-haiku-4.5`), jämför pedagogisk
