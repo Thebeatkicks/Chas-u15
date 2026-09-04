@@ -7,9 +7,9 @@
       "id": 37,
       "owner": "yasmin",
       "title": "Retrieval-gap ≥8/10",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven (6/10, delvis)",
+      "commit": "11b7413",
+      "proof": "PR #51 + rotorsaksanalys"
     },
     {
       "id": 38,
@@ -23,17 +23,17 @@
       "id": 39,
       "owner": "fastuo",
       "title": "Prompt-svagheter v4",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "564057c",
+      "proof": "PR #49, 0/20 huvudmått"
     },
     {
       "id": 40,
       "owner": "fastuo",
       "title": "Modell-A/B",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "8ad4a5c",
+      "proof": "PR #50, behåll gpt-4o-mini"
     },
     {
       "id": 41,
@@ -63,22 +63,30 @@
       "id": 44,
       "owner": "henrik",
       "title": "README v2",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "fea3497",
+      "proof": "PR #47 + 9f467be"
     },
     {
       "id": 45,
       "owner": "henrik",
       "title": "Demo-manus v1",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "d357e00",
+      "proof": "PR #48"
     },
     {
       "id": 46,
       "owner": "stretch",
       "title": "TTS-uppläsning (stretch)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 52,
+      "owner": "fastuo",
+      "title": "Query-normalisering (frivillig)",
       "lifecycle": "planned",
       "commit": null,
       "proof": null

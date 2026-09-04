@@ -23,16 +23,17 @@ ai 7.0.88 · @ai-sdk/react 4.0.91 · pnpm 10.12.2 · ingen `src/`.
 
 | Issue | Ägare | Lifecycle | Not |
 |---|---|---|---|
-| #37 retrieval-gap ≥8/10 | Yasmin | planned | omindexering OK |
+| #37 retrieval-gap | Yasmin | **proven (6/10, delvis)** | PR #51: hybrid-chunkning, 3547 chunks, rotorsaksanalys; uppföljning #52 |
 | #38 regression | Yasmin | planned | efter #37 + F-spårets merges |
-| #39 prompt-svagheter v4 | Fastuo | planned | inkl. varians-fyndet |
-| #40 modell-A/B | Fastuo | planned | env-ändring, ingen kod |
+| #39 prompts v5 | Fastuo | **proven** | PR #49: regressionsharness, 0/20 huvudmått; vägran 7/20 känd rest |
+| #40 modell-A/B | Fastuo | **proven** | PR #50: behåll gpt-4o-mini; README ifylld |
 | #41 markdown + kodblock | Ernest | planned | nya paket VIA HENRIK |
 | #42 knappar + gäst-banner | Ernest | planned | #33-beslutet + Enter-fix |
 | #43 trådlista localStorage | Ernest | planned | INTE Supabase |
-| #44 README v2 | Henrik | planned | alla 4 reflektioner inne |
-| #45 demo-manus v1 | Henrik | planned | rollfördelning per person |
-| #46 TTS-uppläsning | stretch | planned | endast om eget spår klart |
+| #44 README v2 | Henrik | **proven** | PR #47 + A/B-fyllning (`9f467be`) |
+| #45 demo-manus v1 | Henrik | **proven** | PR #48; rollfördelning väntar gruppens OK |
+| #46 TTS-uppläsning | stretch | planned | Fastuo/Yasmin klara — fri att ta |
+| #52 query-normalisering | Fastuo | planned | FRIVILLIG, ur #51:s analys |
 
 ## Kända blockeringar
 
