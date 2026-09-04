@@ -6,9 +6,9 @@
 > **ren repetition mot live-appen**, ingen manusändring utan att gruppen kör
 > igenom den minst en gång (PLAN.md §5).
 
-## Rollfördelning (förslag — bekräftas av gruppen)
+## Rollfördelning (bekräftad av gruppen 4/9)
 
-Gruppmötet 4/9 sådde frågan men fyllde inte i rollerna
+Bekräftad via Henrik efter mötet 4/9. Ursprungligt resonemang:
 ([docs/meetings/2026-09-04.md](meetings/2026-09-04.md) §6). Förslaget nedan
 följer allas spår, så ingen behöver prata utanför sitt eget område:
 
