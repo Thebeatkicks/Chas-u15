@@ -9,6 +9,7 @@ export const COPY = {
     "Skillnad let vs const",
     "Hur fungerar map()?",
   ],
+  inputPlaceholder: "Fråga om JavaScript…",
   guestBanner:
     "Du frågar som gäst — dina chattar sparas bara i den här webbläsaren. Skapa en profil för att anpassa svaren.",
   guestBannerAction: "Skapa profil",
