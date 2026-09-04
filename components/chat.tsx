@@ -112,12 +112,15 @@ function ChatSession() {
 
       {!profile.name.trim() ? (
         <div className="mx-auto mt-4 w-full max-w-3xl px-4">
-          <Link
-            href="/profile"
-            className="block rounded-2xl border border-[var(--gold)]/50 bg-[var(--paper-raised)] px-4 py-3 text-sm text-[var(--ink-soft)] hover:border-[var(--seal)]"
-          >
-            Sätt upp din profil — namn och nivå syns sedan alltid i dojon.
-          </Link>
+          <p className="rounded-2xl bg-[var(--paper-raised)] px-4 py-3 text-sm leading-6 text-[var(--ink-soft)]">
+            {COPY.guestBanner}{" "}
+            <Link
+              href="/profile"
+              className="font-medium text-[var(--seal)] hover:underline"
+            >
+              {COPY.guestBannerAction}
+            </Link>
+          </p>
         </div>
       ) : null}
 
@@ -257,10 +260,12 @@ function ChatSession() {
               rows={1}
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  submit();
-                }
+                if (event.nativeEvent.isComposing) return;
+                if (event.shiftKey) return;
+                if (event.key !== "Enter") return;
+                event.preventDefault();
+                event.stopPropagation();
+                submit();
               }}
               placeholder={COPY.inputPlaceholder}
               disabled={busy}
