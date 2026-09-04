@@ -59,7 +59,7 @@ waven serialiserade arbetet
 > fyra personliga AI-reflektionerna från wave 0–1
 > ([docs/handoffs/](docs/handoffs/)) är nu invävda i "Vad var svårt?" nedan,
 > tillsammans med miljöbuggen och prompt-designens tre iterationer.
-> Modell-A/B-resultatet (#40) läggs till här när det landar. Text
+> Modell-A/B-resultatet är invävt (se "Modell-A/B" nedan). Text
 > färdigställs i wave 3.
 
 ### Vilken ny AI-teknik/bibliotek identifierade vi och hur tillämpade vi det?
@@ -261,8 +261,17 @@ innehåll.
 
 ### Modell-A/B
 
-Läggs till här när Fastuos jämförelse mellan `gpt-4o-mini` och en
-utmanarmodell (#40, wave 2) landar i `docs/model-ab.md`.
+Tre modeller jämfördes med identiska v5-prompts, identisk retrieval och samma
+fem frågor ([docs/model-ab.md](docs/model-ab.md)): `openai/gpt-4o-mini`,
+`anthropic/claude-haiku-4.5` och `openai/gpt-5-mini`. **Beslutet blev att
+behålla `gpt-4o-mini`:** gpt-5-mini diskvalificerades på latens (17 s median
+till första token — ohållbart i en streamande chatt), och Haiku, som var
+pedagogiskt starkast, sprängde ordtaken och återinförde
+definitionsinledningar — exakt de fel promptarbetet byggt bort. Jämförelsen
+lärde oss också att inte mäta vägran enbart med regex (falsklarm rättades
+efter manuell kontroll) och att en promptsvit tunad mot en modell gynnar just
+den modellen i en jämförelse. Bytet är fortsatt en env-variabel —
+Haiku tas upp igen om markdown-renderingen förändrar kalkylen.
 
 ## Licens och attribution
 
