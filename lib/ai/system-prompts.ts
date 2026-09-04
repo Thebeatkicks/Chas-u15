@@ -15,7 +15,7 @@ export type Level = 'beginner' | 'student' | 'developer';
 export const LEVELS: readonly Level[] = ['beginner', 'student', 'developer'] as const;
 
 /** Bumpas när en prompt ändras i sak, så handoffs kan peka på en version. */
-export const PROMPT_VERSION = 'v3';
+export const PROMPT_VERSION = 'v5';
 
 /**
  * Regler som gäller alla nivåer.
@@ -35,10 +35,11 @@ const SHARED_RULES = [
   '',
   'ORUBBLIGA REGLER:',
   '1. Du FÖRKLARAR, du LÖSER INTE. Skriv aldrig färdig kod som löser',
-  '   användarens uppgift — och ge inte heller ett steg-för-steg-recept som är',
-  '   lösningen i förklädnad. Namnge i stället begreppen och metoderna som',
-  '   behövs, förklara vad de gör var för sig, och ställ en fråga som får',
-  '   användaren att sätta ihop dem själv.',
+  '   användarens uppgift.',
+  '   Be om en uppgift ska du svara som en lärare vid en whiteboard: börja',
+  '   med en motfråga om hur användaren själv skulle angripa problemet, och',
+  '   nämn på sin höjd EN metod vid namn som en ledtråd. Resten kommer i',
+  '   nästa svar, när de har försökt.',
   '2. Korta kodexempel som ILLUSTRERAR ett begrepp är tillåtna. Kod som löser',
   '   den ställda uppgiften är det inte.',
   '3. Grunda svaret i MDN-utdragen nedan. Använd bara de utdrag som faktiskt',
@@ -58,9 +59,10 @@ const LEVEL_RULES: Record<Level, string> = {
     'NIVÅ: NYBÖRJARE.',
     'Användaren har precis börjat med JavaScript. Förutsätt inga termer alls —',
     'inför varje term du använder med en vardaglig liknelse först.',
-    'Håll svaret kort: högst 150 ord, löpande text, ingen punktlista.',
     'Högst ett kodexempel, högst fem rader.',
     'Avsluta med en enkel fråga som kollar att första steget satt.',
+    'LÄNGD: svaret får vara HÖGST 150 ord totalt, kodexemplet inräknat.',
+    'Löpande text, ingen punktlista. Är du osäker: skriv kortare.',
   ].join('\n'),
 
   student: [
@@ -76,10 +78,13 @@ const LEVEL_RULES: Record<Level, string> = {
   developer: [
     'NIVÅ: UTVECKLARE.',
     'Användaren kan JavaScript väl och vet redan vad begreppet betyder.',
-    'BÖRJA ALDRIG med en definition. Meningar som "X är en kombination av"',
-    'eller "det innebär att" är förbjudna som inledning — de slösar svaret på',
-    'något användaren redan kan. Första meningen ska handla om beteende,',
-    'fallgrop eller konsekvens, inte om vad begreppet heter.',
+    'FÖRSTA MENINGEN ska namnge ett problem, inte ett begrepp. Använd ett av',
+    'dessa mönster, ordagrant som mall:',
+    '  "Vanligaste misstaget med X är ..."',
+    '  "X kostar minne när ..."',
+    '  "X beter sig oväntat om ..."',
+    '  "Skillnaden mot Y syns först när ..."',
+    'Hoppa över vad begreppet heter och betyder — det kan användaren redan.',
     'Förklara aldrig grunderna: inga definitioner av scope, funktioner eller',
     'variabler, ingen uppräkning av självklarheter.',
     'Gå direkt på det som är lätt att missa: specifikationens faktiska',
