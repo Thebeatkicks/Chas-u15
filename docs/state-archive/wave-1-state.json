@@ -1,0 +1,104 @@
+{
+  "wave": 1,
+  "updated": "2026-09-04",
+  "archive": "docs/state-archive/wave-0.md",
+  "packets": [
+    {
+      "id": 6,
+      "owner": "yasmin",
+      "title": "Embedding-spike (carry-over)",
+      "lifecycle": "proven",
+      "commit": "57e2f6e",
+      "proof": "PR #27, match_documents rankar rätt, similarity 0.4220",
+      "note": "GRIND: service role-nyckel"
+    },
+    {
+      "id": 17,
+      "owner": "yasmin",
+      "title": "Ingestion v1 — 528 sidor",
+      "lifecycle": "proven",
+      "commit": "09358bd",
+      "proof": "PR #30, körlogg 528 sidor"
+    },
+    {
+      "id": 18,
+      "owner": "yasmin",
+      "title": "Retrieval-sanity 10 frågor",
+      "lifecycle": "proven",
+      "commit": "d5e359a",
+      "proof": "PR #31, baseline 6/10 + gap-analys"
+    },
+    {
+      "id": 9,
+      "owner": "fastuo",
+      "title": "OpenRouter chat-spike (c/o)",
+      "lifecycle": "proven",
+      "commit": "5a8c4d9",
+      "proof": "PR #25, streaming + förklara-inte-lösa demonstrerat"
+    },
+    {
+      "id": 19,
+      "owner": "fastuo",
+      "title": "Riktig RAG-route",
+      "lifecycle": "proven",
+      "commit": "b53552e",
+      "proof": "PR #34 + live-verifierad, smoke-runs/wave-1.md"
+    },
+    {
+      "id": 20,
+      "owner": "fastuo",
+      "title": "System-prompts per nivå",
+      "lifecycle": "proven",
+      "commit": "PR35",
+      "proof": "docs/prompt-design.md, 3 iterationer, v3 live"
+    },
+    {
+      "id": 11,
+      "owner": "ernest",
+      "title": "Chatkomponent mot mock (c/o)",
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28"
+    },
+    {
+      "id": 12,
+      "owner": "ernest",
+      "title": "Nivåväljare i request (c/o)",
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28, 400-fällan verifierad"
+    },
+    {
+      "id": 21,
+      "owner": "ernest",
+      "title": "UI mot riktig route + källchips",
+      "lifecycle": "proven",
+      "commit": "b53552e",
+      "proof": "noll-ändringskoll live OK"
+    },
+    {
+      "id": 22,
+      "owner": "ernest",
+      "title": "Tomt läge + förslagschips",
+      "lifecycle": "proven",
+      "commit": "e1d208b",
+      "proof": "PR #28, kanonisk copy"
+    },
+    {
+      "id": 23,
+      "owner": "henrik",
+      "title": "Smoke-test + live-verifiering",
+      "lifecycle": "proven",
+      "commit": "9803bf6",
+      "proof": "smoke-runs/wave-1.md GODKÄND"
+    },
+    {
+      "id": 24,
+      "owner": "henrik",
+      "title": "README-reflektion v1",
+      "lifecycle": "proven",
+      "commit": "f51b14e",
+      "proof": "PR #26 mergad"
+    }
+  ]
+}

@@ -1,104 +1,87 @@
 {
-  "wave": 1,
+  "wave": 2,
   "updated": "2026-09-04",
-  "archive": "docs/state-archive/wave-0.md",
+  "archive": "docs/state-archive/",
   "packets": [
     {
-      "id": 6,
+      "id": 37,
       "owner": "yasmin",
-      "title": "Embedding-spike (carry-over)",
-      "lifecycle": "proven",
-      "commit": "57e2f6e",
-      "proof": "PR #27, match_documents rankar rätt, similarity 0.4220",
-      "note": "GRIND: service role-nyckel"
+      "title": "Retrieval-gap ≥8/10",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 17,
+      "id": 38,
       "owner": "yasmin",
-      "title": "Ingestion v1 — 528 sidor",
-      "lifecycle": "proven",
-      "commit": "09358bd",
-      "proof": "PR #30, körlogg 528 sidor"
+      "title": "Regression efter tuning+prompts",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 18,
-      "owner": "yasmin",
-      "title": "Retrieval-sanity 10 frågor",
-      "lifecycle": "proven",
-      "commit": "d5e359a",
-      "proof": "PR #31, baseline 6/10 + gap-analys"
-    },
-    {
-      "id": 9,
+      "id": 39,
       "owner": "fastuo",
-      "title": "OpenRouter chat-spike (c/o)",
-      "lifecycle": "proven",
-      "commit": "5a8c4d9",
-      "proof": "PR #25, streaming + förklara-inte-lösa demonstrerat"
+      "title": "Prompt-svagheter v4",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 19,
+      "id": 40,
       "owner": "fastuo",
-      "title": "Riktig RAG-route",
-      "lifecycle": "proven",
-      "commit": "b53552e",
-      "proof": "PR #34 + live-verifierad, smoke-runs/wave-1.md"
+      "title": "Modell-A/B",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 20,
-      "owner": "fastuo",
-      "title": "System-prompts per nivå",
-      "lifecycle": "proven",
-      "commit": "PR35",
-      "proof": "docs/prompt-design.md, 3 iterationer, v3 live"
-    },
-    {
-      "id": 11,
+      "id": 41,
       "owner": "ernest",
-      "title": "Chatkomponent mot mock (c/o)",
-      "lifecycle": "proven",
-      "commit": "e1d208b",
-      "proof": "PR #28"
+      "title": "Markdown + kodblock + copy",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 12,
+      "id": 42,
       "owner": "ernest",
-      "title": "Nivåväljare i request (c/o)",
-      "lifecycle": "proven",
-      "commit": "e1d208b",
-      "proof": "PR #28, 400-fällan verifierad"
+      "title": "Knappstädning + gäst-banner",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 21,
+      "id": 43,
       "owner": "ernest",
-      "title": "UI mot riktig route + källchips",
-      "lifecycle": "proven",
-      "commit": "b53552e",
-      "proof": "noll-ändringskoll live OK"
+      "title": "Trådlista localStorage",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 22,
-      "owner": "ernest",
-      "title": "Tomt läge + förslagschips",
-      "lifecycle": "proven",
-      "commit": "e1d208b",
-      "proof": "PR #28, kanonisk copy"
-    },
-    {
-      "id": 23,
+      "id": 44,
       "owner": "henrik",
-      "title": "Smoke-test + live-verifiering",
-      "lifecycle": "proven",
-      "commit": "9803bf6",
-      "proof": "smoke-runs/wave-1.md GODKÄND"
+      "title": "README v2",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     },
     {
-      "id": 24,
+      "id": 45,
       "owner": "henrik",
-      "title": "README-reflektion v1",
-      "lifecycle": "proven",
-      "commit": "f51b14e",
-      "proof": "PR #26 mergad"
+      "title": "Demo-manus v1",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 46,
+      "owner": "stretch",
+      "title": "TTS-uppläsning (stretch)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     }
   ]
 }

@@ -1,65 +1,51 @@
 # STATE — HEAD
 
-> Index över git + issues, aldrig egen sanning. Om detta motsäger git: git vinner.
-> Arkiv: `docs/state-archive/` (wave 0 roterad dit ons 3/9).
+> Index över git + issues, aldrig egen sanning. Git vinner vid konflikt.
+> Arkiv: `docs/state-archive/` (wave 0 + wave 1 roterade dit).
 
-**Senast uppdaterad:** 2026-09-04 fm — **WAVE 1 KOMPLETT: 12/12 proven.** Alla fyra wave-handoffs inne. Kvar öppet: endast gruppbeslut #33 (tas på dagens möte).
-**Aktuell wave:** 1 (ons 3/9–tors 4/9) · **Mål:** hela kedjan live på
-https://chas-u15.vercel.app torsdag kväll
+**Senast uppdaterad:** 2026-09-04 (wave 2 öppnad efter gruppmötet)
+**Aktuell wave:** 2 (fre 5/9 + mån 8/9, helg frivillig) · **Mål:** högre
+svarskvalitet + demoredo app. Live: https://chas-u15.vercel.app
+**Wave 1: KOMPLETT, 12/12 proven** (arkiv: `docs/state-archive/wave-1-state.json`).
 **Proven-debt:** 0
 
-**Versioner** (låsta): Next 16.3.3 · React 19.2.8 · ai 7.0.88 ·
-@ai-sdk/react 4.0.91 · @openrouter/ai-sdk-provider 3.0.0 · pnpm 10.12.2 ·
-ingen `src/`-katalog.
+**Sveprincipen gäller** (PLAN.md §4). Versioner: Next 16.3.3 · React 19.2.8 ·
+ai 7.0.88 · @ai-sdk/react 4.0.91 · pnpm 10.12.2 · ingen `src/`.
 
-**Sveprincipen gäller** (PLAN.md §4): vertikala spår, inga väntetider mellan
-personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
-är fallback-reviewer, halvdags-SLA).
+## Gruppbeslut fre 4/9
 
-## Lifecycle per packet (wave 1)
+- **#33 avgjort:** profil + trådar BEHÅLLS (localStorage), knappar bantas,
+  gäst-banner med ärlig text. **INGEN Supabase-auth före redovisningen** —
+  auth + serverlagrade trådar → backlogg efter kursen.
+- Fullt pratläge (mic in) → backlogg; TTS-uppläsning = stretch-issue #46.
+
+## Lifecycle per packet (wave 2)
 
 | Issue | Ägare | Lifecycle | Not |
 |---|---|---|---|
-| #6 embedding-spike (c/o) | Yasmin | **proven** | PR #27 (`57e2f6e`), match_documents rankar rätt, similarity 0.4220 |
-| #17 ingestion 528 | Yasmin | **proven** | PR #30 (`09358bd`), körlogg 528 sidor, ~1200+ chunks |
-| #18 retrieval-sanity | Yasmin | **proven** | PR #31, baseline 6/10 + gap-analys |
-| #9 chat-spike (c/o) | Fastuo | **proven** | PR #25 (`5a8c4d9`), streaming verifierad, "förklara-inte-lösa" demonstrerad |
-| #19 riktig RAG-route | Fastuo | **proven** | PR #34 + live-verifierad (smoke-runs/wave-1.md) |
-| #20 system-prompts | Fastuo | **proven** | PR #35, tre iterationer i docs/prompt-design.md, v3 live-verifierad |
-| #11 chatkomponent (c/o) | Ernest | **proven** | PR #28 (`e1d208b`) |
-| #12 nivåväljare (c/o) | Ernest | **proven** | PR #28, 400-fällan verifierad |
-| #21 UI mot riktig route | Ernest | **proven** | noll-ändringskoll live OK — kontraktet höll |
-| #22 tomt läge + chips | Ernest | **proven** | PR #28, kanonisk copy |
-| #23 smoke-test + live | Henrik | **proven** | smoke-runs/wave-1.md GODKÄND — env-buggen fångad och löst |
-| #24 README-reflektion v1 | Henrik | **proven** | PR #26 mergad (`f51b14e`), faktakontrollerad mot källdokumenten |
+| #37 retrieval-gap ≥8/10 | Yasmin | planned | omindexering OK |
+| #38 regression | Yasmin | planned | efter #37 + F-spårets merges |
+| #39 prompt-svagheter v4 | Fastuo | planned | inkl. varians-fyndet |
+| #40 modell-A/B | Fastuo | planned | env-ändring, ingen kod |
+| #41 markdown + kodblock | Ernest | planned | nya paket VIA HENRIK |
+| #42 knappar + gäst-banner | Ernest | planned | #33-beslutet + Enter-fix |
+| #43 trådlista localStorage | Ernest | planned | INTE Supabase |
+| #44 README v2 | Henrik | planned | alla 4 reflektioner inne |
+| #45 demo-manus v1 | Henrik | planned | rollfördelning per person |
+| #46 TTS-uppläsning | stretch | planned | endast om eget spår klart |
 
 ## Kända blockeringar
 
-- Inga. ~~Service role-nyckeln~~ **Löst ons 3/9**: nyckeln ligger i Vercel
-  (Production + Preview) och alla fyra startprompts är utskickade —
-  wave-open-grinden är passerad, alla spår rullar.
+- Inga vid wave-öppning. #41:s paketinstallation är enda person-beroendet
+  (Ernest → Henrik, en pnpm add — hanteras som ping, inte väntan).
 
-## Wave 2-kandidater (upptäckta under wave 1)
+## Backlogg (efter kursen)
 
-- Kontraktsförtydligande §6: 405 kommer från Next utan JSON-kropp
-  (routen exporterar bara POST) — statuskod är krav, felkroppen önskvärd.
-- Mock-detektorn i smoke-test §0 kan tas bort när mocken pensioneras.
-- #33: gruppbeslut om Ernests extra profil/trådar/hälsning (funktioner utanför issues).
-- Ernests scope-lärdom: en PR per issue, PR-body med bevis, inga funktioner utanför issuen (design är fri).
-
-## Wave-gräns-integration (orchestratorns lista, tors kväll)
-
-- Fastuos riktiga route ersätter mocken → Ernests #21 verifierar noll-ändring.
-- Yasmins fulla data möter Fastuos route i produktion → Henriks #23 smoke-testar.
-- Wave-handoffs (inkl. AI-reflektion för wave 0+1) → README-underlag (#24).
+- Supabase-auth + serverlagrade trådar/profil
+- Fullt pratläge (mic-input, STT)
+- Nivåstyrd retrieval
 
 ## Nästa reconciliation
 
-Tors 4/9 kväll: wave-slut, smoke-test, wave 2 planeras (fre + mån).
-
-## Kända egenheter (inte blockerande)
-
-- `npx tsc --noEmit` på main klagar på `LayoutProps` tills en build körts
-  (Next 16 genererar typerna) — kör `pnpm build` först. Vercel-byggen påverkas ej.
-- Node varnar `MODULE_TYPELESS_PACKAGE_JSON` vid spike-scripten; `"type": "module"`
-  i package.json vore fixen men rörs inte utan Henrik (kan påverka bygget).
+Mån 8/9 kväll: wave 2-slut, full 3×3-regression, wave 3 (tis–ons: ENBART
+polish/demo-repetition, ingen ny funktionskod). Redovisning tors 11/9.
