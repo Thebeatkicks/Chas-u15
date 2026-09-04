@@ -3,7 +3,7 @@
 > Index över git + issues, aldrig egen sanning. Om detta motsäger git: git vinner.
 > Arkiv: `docs/state-archive/` (wave 0 roterad dit ons 3/9).
 
-**Senast uppdaterad:** 2026-09-03 fm (wave 1 öppnad med sveprincipen)
+**Senast uppdaterad:** 2026-09-04 fm — **WAVE 1 KOMPLETT: 12/12 proven.** Alla fyra wave-handoffs inne. Kvar öppet: endast gruppbeslut #33 (tas på dagens möte).
 **Aktuell wave:** 1 (ons 3/9–tors 4/9) · **Mål:** hela kedjan live på
 https://chas-u15.vercel.app torsdag kväll
 **Proven-debt:** 0
@@ -25,7 +25,7 @@ personer inom waven, reviews blockerar aldrig (pinga + fortsätt, orchestrator
 | #18 retrieval-sanity | Yasmin | **proven** | PR #31, baseline 6/10 + gap-analys |
 | #9 chat-spike (c/o) | Fastuo | **proven** | PR #25 (`5a8c4d9`), streaming verifierad, "förklara-inte-lösa" demonstrerad |
 | #19 riktig RAG-route | Fastuo | **proven** | PR #34 + live-verifierad (smoke-runs/wave-1.md) |
-| #20 system-prompts | Fastuo | planned | efter #19 |
+| #20 system-prompts | Fastuo | **proven** | PR #35, tre iterationer i docs/prompt-design.md, v3 live-verifierad |
 | #11 chatkomponent (c/o) | Ernest | **proven** | PR #28 (`e1d208b`) |
 | #12 nivåväljare (c/o) | Ernest | **proven** | PR #28, 400-fällan verifierad |
 | #21 UI mot riktig route | Ernest | **proven** | noll-ändringskoll live OK — kontraktet höll |
