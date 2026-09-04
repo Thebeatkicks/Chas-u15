@@ -30,8 +30,26 @@ pnpm dev
 ## Projektstruktur och arbetssätt
 
 Planen, arkitekturen och alla beslut finns i [docs/PLAN.md](docs/PLAN.md).
-Läget just nu indexeras i [STATE.md](STATE.md). Arbetet sker i 2-dagars *waves*
-med issues per person och handoffs i [docs/handoffs/](docs/handoffs/).
+Läget just nu indexeras i [STATE.md](STATE.md).
+
+Vi jobbade i en **orchestrator/session-modell** med fyra AI-verktyg parallellt
+— ett per person (Claude Code ×2, Codex, Cursor). Henrik som main
+orchestrator skickade **startprompts** i början av varje wave; var och en
+startade en **personlig orchestrator** i sitt eget verktyg, som i sin tur gav
+prompts för en session per issue. En avslutad session lämnade en
+session-handoff till den personliga orchestratorn, och en avslutad wave en
+wave-handoff till Henrik ([docs/handoffs/](docs/handoffs/)) — Henrik
+reconcilade, mergade och öppnade nästa wave.
+
+Arbetet gick i **2-dagars waves** med issues per person, styrda av
+**sveprincipen** ([docs/PLAN.md §4](docs/PLAN.md)): allt en person behöver
+för sina issues — delade nycklar, mergade kontrakt/stubbar, installerade
+paket — ska finnas *innan* waven öppnas, beroenden mellan personer läggs
+alltid på wave-gränsen (aldrig inuti en wave), och en öppnad PR blockerar
+aldrig arbetet — man pingar en namngiven reviewer och fortsätter direkt på
+nästa issue. Regeln kom av en lärdom från wave 0, där beroendekedjor mitt i
+waven serialiserade arbetet
+([docs/state-archive/wave-0.md](docs/state-archive/wave-0.md)).
 
 ## Reflektion (uppgiftens frågor)
 
