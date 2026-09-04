@@ -17,14 +17,6 @@ function DojoIcon() {
   );
 }
 
-function ProfileIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 fill-current" aria-hidden>
-      <path d="M10 2a4 4 0 1 1 0 8 4 4 0 0 1 0-8Zm0 10c4.42 0 7 1.79 7 3v1H3v-1c0-1.21 2.58-3 7-3Z" />
-    </svg>
-  );
-}
-
 function ChevronIcon() {
   return (
     <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 fill-current opacity-40" aria-hidden>
@@ -41,8 +33,7 @@ const LEVEL_DOT: Record<string, string> = {
 };
 
 const NAV = [
-  { href: "/",        label: "Dojo",  Icon: DojoIcon },
-  { href: "/profile", label: "Profil", Icon: ProfileIcon },
+  { href: "/", label: "Dojo", Icon: DojoIcon },
 ] as const;
 
 /* ══════════════════════════════════════════════════════════════ */
