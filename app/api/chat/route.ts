@@ -19,38 +19,7 @@
 import { streamText } from 'ai';
 import { getChatModel } from '@/lib/ai/openrouter';
 import { embedQuery, matchDocuments, toSources, type Match } from '@/lib/ai/retrieval';
-
-type Level = 'beginner' | 'student' | 'developer';
-
-const LEVELS: readonly Level[] = ['beginner', 'student', 'developer'] as const;
-
-/**
- * Minimal nivåstyrning. De genomarbetade, versionerade prompterna per nivå
- * byggs i #20 tillsammans med `docs/prompt-design.md` — den här raden finns
- * bara för att inte tappa nivåbeteendet som mocken hade.
- */
-const LEVEL_HINT: Record<Level, string> = {
-  beginner: 'Användaren är nybörjare: undvik jargong, använd vardagliga liknelser.',
-  student: 'Användaren är student: använd korrekta termer och förklara dem.',
-  developer: 'Användaren är erfaren utvecklare: var precis och teknisk, hoppa över grunderna.',
-};
-
-function systemPrompt(level: Level, context: string): string {
-  return [
-    'Du är JS Sensei, en lärarassistent för JavaScript.',
-    'Du FÖRKLARAR — du löser inte uppgifter åt användaren.',
-    'Om någon ber dig skriva färdig kod som löser deras uppgift: skriv den inte.',
-    'Förklara i stället begreppen som behövs och ställ en fråga som leder dem vidare.',
-    'Korta kodexempel som illustrerar ett begrepp är tillåtna — färdiga lösningar är det inte.',
-    LEVEL_HINT[level],
-    'Grunda svaret i utdragen från MDN nedan. Står svaret inte där: säg det',
-    'hellre än att gissa.',
-    'Svara på svenska.',
-    '',
-    '--- MDN-utdrag ---',
-    context || '(inga träffar — säg att du saknar underlag för just den frågan)',
-  ].join(' ');
-}
+import { buildSystemPrompt, LEVELS, type Level } from '@/lib/ai/system-prompts';
 
 /** Felsvar innan streamen börjat — vanlig JSON, kontraktets §6. */
 function jsonError(status: number, code: string, message: string): Response {
@@ -123,7 +92,7 @@ export async function POST(req: Request): Promise<Response> {
       try {
         const result = streamText({
           model,
-          system: systemPrompt(lvl, context),
+          system: buildSystemPrompt(lvl, context),
           prompt: question,
         });
 
