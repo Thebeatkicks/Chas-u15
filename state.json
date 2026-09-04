@@ -15,9 +15,9 @@
       "id": 38,
       "owner": "yasmin",
       "title": "Regression efter tuning+prompts",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "73434a6",
+      "proof": "PR #53"
     },
     {
       "id": 39,
@@ -39,25 +39,25 @@
       "id": 41,
       "owner": "ernest",
       "title": "Markdown + kodblock + copy",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "PR56",
+      "proof": "live: markdown renderas"
     },
     {
       "id": 42,
       "owner": "ernest",
       "title": "Knappstädning + gäst-banner",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "PR57",
+      "proof": "live; Enter manuell koll kvar"
     },
     {
       "id": 43,
       "owner": "ernest",
       "title": "Trådlista localStorage",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "PR58",
+      "proof": "live: trådlista"
     },
     {
       "id": 44,
@@ -87,9 +87,9 @@
       "id": 52,
       "owner": "fastuo",
       "title": "Query-normalisering (frivillig)",
-      "lifecycle": "planned",
-      "commit": null,
-      "proof": null
+      "lifecycle": "proven",
+      "commit": "73434a6",
+      "proof": "PR #54, 10/10 live"
     }
   ]
 }
