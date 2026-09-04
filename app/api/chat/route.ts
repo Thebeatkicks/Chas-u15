@@ -18,7 +18,7 @@
  */
 import { streamText } from 'ai';
 import { getChatModel } from '@/lib/ai/openrouter';
-import { embedQuery, matchDocuments, toSources, type Match } from '@/lib/ai/retrieval';
+import { retrieve, toSources, type Match } from '@/lib/ai/retrieval';
 import { buildSystemPrompt, LEVELS, type Level } from '@/lib/ai/system-prompts';
 
 /** Felsvar innan streamen börjat — vanlig JSON, kontraktets §6. */
@@ -61,7 +61,7 @@ export async function POST(req: Request): Promise<Response> {
   //     riktiga statuskoder (§6) i stället för ett fel mitt i strömmen. ---
   let matches: Match[];
   try {
-    matches = await matchDocuments(await embedQuery(question));
+    matches = await retrieve(question);
   } catch (error) {
     console.error('[chat] retrieval misslyckades:', error);
     const isEmbedding = error instanceof Error && error.message.includes('Embedding');
