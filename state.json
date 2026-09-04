@@ -1,95 +1,55 @@
 {
-  "wave": 2,
+  "wave": 3,
   "updated": "2026-09-04",
   "archive": "docs/state-archive/",
   "packets": [
     {
-      "id": 37,
-      "owner": "yasmin",
-      "title": "Retrieval-gap ≥8/10",
-      "lifecycle": "proven (6/10, delvis)",
-      "commit": "11b7413",
-      "proof": "PR #51 + rotorsaksanalys"
-    },
-    {
-      "id": 38,
-      "owner": "yasmin",
-      "title": "Regression efter tuning+prompts",
-      "lifecycle": "proven",
-      "commit": "73434a6",
-      "proof": "PR #53"
-    },
-    {
-      "id": 39,
-      "owner": "fastuo",
-      "title": "Prompt-svagheter v4",
-      "lifecycle": "proven",
-      "commit": "564057c",
-      "proof": "PR #49, 0/20 huvudmått"
-    },
-    {
-      "id": 40,
-      "owner": "fastuo",
-      "title": "Modell-A/B",
-      "lifecycle": "proven",
-      "commit": "8ad4a5c",
-      "proof": "PR #50, behåll gpt-4o-mini"
-    },
-    {
-      "id": 41,
-      "owner": "ernest",
-      "title": "Markdown + kodblock + copy",
-      "lifecycle": "proven",
-      "commit": "PR56",
-      "proof": "live: markdown renderas"
-    },
-    {
-      "id": 42,
-      "owner": "ernest",
-      "title": "Knappstädning + gäst-banner",
-      "lifecycle": "proven",
-      "commit": "PR57",
-      "proof": "live; Enter manuell koll kvar"
-    },
-    {
-      "id": 43,
-      "owner": "ernest",
-      "title": "Trådlista localStorage",
-      "lifecycle": "proven",
-      "commit": "PR58",
-      "proof": "live: trådlista"
-    },
-    {
-      "id": 44,
-      "owner": "henrik",
-      "title": "README v2",
-      "lifecycle": "proven",
-      "commit": "fea3497",
-      "proof": "PR #47 + 9f467be"
-    },
-    {
-      "id": 45,
-      "owner": "henrik",
-      "title": "Demo-manus v1",
-      "lifecycle": "proven",
-      "commit": "d357e00",
-      "proof": "PR #48"
-    },
-    {
-      "id": 46,
-      "owner": "stretch",
-      "title": "TTS-uppläsning (stretch)",
+      "id": 59,
+      "owner": "alla",
+      "title": "Kodkommentar-granskning (betygskrav)",
       "lifecycle": "planned",
       "commit": null,
       "proof": null
     },
     {
-      "id": 52,
+      "id": 60,
+      "owner": "henrik",
+      "title": "Full smoke-regression 3x3",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 61,
+      "owner": "henrik",
+      "title": "README v3 + inlämningschecklista",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 62,
       "owner": "fastuo",
-      "title": "Query-normalisering (frivillig)",
-      "lifecycle": "proven",
-      "commit": "73434a6",
-      "proof": "PR #54, 10/10 live"
+      "title": "Wave-2-handoff (rest)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 63,
+      "owner": "alla",
+      "title": "Demo-repetition x2",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
+    },
+    {
+      "id": 46,
+      "owner": "stretch",
+      "title": "TTS-uppläsning (villkorad stretch)",
+      "lifecycle": "planned",
+      "commit": null,
+      "proof": null
     }
   ]
 }
