@@ -134,7 +134,182 @@ sidtitel delar samma unika, otvetydiga nyckelord.
   #3 similarity=0.4474  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
 ```
 
-## Explicit icke-gjort
+## Explicit icke-gjort (baseline)
 
 Ingen tuning. `similarity_threshold`, chunk-storlek och overlap är
 oförändrade — det här är bara mätningen wave 2 ska utgå från.
+
+---
+
+# Efter-mätning — issue #37 (2026-09-04)
+
+> Svarar på: hjälpte tuningen? Samma metod som baseline (samma 10 frågor,
+> topp-3, `similarity_threshold=0.0`, samma bedömningskriterium "skulle den
+> här sidan faktiskt svara på frågan"). Kört mot en **fullständig
+> ombindexering** av alla 528 sidor (inte en delmängd) — `documents`
+> verifierad till **3547 rader** efter körningen (upp från baseline-mätningens
+> 1738, se "Vad ändrades" nedan för varför).
+
+## Vad ändrades i `scripts/ingest.ts`
+
+1. **Sidtitel i embedding-texten.** Varje chunk embeddas som
+   `${title}\n\n${chunkText}` istället för bara `chunkText`. `content`-fältet
+   som lagras i databasen är **oförändrat** (utan titelprefix) — 
+   `app/api/chat/route.ts` prependar redan `"## title"` runt `content` vid
+   promptbygge, så att duplicera titeln i lagrad `content` hade varit
+   redundant för den konsumenten (och den filen ägs inte av den här issuen).
+2. **Chunkning: hybrid rubrik + max-storlek-tak**, istället för ren fast
+   storlek. `##`-rubriker är primärregeln; en `##`-sektion som överskrider
+   `CHUNK_SIZE` (2800 tecken, oförändrat) provas först med `###`-underrubriker
+   inom sektionen, och faller sist tillbaka till fast delning+overlap. Se
+   filhuvudet i `scripts/ingest.ts` för fullständig motivering.
+3. **Boilerplate-filter.** Sektioner rubricerade "See also", "Specifications"
+   eller "Browser compatibility" (near-identiska länklistor/tabeller på
+   nästan varje referens-sida, ingen prosa) filtreras bort helt — mindre brus,
+   lägre embedding-kostnad.
+
+**Kostnadsavvägning, uttryckligen:** hybrid-chunkningen ger fler, mindre
+chunks — 3547 mot baseline-mätningens 1738 (≈2,04×). Verifierat i en
+scratchpad-simulering över alla 528 sidor **innan** den skarpa körningen
+(se "Så testade jag" i sessionens handoff) att detta var det förväntade
+utfallet, inte en bugg. Motiveringen: exakt den här typen av finkornig
+rubrik-isolering var vad som faktiskt löste hoisting-gapet (se #7 nedan) —
+en fast-storlek-chunk hade begravt "### Variable hoisting" i 2227 tecken
+orelaterad text om variabelscope.
+
+## Resultat — efter
+
+| # | Fråga | Topp-3 EFTER (titel — similarity) | Rätt sida bland träffarna? | Jämfört med baseline |
+|---|---|---|---|---|
+| 1 | vad är en closure | Closures — 0.6207 · Closures — 0.4746 · Closures — 0.4642 | **Ja** | Oförändrat (starkare — alla tre nu closure-sidan, mot en Functions-distraktor på rank 1 tidigare) |
+| 2 | skillnaden mellan let och const | const — 0.3074 · const — 0.2813 · **static** — 0.2758 | **Nej** | Oförändrat resultat. `let` nu rank 4 (0.2752) — **0,0006** bakom rank 3. Regex-distraktorn från baseline är borta, ersatt av en ny (Classes/`static`), lika irrelevant. |
+| 3 | hur fungerar map() | Map — 0.5087 · Map() constructor — 0.4841 · Map — 0.4829 | **Nej** | Oförändrat resultat. `Array.prototype.map()` nu rank 4 (0.4740) — 0,009 bakom rank 3. En tidigare osedd `Map`-undersida (`Map() constructor`) tog den plats titelfixen skulle gett arraymetoden. |
+| 4 | vad är async/await | await — 0.6089 · await — 0.5720 · async function — 0.5669 | **Ja** | Oförändrat |
+| 5 | hur använder man fetch för att hämta data | Using the Fetch API — 0.5339 · Fetch API — 0.5016 · Using the Fetch API — 0.4726 | **Ja** | Oförändrat |
+| 6 | vad är en prototyp i JavaScript | "Function: prototype" ×3 (0.5712/0.5592/0.5585) | **Nej** | Oförändrat resultat, men kvaliteten på rank 2/3 höjd (två `Function: prototype`-delsektioner istf en helt orelaterad `Object.getOwnPropertyDescriptors()`-träff i baseline). Guide-sidan (`Inheritance and the prototype chain`) nu rank 4 (0.5487) — 0,0098 bakom rank 3. Syntes inte alls i baseline. |
+| 7 | vad är hoisting | function — 0.4254 · **Grammar and types — 0.3603** · import — 0.3576 | **Ja** | **FIXAD.** Var `Nej` i baseline (lägst similarity av alla tio, 0.22–0.29, ingen relevant sida i topp-3). Målsidan syns nu i topp-3 med väsentligt högre similarity. |
+| 8 | skillnad på == och === | Expressions and operators — 0.4359 · Equality (==) — 0.4285 · Strict equality (===) — 0.4235 | **Ja** | Oförändrat resultat, bredare/mer relevant sidmix (täcker nu båda operatorerna som jämförs, inte bara varianter av `===`) |
+| 9 | hur fungerar this | Functions — 0.2970 · **Function.prototype.apply() — 0.2948** · Functions — 0.2921 | **Nej** | **REGRESSION.** Var `Ja` (svagt, rank 3) i baseline. `this`-sidan syns inte längre i topp-3 — se rotorsak nedan. |
+| 10 | vad gör reduce() | Array.prototype.reduce() ×3 (0.4981/0.4967/0.4847) | **Ja** | Oförändrat, starkt |
+
+**Träffsäkerhet: 6/10 — målet ≥8/10 nåddes INTE.**
+
+Samma råa antal som baseline, men sammansättningen är en annan: ett av de
+fyra namngivna gapen (#7, hoisting) är löst. De tre andra (#2, #3, #6) är
+**inte** lösta enligt det strikta topp-3-kriteriet, men har gått från tydliga
+förluster (baseline: målsidan syns inte alls, eller trängs undan av en helt
+orelaterad träff) till **jämna lopp** — målsidan ligger nu på rank 4, mindre
+än 0,01 similarity bakom rank 3 i alla tre fallen (0,0006 / 0,009 / 0,0098).
+Utöver de fyra namngivna gapen regredierade en femte, tidigare svagt godkänd
+fråga (#9, "this") till underkänd.
+
+## Terminalutdrag (fullständigt, från den skarpa körningen 2026-09-04)
+
+```
+=== FRÅGA: "vad är en closure" ===
+  #1 similarity=0.6207  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+  #2 similarity=0.4746  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+  #3 similarity=0.4642  "Closures"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Closures
+
+=== FRÅGA: "skillnaden mellan let och const" ===
+  #1 similarity=0.3074  "const"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
+  #2 similarity=0.2813  "const"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
+  #3 similarity=0.2758  "static"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static
+
+=== FRÅGA: "hur fungerar map()" ===
+  #1 similarity=0.5087  "Map"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+  #2 similarity=0.4841  "Map() constructor"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/Map
+  #3 similarity=0.4829  "Map"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map
+
+=== FRÅGA: "vad är async/await" ===
+  #1 similarity=0.6089  "await"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+  #2 similarity=0.5720  "await"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/await
+  #3 similarity=0.5669  "async function"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+
+=== FRÅGA: "hur använder man fetch för att hämta data" ===
+  #1 similarity=0.5339  "Using the Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+  #2 similarity=0.5016  "Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
+  #3 similarity=0.4726  "Using the Fetch API"  https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+=== FRÅGA: "vad är en prototyp i JavaScript" ===
+  #1 similarity=0.5712  ""Function: prototype""  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+  #2 similarity=0.5592  ""Function: prototype""  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+  #3 similarity=0.5585  ""Function: prototype""  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/prototype
+
+=== FRÅGA: "vad är hoisting" ===
+  #1 similarity=0.4254  "function"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function
+  #2 similarity=0.3603  "Grammar and types"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Grammar_and_types
+  #3 similarity=0.3576  "import"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
+
+=== FRÅGA: "skillnad på == och ===" ===
+  #1 similarity=0.4359  "Expressions and operators"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Expressions_and_operators
+  #2 similarity=0.4285  "Equality (==)"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Equality
+  #3 similarity=0.4235  "Strict equality (===)"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Strict_equality
+
+=== FRÅGA: "hur fungerar this" ===
+  #1 similarity=0.2970  "Functions"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions
+  #2 similarity=0.2948  "Function.prototype.apply()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply
+  #3 similarity=0.2921  "Functions"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Functions
+
+=== FRÅGA: "vad gör reduce()" ===
+  #1 similarity=0.4981  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+  #2 similarity=0.4967  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+  #3 similarity=0.4847  "Array.prototype.reduce()"  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduce
+```
+
+## Rotorsaksanalys — varför #2/#3/#6 inte flippade, och varför #9 regredierade
+
+Ett **scratchpad-delmängdstest** (23 utvalda sidor, inte de fulla 528) kördes
+innan den skarpa ombindexeringen, för att testa chunkning/titel-ändringar
+billigt (se sessionens handoff). Där **löste** samma kod alla tre av
+#2/#3/#7 (8/10 totalt i delmängden). Mot den fulla korpusen dök nya
+distraktorer upp som inte fanns i delmängden och åt upp marginalen:
+
+- **#2 (let/const):** delmängden innehöll bara `let`, `const` och en
+  regex-sida som konkurrenter. Fulla korpusen introducerar `static`
+  (`Classes/static`) — en helt orelaterad deklarations-sida vars
+  boilerplate-friserade text råkar likna `let`/`const`-sidornas generiska
+  "the `X` statement declares..."-fras tillräckligt för att tränga sig in på
+  rank 3, 0,0006 före `let`.
+- **#3 (map()):** delmängden innehöll bara `Array.prototype.map()`, `Map` och
+  `Map.groupBy()`. Fulla korpusen har fler `Map`-undersidor (`Map()
+  constructor`, `Map.prototype[Symbol.iterator]()`, m.fl.) som alla drar nytta
+  av samma sidtitel-fix (`Map`/`Map()`) och förstärker `Map`-klustrets
+  dominans ytterligare.
+- **#6 (prototype):** guide-sidan klättrade från att inte synas alls i
+  baseline till rank 4 (0,0098 bakom rank 3) — en reell förbättring, men
+  `Function: prototype`-referenssidan har helt enkelt fler nästan identiskt
+  rankade delsektioner (fem `Function: prototype`-chunks i topp-8) som fyller
+  topp-3 innan guiden får plats.
+- **#9 (this, regression):** finkornig rubrik-chunkning delade upp
+  `this`-referenssidan i fler, mindre chunks. En ny distraktor
+  (`Function.prototype.apply()`, som diskuterar `this`-bindning via `apply()`)
+  fick plats i topp-3 istället. `this`-sidans egna chunks syns fortfarande i
+  korpuset, bara inte längre i topp-3 för den här frågan.
+
+**Gemensamt mönster:** när flera sidor är genuint nära besläktade i
+MDN:s eget vokabulär (deklarationssatser, `Map`-familjen,
+`prototype`-relaterade referenssidor, `this`-bindning i funktionsmetoder)
+sitter de nära varandra i embeddingrymden oavsett lokala chunk-/titel-knep —
+marginalerna som avgör topp-3 är brøkdelar av en similaritetspoäng, inte
+något en chunkningsstrategi ensam kan garantera att vinna. Det här är i
+linje med det ursprungliga gapet ("konceptuell/jämförande fråga tappar mot
+referens-sida för enskilt API") men visar att åtgärden krymper problemet
+utan att helt eliminera det för alla fyra gap.
+
+## Rekommendation till nästa steg (INTE implementerad — utanför filägarskapet)
+
+Query-time-normalisering eller sönderdelning av jämförande frågor (t.ex.
+"skillnaden mellan let och const" → två separata sökningar, en per begrepp,
+med union av träffarna) skulle sannolikt lösa #2 och liknande
+jämförelsefrågor mer robust än vidare chunkningsjustering. Det hör hemma i
+`lib/ai/retrieval.ts` (Fastuos yta, #19/#38) — rör INTE den filen härifrån
+per issue #37:s filägarskapsregel. Dokumenteras här som rekommendation till
+den sessionen istället.
+
+## Explicit icke-gjort (efter-mätningen)
+
+`similarity_threshold` (0.2 i produktion, `lib/ai/retrieval.ts`) och
+`MATCH_COUNT` (5 i produktion) är oförändrade — den här mätningen använder
+fortfarande topp-3/tröskel-0.0 för att vara direkt jämförbar med baseline,
+inte produktionens faktiska hämtningsparametrar.
