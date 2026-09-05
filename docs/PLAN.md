@@ -89,6 +89,10 @@ En wave ska gå att **bränna av i ett svep**, oavsett när på dygnet man jobba
 - Ingen force-push. Repot är **publikt** — inga hemligheter i kod, issues eller PR:er.
 - Filägarskap per issue (står i varje issue) — två parallella sessions rör
   aldrig samma filer.
+- **Stackade PR:er byggs om mot `main` efter varje merge i kedjan**, inte
+  bara mot sin egen utgångspunkt (lärdom från wave 2: en squash-merge tappade
+  `COPY.inputPlaceholder` mellan två stackade PR:er, typecheck trasig ~10 min
+  — se README §"Integrationsbuggen").
 
 ### Nyckelhantering
 - `.env.local` (gitignorad) för alla hemligheter. `.env.example` visar vilka

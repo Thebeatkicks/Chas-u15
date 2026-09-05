@@ -53,14 +53,16 @@ waven serialiserade arbetet
 
 ## Reflektion (uppgiftens frågor)
 
-> **Version 2** (wave 2). Besluten i [docs/PLAN.md §3](docs/PLAN.md),
+> **Version 3** (wave 3, pågående). Besluten i [docs/PLAN.md §3](docs/PLAN.md),
 > lärdomarna i [docs/state-archive/wave-0.md](docs/state-archive/wave-0.md)
-> och API-kontraktet i [docs/api-contract.md](docs/api-contract.md). Alla
-> fyra personliga AI-reflektionerna från wave 0–1
-> ([docs/handoffs/](docs/handoffs/)) är nu invävda i "Vad var svårt?" nedan,
-> tillsammans med miljöbuggen och prompt-designens tre iterationer.
-> Modell-A/B-resultatet är invävt (se "Modell-A/B" nedan). Text
-> färdigställs i wave 3.
+> och API-kontraktet i [docs/api-contract.md](docs/api-contract.md). Wave 2:s
+> resultat är invävda nedan: retrievalfixen 6/10 → 10/10, prompt-designens
+> alla fem iterationer (inklusive v4:s misslyckande med förbudslistor),
+> modell-A/B-slutsatsen och integrationsbuggen med stackade PR:er. De fyra
+> personliga AI-reflektionerna från wave 0–1 står kvar under "Vad var svårt?"
+> — wave 2:s reflektioner (Yasmin, Ernest, Fastuo) läggs till när
+> [#62](https://github.com/Thebeatkicks/Chas-u15/issues/62) (Fastuos
+> wave-2-handoff) har landat, så alla tre kommer in i samma svep.
 
 ### Vilken ny AI-teknik/bibliotek identifierade vi och hur tillämpade vi det?
 
@@ -106,6 +108,31 @@ inte bara scriptets egen logg). Retrieval-baseline låg på **6/10** rätt sida
 i topp-3 över tio testfrågor ([docs/retrieval-sanity.md](docs/retrieval-sanity.md))
 — de fyra missarna är namngivna och verifierat att vara renodlade
 retrieval-gap, inte täckningsluckor, och är wave 2:s startlista (#37).
+
+**Retrieval: 6/10 → 10/10 (wave 2).** Två separata fixar, båda mätta mot
+exakt samma tio frågor för att vara jämförbara:
+
+1. **Hybrid rubrik-chunkning** (#37, `scripts/ingest.ts`) — `##`-rubriker
+   som primärregel i stället för fast chunkstorlek, med sidtiteln
+   prependad i embeddingtexten. Löste ett av de fyra gapen (hoisting) rakt
+   av, men de tre andra (let/const, map(), prototype) förbättrades bara till
+   "jämnt lopp" — målsidan hamnade på rank 4, under 0,01 similarity bakom
+   rank 3. En chunkningsstrategi kan inte ensam vinna marginaler så små.
+2. **Query-normalisering** (#52, `lib/ai/retrieval.ts`) tog resten: frågan
+   expanderas till en hel mening före embedding (6/10 → 9/10 ensamt — en kort
+   fråga som "hur fungerar map()?" ligger nära `Map`-objektet, en hel mening
+   drar mot guide-/referenstext), och en jämförelsefråga som "let vs const"
+   söks som hela frasen **plus** en sökning per begrepp, med träffarna
+   **varvade** i stället för sorterade på similarity (9/10 → 10/10). Poängen
+   med varvningen: sorterar man unionen tar det starkare begreppet (`const`)
+   alla topp-3-platserna — exakt felet som gjorde att `let` aldrig syntes.
+   Live-verifierat i produktion: closures, let+const och `Array.prototype.map()`
+   kommer nu överst.
+
+Två strategier som såg lovande ut föll på mätningen i stället för på
+magkänslan: engelska nyckelord istf svenska gav bara 6/10, och
+sönderdelning av frågan utan varvning gav 5/10 och bröt dessutom `==` vs
+`===`.
 
 ### Varför valde vi den AI-tekniken/det biblioteket?
 
@@ -243,9 +270,24 @@ var den första deployade koden som faktiskt läste dem. Dokumenterat i
 *finns* i Production säger inget om att den har ett *värde* — checklistan
 kollar nu båda.
 
-### Prompt-designens tre iterationer
+### Integrationsbuggen — stackade PR:er (wave 2)
 
-Nivåprompterna gick genom tre versioner innan de höll
+En andra produktionsbugg kom inte från ren kod utan från git-processen: när
+två stackade PR:er (den ena byggd ovanpå den andra, båda mot `main`) mergades
+med squash försvann `COPY.inputPlaceholder` — en konstant den andra PR:en
+hade lagt till men den första inte kände till — och typecheck var trasig i
+cirka tio minuter innan det upptäcktes och rättades
+([`7f8bb4a`](https://github.com/Thebeatkicks/Chas-u15/commit/7f8bb4a)).
+Orsaken: en stackad PR byggdes och
+testades mot sin egen bas, inte mot `main` efter att den underliggande PR:en
+redan mergats in. Lärdom, tillagd i
+[docs/PLAN.md §4](docs/PLAN.md)s git-regler: stackade PR:er ska byggas om
+mot `main` efter *varje* merge i kedjan, inte bara verifieras mot sin egen
+utgångspunkt.
+
+### Prompt-designens fem iterationer
+
+Nivåprompterna gick genom fem versioner innan de höll
 ([docs/prompt-design.md](docs/prompt-design.md)). **v1** — sex rader inbakade
 i routen — gav fyra synliga problem: nivåskillnaden var bara ordval,
 `developer` förklarade grunderna ändå, vägran läckte lösningen som ett
@@ -255,9 +297,30 @@ modul, längdtak per nivå, hårdare vägransregel — fixade tre av fyra, men
 *innehåll* ("förklara inte grunderna") räckte inte. **v3**:s enda ändring
 var att i stället styra **formen** på första meningen: förbjudna
 inledningsfraser som "X är en kombination av", och första meningen ska
-handla om beteende eller fallgrop i stället för definition. Lärdomen: när
-modellen har en stark stilmässig vana slår en regel om form en regel om
-innehåll.
+handla om beteende eller fallgrop i stället för definition.
+
+**v4 — den misslyckade iterationen (wave 2).** Hypotesen var att göra regeln
+mekanisk: räkna upp exakt vilka formuleringar som är förbjudna ("är en",
+"innebär att", "kombination av"…) och "nämn ALDRIG alla metoder i ordning"
+för vägran. Resultatet blev sämre på alla mått — `developer`-definitioner
+gick från 1/10 till **3/10**, `beginner` över ordtaket från 0/10 till
+**5/10**. Två lärdomar: att räkna upp förbjudna formuleringar ordagrant gör
+dem mer närvarande i modellens svar, inte mindre, och regelmassan i sig
+tränger undan andra regler den delar block med (längdtaket, som var orört,
+slutade hållas i hälften av körningarna). **v5** vände på greppet helt —
+inga förbud, bara positiva mönster att följa (svara som en lärare vid en
+whiteboard, fyra öppningsmallar för `developer`, konkretiserad längdregel
+sist i blocket) — och tog `developer`-definitioner och `beginner`-ordtaket
+till **0/20** vardera över tjugo varv.
+
+Lärdomen som håller genom alla fem: när modellen har en stark stilmässig
+vana slår en regel om **form** en regel om **innehåll**, och ett **förbud**
+biter sämre än ett **positivt mönster** att följa. Den andra lärdomen var
+metodologisk: v1–v3 mättes med en körning per ändring, vilket dolde variansen
+helt — main-orchestratorns live-regression hittade v3-stilen tillbaka i
+ungefär en av flera körningar. Därför finns nu
+`lib/ai/prompt-regression.mjs`, som kör tio/tjugo varv per ändring i stället
+för ett.
 
 ### Modell-A/B
 
