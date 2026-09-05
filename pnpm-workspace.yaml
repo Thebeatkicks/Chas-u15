@@ -1,3 +1,8 @@
+# pnpm blockerar postinstall-skript för paket med native bindings som
+# standard (skydd mot supply-chain-attacker). sharp/unrs-resolver är
+# transitiva beroenden som aldrig körs server-side i den här appen — vi
+# har inget behov av deras native builds, så vi litar på pnpms standardval
+# istf att godkänna dem. create-next-app/pnpm-scaffoldens standardval.
 ignoredBuiltDependencies:
   - sharp
   - unrs-resolver
