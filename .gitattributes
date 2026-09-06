@@ -1,3 +1,4 @@
+# Teamet blandar Windows/macOS — utan detta ger CRLF vs LF diff-brus i varje PR.
 * text=auto eol=lf
 *.ico binary
 *.png binary
