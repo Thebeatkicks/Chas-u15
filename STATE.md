@@ -28,10 +28,11 @@
 |---|---|---|---|
 | #59 kodkommentarer | ALLA | Henrik proven (PR #65), övriga planned | **betygskrav** — en PR per person |
 | #60 smoke 3×3 | Henrik | **proven** | `docs/smoke-runs/wave-3.md`, godkänd med anmärkning → #64 |
-| #61 README v3 + inlämning | Henrik | PR öppen (#66), ej mergad | reflektions-personreflektioner väntar #62 |
-| #62 wave-2-handoff | Fastuo | planned | blockerar #61:s AI-reflektionsdel (resten av #61 är klar) |
+| #61 README v3 + inlämning | Henrik | **proven** | PR #66 mergad + docs/inlamning.md |
+| #62 wave-2-handoff | Fastuo | **proven** | PR #67 — alla fyra wave 2-handoffs nu inne |
 | #63 demo-repetition ×2 | ALLA | planned | tidtagning, inkognito, live |
-| #64 React-krasch (#185) vid streaming | Ernest/Fastuo | planned | hittad i #60:s smoke-körning |
+| #64 React-krasch vid streaming | **Ernest** | planned | **HÖGSTA PRIO** — rotorsakshypotes i issuen: race mellan tvåuseEffect i chat.tsx |
+| #68 sanity-doc 6/10→10/10 | Yasmin | planned | dokumentationsinkonsekvens, läsarfälla vid kodgranskning |
 | #46 TTS | stretch | planned | ENDAST om eget spår klart |
 
 ## Kända rester
