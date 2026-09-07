@@ -3,11 +3,12 @@
 import { useChat, type UIMessage } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { COPY } from "./copy";
 import { EmptyState } from "./empty-state";
 import { LevelPicker } from "./level-picker";
 import { MarkdownMessage } from "./markdown-message";
+import { MessageBoundary } from "./message-boundary";
 import { useProfile } from "./profile-store";
 import { SourceChips } from "./source-chips";
 
@@ -75,9 +76,30 @@ function ChatSession() {
     clearError();
   }, [activeThreadId, sessionId, threads, setMessages, clearError]);
 
+  // Speglar den pågående sessionen till trådlistan.
+  //
+  // `savedSignature` bryter en oändlig renderloop (issue #64): saveThread()
+  // uppdaterar `threads` i providern, vilket renderar om den här komponenten,
+  // varpå useChat lämnar ut en ny `messages`-referens — även när innehållet är
+  // oförändrat. Utan vakt blir det spara → rendera → spara i all oändlighet,
+  // vilket React avbryter med "Maximum update depth exceeded" mitt i ett
+  // streamat svar (rått felmeddelande i chattbubblan, avbruten fetch).
+  //
+  // Signaturen jämför innehåll i stället för referens. Under streaming ingår
+  // bara antalet meddelanden, så tråden dyker upp i menyn direkt när frågan
+  // skickas — men texten som växer fram chunk för chunk utlöser inte en
+  // skrivning per chunk. När strömmen är klar sparas svaret i sin helhet.
+  const savedSignature = useRef("");
+
   useEffect(() => {
     if (messages.length === 0) return;
     const last = messages.at(-1);
+    const signature = busy
+      ? `${sessionId}|${messages.length}`
+      : `${sessionId}|${messages.length}|${last ? messageText(last).length : 0}`;
+    if (savedSignature.current === signature) return;
+    savedSignature.current = signature;
+
     saveThread({
       id: sessionId,
       title: asThreadTitle(messages),
@@ -86,9 +108,20 @@ function ChatSession() {
       messages,
     });
     if (activeThreadId !== sessionId) openThread(sessionId);
-  }, [messages, saveThread, sessionId, activeThreadId, openThread]);
+  }, [messages, busy, saveThread, sessionId, activeThreadId, openThread]);
 
+  // Nollställer sessionen när den aktiva tråden raderats ur menyn.
+  //
+  // `busy`-vakten är inte kosmetisk (issue #64): effekten ovan sätter
+  // activeThreadId via openThread(), men det är ett setState som inte syns
+  // förrän nästa render. Under den rendern ser den här effekten fortfarande
+  // activeThreadId === null och en `threads` utan den nyss sparade tråden,
+  // och nollställde då messages MITT I en pågående ström — vilket avbröt
+  // fetchen (net::ERR_ABORTED) och kraschade renderingen med ett rått
+  // React-fel i chattbubblan. Städning kan alltid vänta tills strömmen är
+  // klar; en aktiv ström får aldrig avbrytas av den.
   useEffect(() => {
+    if (busy) return;
     if (activeThreadId !== null) return;
     const stillHere = threads.some((item) => item.id === sessionId);
     if (!stillHere && messages.length > 0) {
@@ -97,7 +130,15 @@ function ChatSession() {
       setInput("");
       clearError();
     }
-  }, [activeThreadId, threads, sessionId, messages.length, setMessages, clearError]);
+  }, [
+    busy,
+    activeThreadId,
+    threads,
+    sessionId,
+    messages.length,
+    setMessages,
+    clearError,
+  ]);
 
   const submit = () => {
     const text = input.trim();
@@ -174,13 +215,15 @@ function ChatSession() {
                     </p>
                   ) : (
                     <div className="max-w-[40rem] rounded-3xl border border-[var(--line)] bg-[var(--paper-raised)]/80 px-4 py-4 shadow-[0_12px_40px_rgba(22,19,15,0.04)]">
-                      <MarkdownMessage
-                        text={text}
-                        streaming={
-                          status === "streaming" &&
-                          message.id === messages.at(-1)?.id
-                        }
-                      />
+                      <MessageBoundary>
+                        <MarkdownMessage
+                          text={text}
+                          streaming={
+                            status === "streaming" &&
+                            message.id === messages.at(-1)?.id
+                          }
+                        />
+                      </MessageBoundary>
                       <SourceChips message={message} />
                       {text && status !== "streaming" ? (
                         <button
