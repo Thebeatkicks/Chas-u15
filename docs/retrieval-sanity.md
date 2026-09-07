@@ -429,3 +429,70 @@ Ingen ny tuning här — enligt filägarskapet i #38 rördes bara denna fil.
 `app/**` är oförändrade av den här sessionen. Query-time-normalisering
 (#52) är fortfarande rekommendationen för #2/#3/#6/#9, inte implementerad
 här.
+
+---
+
+# Slutresultat — issue #52, query-normalisering (2026-09-07)
+
+> Svarar på issue #68: filen stod kvar på 6/10 i alla tre föregående
+> avsnitt trots att #52 (mergad, PR #54) redan hade löst de fyra
+> kvarvarande gapen. Det här avsnittet ändrar ingen historik ovan — resan
+> **6/10 (baseline) → 6/10 (efter #37) → 10/10 (efter #52)** är poängen,
+> och alla tre tidigare mätningar står orörda.
+
+Fastuo (@Argentino010) implementerade query-time-normalisering i
+`lib/ai/retrieval.ts` (issue #52, [PR #54](https://github.com/Thebeatkicks/Chas-u15/pull/54),
+mergad 2026-09-04) — precis den rekommendation som stod kvar oimplementerad
+i slut-checkpointens "Rekommendation till nästa steg" ovan. Två steg,
+båda mätta separat på den här filens egen 10-frågorssvit
+(topp-3, `similarity_threshold=0.0`):
+
+1. **Fullmeningsexpansion av korta frågor före embedding.** En kort fråga
+   som "hur fungerar map()" ligger nära `Map`-objektet i embeddingrymden;
+   att expandera frågan till en hel förklarande mening drar träffarna mot
+   guide-/referenstexter som själva är skrivna som hela meningar. Ensamt:
+   **6/10 → 9/10**.
+2. **Jämförelsefrågor söks som hela frasen PLUS en gång per begrepp, med
+   träffarna interleavade istället för similarity-sorterade.** Sortering
+   på ren similarity lät det starkare begreppet ta alla topp-3-platserna —
+   exakt felet som gjorde att `let` aldrig syntes bredvid `const` i både
+   baseline och #37s efter-mätning. Interleaving löser det sista gapet:
+   **9/10 → 10/10**.
+
+Fastuos fullständiga före/efter-tabell (hans commit-message, PR #54) mot
+den här filens egen svit och kriterium:
+
+| Fråga | Före (#37) | Efter (#52) |
+|---|---|---|
+| vad är en closure | ✅ | ✅ |
+| skillnaden mellan let och const | ❌ | **✅** |
+| hur fungerar map() | ❌ | **✅** |
+| vad är async/await | ✅ | ✅ |
+| hur använder man fetch | ✅ | ✅ |
+| vad är en prototyp i JavaScript | ❌ | **✅** |
+| vad är hoisting | ✅ | ✅ |
+| skillnad på == och === | ✅ | ✅ |
+| hur fungerar this | ❌ | **✅** |
+| vad gör reduce() | ✅ | ✅ |
+| | **6/10** | **10/10** |
+
+De fyra frågor som stod olösta genom både baseline och #37 (#2 let/const,
+#3 map(), #6 prototype, samt #9 this som regredierade i #37) är samtliga
+**Ja** nu — precis de fyra rotorsaksanalysen ovan identifierade som
+marginalfall (0,0006–0,0098 similarity bakom rank 3), löst av frågans egen
+formulering snarare än ytterligare chunkningsjustering. Se PR #54 för
+Fastuos fulla resonemang, kostnadsavvägning (jämförelsefrågor kör tre
+embeddings parallellt istället för en) och de alternativa strategier som
+mättes och förkastades (engelska nyckelord: ingen förbättring; sönderdelning
+utan interleaving: 5/10, bröt dessutom `==`/`===`).
+
+**Träffsäkerhet: 10/10.** Sanity-sviten som initierades i wave 2 (#18) är
+i mål.
+
+## Explicit icke-gjort (detta avsnitt)
+
+Ingen ny mätning kördes här — det här avsnittet dokumenterar PR #54:s
+redan mergade och redan mätta resultat (issue #68 är en
+dokumentationsinkonsekvens, inte en ny testkörning). `lib/ai/retrieval.ts`
+är oförändrad av den här sessionen; filägarskapet för #68 är endast den
+här filen.

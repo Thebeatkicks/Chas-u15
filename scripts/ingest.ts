@@ -258,12 +258,20 @@ async function main() {
       const chunks = loadChunks(relPath);
       for (const chunk of chunks) {
         // Sidtiteln prependas ENDAST i texten som embeddas, inte i `content`
-        // som lagras (issue #37, adresserar #3/#6: "Array.prototype.map()"
-        // vs bara "Map" som rubrik, "Function: prototype" vs den konceptuella
-        // guide-sidan). `content` hålls orört eftersom
-        // app/api/chat/route.ts redan prependar "## title" runt content vid
-        // promptbygge — att duplicera titeln i lagrad content vore redundant
-        // för den konsumenten och inte vårt filägarskap att ändra.
+        // som lagras (issue #37, riktat mot sanity-frågorna #3/#6:
+        // "Array.prototype.map()" vs bara "Map" som rubrik, "Function:
+        // prototype" vs den konceptuella guide-sidan). `content` hålls orört
+        // eftersom app/api/chat/route.ts redan prependar "## title" runt
+        // content vid promptbygge — att duplicera titeln i lagrad content
+        // vore redundant för den konsumenten och inte vårt filägarskap att
+        // ändra.
+        //
+        // Facit (docs/retrieval-sanity.md, #37s efter-mätning): den här
+        // titelprefixningen krympte gapet för #3/#6 (och #2/#9) till under
+        // 0.01 similarity bakom rank 3, men stängde det inte — sviten stod
+        // kvar på 6/10. Det gapet stängdes till slut inte här utan i
+        // query-tid, via #52s frågenormalisering i lib/ai/retrieval.ts (utanför
+        // den här filens ägarskap) — se sanity-dokumentets slutavsnitt (#68).
         const embedding = await embed(`${chunk.metadata.title}\n\n${chunk.content}`);
         batch.push({ content: chunk.content, metadata: chunk.metadata, embedding });
         totalChunks++;
