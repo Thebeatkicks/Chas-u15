@@ -36,10 +36,9 @@ demo-risk, inte bara en bugg:
 - [ ] **Reservplan om nätet/deployen strular:** skärminspelning av en tidigare
       godkänd körning (`docs/smoke-runs/`) redo att visas i stället för live —
       hellre en inspelning som funkar än en live-demo som hänger i tystnad
-- [ ] Känt UI-beteende att komma ihåg: Enter skickar inte ännu (Ernest, #42) —
-      använd skicka-knappen; hälsningsmodalen från #33 möter varje ny
-      besökare — öppna appen i inkognitofönster *innan* ni går upp, inte på
-      scenen
+- [ ] Känt UI-beteende: hälsningsmodalen möter varje ny besökare — öppna appen
+      i inkognitofönster och klicka bort modalen *innan* ni går upp, inte på
+      scenen. (Enter fungerar sedan #42, verifierat manuellt 5/9.)
 
 ## 1. Intro — produktidé (0:00–0:30, Henrik)
 
@@ -49,7 +48,39 @@ demo-risk, inte bara en bugg:
 > Den skriver aldrig färdig kod åt dig — det är hela poängen, och ni kommer
 > se varför om en liten stund."
 
-## 2. Arkitektur (0:30–2:00, Henrik)
+## 1b. Arbetssättet (0:30–2:00, Henrik)
+
+> Gruppens uttalade prioritet #1. Detta är också G-kravet "utvecklad med stöd
+> av AI" — men vi driver det längre än kravet: fyra personer, fyra olika
+> AI-verktyg, ett gemensamt regelverk.
+
+**Fyra verktyg parallellt:** Claude Code ×2 (Henrik, Yasmin), Codex (Fastuo),
+Cursor (Ernest). **Orchestrator-modell:** en main orchestrator planerar och
+granskar, varje person har en egen orchestrator-session som delar ut en
+kod-session per issue. Varje avslutad session lämnar en **skriftlig handoff
+med konkret bevis** — inte "det funkar", utan kommandot och utdatan som visar
+det ([docs/handoffs/](handoffs/), 20+ filer).
+
+**Arbetet delades i waves om två dagar.** Tre saker är värda att nämna:
+
+1. **Ingenting räknas som klart utan bevis.** Ett paket går `planned → merged
+   → proven`, och `proven` kräver att den användarsynliga vägen körts på den
+   *deployade* bygget. Källkodstester räcker inte.
+2. **Sveprincipen — vår viktigaste lärdom.** Wave 0 gick trögt: kontraktet
+   blockerade mocken som blockerade UI:t, så alla väntade på varandra. Fixen
+   var att lägga beroenden på *wave-gränsen* i stället för inuti waven — allt
+   en person behöver ska finnas när waven öppnar. Wave 1 och 2 blev raka svep
+   utan väntetider.
+3. **API-kontraktet skrevs innan koden.** Frontend byggdes mot en mock som
+   följde kontraktet exakt; när den riktiga RAG-routen byttes in krävdes
+   **noll kodändringar** i UI:t. Det är det tydligaste beviset på att
+   arbetssättet fungerade.
+
+*En mening att landa i: verktygen skrev koden, men det var reglerna runt dem —
+bevis, filägarskap, kontrakt — som gjorde att fyra parallella AI-agenter inte
+sprang isär.*
+
+## 2. Arkitektur (2:00–2:45, Henrik)
 
 Rita eller visa diagrammet ur [docs/PLAN.md §2](PLAN.md):
 
@@ -63,32 +94,55 @@ Browser ──► Next.js /api/chat ── embedding av frågan ─────�
 
 Tre meningar räcker: Next.js på Vercel, ingen separat backend. RAG —
 retrieval-augmented generation — så att svaren är grundade i riktig
-dokumentation i stället för modellens egna, ibland felaktiga, minne. Fyra
-AI-verktyg användes för att bygga det (Claude Code ×2, Codex, Cursor) i en
-orchestrator-modell — kommer tillbaka till det i svårigheterna.
+dokumentation i stället för modellens egna, ibland felaktiga, minne.
+Datakällan är MDN:s officiella innehållsrepo, inte skrapat material.
 
-## 3. RAG-kedjan (2:00–4:00, Yasmin)
+## 3. RAG-kedjan (2:45–4:15, Yasmin)
 
 - 528 kuraterade MDN-sidor ([docs/mdn-selection.md](mdn-selection.md)) →
-  **1 738 chunks** embeddade och lagrade i Supabase/pgvector.
+  **3 547 chunks** embeddade och lagrade i Supabase/pgvector.
 - Frågan embeddas med samma modell, `match_documents()` hittar de mest lika
   chunkarna via cosine-likhet.
-- Retrieval-baseline just nu: **6/10** rätt sida i topp-3
-  ([docs/retrieval-sanity.md](retrieval-sanity.md)) — nämn öppet att det är
-  uppmätt, inte påstått, och att de fyra missarna är namngivna och redan
-  wave 2:s jobb (#37). En dokumenterad brist väger tyngre än ett odokumenterat
-  påstått 100 %.
+- **Mätt kvalitet: 6/10 → 10/10.** Vi byggde en sanity-svit med tio frågor och
+  mätte i stället för att gissa ([docs/retrieval-sanity.md](retrieval-sanity.md)).
+  Första mätningen gav 6/10 rätt sida i topp-3. Två åtgärder tog den till 10/10:
+  1. **Hybrid-chunkning** — dela per rubrik i stället för fast storlek, så att
+     t.ex. "Variable hoisting" blir en egen chunk i stället för att begravas i
+     ett 2 800 teckens block om variabelscope.
+  2. **Query-normalisering** — korta frågor expanderas till hela meningar före
+     embedding (en fråga som "hur fungerar map()" ligger annars nära `Map`-
+     objektet), och jämförelsefrågor söks både som hel fras och per begrepp,
+     med **varvade** träffar. Det sista är nyckeln: sorterar man ihop
+     träffarna på likhet tar det starkare begreppet alla platserna — därför
+     syntes aldrig `let` bredvid `const`.
 
-## 4. Nivåanpassning och "förklara inte lös" (4:00–5:30, Fastuo)
+  *Poängen att göra på scenen: vi visste att det var 6/10 för att vi hade mätt.
+  Utan mätning hade vi trott att sökningen fungerade.*
 
-- En egen system-prompt per nivå, inte bara "svara enklare" — nybörjare får
-  en liknelse och 150 ord, utvecklare får mekanism och fallgropar på 150–200
-  ord ([docs/prompt-design.md](prompt-design.md)).
-- Vägransregeln är hårdkodad i prompten: assistenten namnger metoderna och
-  förklarar dem var för sig i stället för att skriva lösningen, även när
-  användaren uttryckligen ber om bara kod.
+## 4. Nivåanpassning och "förklara inte lös" (4:15–5:45, Fastuo)
 
-## 5. Live-demo (5:30–8:30, Ernest kör, alla kommenterar)
+- En egen system-prompt per nivå, inte bara "svara enklare" — nybörjare får en
+  liknelse och 150 ord, utvecklare får mekanism och fallgropar
+  ([docs/prompt-design.md](prompt-design.md)).
+- Vägransregeln ligger i prompten: assistenten namnger begreppen och förklarar
+  dem var för sig i stället för att skriva lösningen, även när användaren
+  uttryckligen ber om bara kod.
+- **Prompterna är framtagna genom mätning, inte tyckande — fem versioner.** Vi
+  skrev en regressionsharness (`lib/ai/prompt-regression.mjs`) som kör samma
+  fråga 10–20 gånger per nivå och räknar hur ofta reglerna faktiskt följs.
+  - v3 såg löst ut efter *en* körning — mätningen visade 1/10 fel.
+  - **v4 blev sämre av att förbjuda mer:** att räkna upp förbjudna
+    formuleringar ordagrant tredubblade dem (1/10 → 3/10), och den extra
+    regelmassan trängde undan en helt orörd längdregel (0/10 → 5/10 fel).
+  - **v5 vände på greppet:** positiva mönster i stället för förbud — öppningar
+    att följa, en roll för vägran. Resultat: **0/20** definitionsinledningar,
+    **0/20** över ordtaket.
+- **Modellval mättes också** ([docs/model-ab.md](model-ab.md)): tre modeller,
+  identiska prompts. `gpt-5-mini` diskades på latens (17 s till första token —
+  ohållbart när svaret ska strömma fram medan man läser), Haiku var
+  pedagogiskt trevligast men bröt mot ordtaken. `gpt-4o-mini` vann.
+
+## 5. Live-demo (5:45–8:15, Ernest kör, alla kommenterar)
 
 Kör mot https://chas-u15.vercel.app i ett rent/inkognito-fönster.
 
@@ -109,9 +163,10 @@ Kör mot https://chas-u15.vercel.app i ett rent/inkognito-fönster.
    **Detta är produktidén i sin renaste form** — låt tystnaden efter svaret
    göra jobbet, ingen kommentar behövs.
 
-## 6. Vad var svårt? (8:30–9:30, alla — en mening var)
+## 6. Vad var svårt? (8:15–9:30, alla — en mening var)
 
-Fyra konkreta punkter, en person per punkt (ordning valfri på scenen):
+Fyra konkreta punkter, en person per punkt (ordning valfri på scenen).
+**Välj fyra av de fem nedan** — den femte kan sparas som reservsvar:
 
 - **v7-problemet:** Vercel AI SDK är på v7, men i princip all
   AI-genererad kod och dokumentation vi stötte på beskriver v4/v5 — annat
@@ -126,10 +181,19 @@ Fyra konkreta punkter, en person per punkt (ordning valfri på scenen):
   env-variabler som fanns till namnet i Vercel men hade tomma värden — att en
   variabel *finns* säger inget om att den har ett *värde*. Fångades av
   smoke-testets pre-flight, inte av koden.
-- **Prompt-varians:** `developer`-nivåns inledning är inte deterministisk —
-  samma prompt kan fortfarande öppna med en definition ibland. En regel om
-  *form* (inte innehåll) hjälpte men löste det inte helt — kvar som
-  wave 2-jobb (#39).
+- **Prompt-varians — och att förbud kan slå tillbaka:** samma prompt ger inte
+  samma svar två gånger, så en enda testkörning bevisar ingenting. När vi
+  mätte över tio körningar visade det sig att v4:s *förbudslista* gjorde
+  felen tre gånger vanligare — att räkna upp det man inte vill ha verkar göra
+  det mer närvarande för modellen. v5 löste det med positiva mönster i
+  stället (0/20 fel).
+- **Buggen som bara syntes i produktion:** ~3 av 17 streamade svar kraschade
+  och visade ett rått React-fel i chattbubblan. Det såg ut som ett
+  nätverksfel, men var en oändlig renderloop: sparandet av chatthistoriken
+  utlöste en omrendering som fick AI-biblioteket att lämna ut ny data, som
+  utlöste ett nytt sparande. Hittades av en systematisk smoke-körning, inte
+  av att någon "testade lite" — och den minifierade felkoden avslöjade
+  ingenting förrän vi reproducerade den lokalt.
 
 ## 7. Avslut (9:30–10:00, Henrik)
 
@@ -143,8 +207,20 @@ fyra AI-verktyg parallellt." Öppna för frågor.
   ["Varför behövdes AI-komponenten?"](../README.md#varför-behövdes-ai-komponenten-kunde-vi-löst-det-på-annat-sätt).
 - **Vad hände med rösten?** Text-chat är MVP (PLAN.md §3 beslut 7); TTS ligger
   som stretch-issue #46, görs bara om huvudspåret är klart.
-- **Modell-A/B?** #40, wave 2 — läggs till i README och här när den landar.
+- **Varför inte inloggning och sparade konton?** Medvetet bortvalt fyra dagar
+  före redovisning — trådarna sparas per webbläsare i stället. Auth hade varit
+  två dagars arbete som inte gör AI-komponenten bättre (gruppbeslut #33).
+- **Vad skulle ni göra annorlunda?** Mäta tidigare. Både retrieval-kvaliteten
+  och prompt-reglerna såg bra ut tills vi faktiskt mätte dem.
+- **Är svaren alltid rätt?** Nej — och därför är källorna aldrig valfria.
+  Länkarna kommer från de chunkar sökningen faktiskt hämtade, inte från
+  modellens text, så användaren kan kontrollera svaret på en klickning.
 
 ## Ändringslogg
 
-- **v1** (wave 2, denna PR): första versionen. Ej repeterad live än.
+- **v2** (wave 3, 7/9): färska siffror (3 547 chunks, retrieval 10/10,
+  prompts v5, modell-A/B klar), arbetssättet uppgraderat till egen sektion
+  (§1b) enligt gruppens prioritering, #64-buggen tillagd som
+  svårighetspunkt, Enter-noteringen borttagen (fixad), tider omfördelade.
+  **Ej repeterad live än.**
+- **v1** (wave 2): första versionen.
