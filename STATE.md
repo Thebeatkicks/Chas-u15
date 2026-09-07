@@ -31,7 +31,7 @@
 | #61 README v3 + inlämning | Henrik | **proven** | PR #66 mergad + docs/inlamning.md |
 | #62 wave-2-handoff | Fastuo | **proven** | PR #67 — alla fyra wave 2-handoffs nu inne |
 | #63 demo-repetition ×2 | ALLA | planned | tidtagning, inkognito, live |
-| #64 React-krasch vid streaming | **Ernest** | planned | **HÖGSTA PRIO** — rotorsakshypotes i issuen: race mellan tvåuseEffect i chat.tsx |
+| #64 React-krasch vid streaming | orchestrator | **proven** | PR #69 (`9617cde`): renderloop, ej race. Verifierad lokalt (7 trådar) + prod (3 trådar), ren konsol |
 | #68 sanity-doc 6/10→10/10 | Yasmin | planned | dokumentationsinkonsekvens, läsarfälla vid kodgranskning |
 | #46 TTS | stretch | planned | ENDAST om eget spår klart |
 
@@ -41,7 +41,7 @@
   fungerar. Automationens tidigare "inget svar" var ett verktygsartefakt.
 - Vägran räknar upp metoder i användningsordning 7/20 (v5) — accepterad och
   dokumenterad i `docs/prompt-design.md`.
-- **Ny (#60):** rått `Minified React error #185` läcker till UI:t vid en
+- ~~**Ny (#60):** rått `Minified React error #185`~~ **LÖST 7/9 (PR #69)** — var en
   klient-side `ERR_ABORTED` mitt i streaming (~3/17 svar i smoke-körningen).
   Server är opåverkad (alla `/api/chat`-svar 200). → #64.
 
@@ -59,3 +59,10 @@ retrieval · vägrans-formuleringen (7/20)
 ## Nästa reconciliation
 
 Löpande vid handoffs; slutcheck ons 10/9 kväll (allt grönt inför demon).
+
+## Backlogg tillagd 7/9
+
+- `react-hooks/set-state-in-effect` flaggas på fyra ställen i `chat.tsx` och
+  `profile-store.tsx` — samma mönsterfamilj som orsakade #64. Linten är röd
+  redan före fixen; att bygga om effektkedjan är refaktorering och hör inte
+  hemma i wave 3. Egen issue efter kursen.
