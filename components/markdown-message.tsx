@@ -75,6 +75,8 @@ export function MarkdownMessage({
     <div className="sensei-md">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        // highlight.js CSS-fil skippas — tokenfärgerna i globals.css är
+        // skrivna mot den mörka editor-ytan så temat inte krockar med pappret.
         rehypePlugins={[rehypeHighlight]}
         components={{
           pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,

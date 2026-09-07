@@ -1,5 +1,6 @@
 import { LEVELS, type Level } from "./levels";
 
+/** Visar svenska etiketter; `onChange` lämnar det engelska id:t till API:t. */
 export function LevelPicker({
   value,
   onChange,

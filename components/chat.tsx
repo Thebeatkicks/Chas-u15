@@ -26,6 +26,8 @@ function asThreadTitle(messages: UIMessage[]) {
 }
 
 export function Chat() {
+  // ChatSession läser localStorage via useProfile. SSR + klientens lagrade
+  // namn/trådar ger annars hydration-mismatch (Next-overlay mitt i demon).
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) {
@@ -144,6 +146,8 @@ function ChatSession() {
     const text = input.trim();
     if (!text || busy) return;
     clearError();
+    // `level` i body — engelskt id. useChat skickar messages som UIMessage
+    // (parts[], inte content) vilket är AI SDK v7 / kontraktets §2.
     sendMessage({ text }, { body: { level: profile.level } });
     setInput("");
   };
@@ -245,6 +249,8 @@ function ChatSession() {
         )}
       </main>
 
+      {/* pointer-events-none på wrappern så gradienten inte fångar klick
+          på meddelanden bakom; formuläret slår på pointer-events igen. */}
       <footer className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
         <div className="pointer-events-auto mx-auto w-full max-w-3xl px-4 pb-4 pt-6"
           style={{ background: "linear-gradient(to top, var(--paper) 60%, transparent)" }}>
@@ -299,6 +305,9 @@ function ChatSession() {
               rows={1}
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={(event) => {
+                // Textarea submit:ar inte formulär på Enter (till skillnad
+                // från <input>). IME-Enter under svensk sammansättning ska
+                // inte skicka — därför isComposing-vakten (#42 / #60).
                 if (event.nativeEvent.isComposing) return;
                 if (event.shiftKey) return;
                 if (event.key !== "Enter") return;

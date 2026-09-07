@@ -26,6 +26,8 @@
   --font-serif: var(--font-newsreader);
 }
 
+/* 100vh-lås: chatten + svävande input ska fylla rutan. overflow:hidden på
+   body så sidan inte scrollar bakom — bara <main> i Chat scrollar. */
 html,
 body,
 #__next {

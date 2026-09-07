@@ -32,6 +32,7 @@ const LEVEL_DOT: Record<string, string> = {
   developer: "bg-[var(--seal)]",
 };
 
+// #33: bara Dojo här. Profil-länken under Dojo togs bort; kortet i botten är kvar.
 const NAV = [
   { href: "/", label: "Dojo", Icon: DojoIcon },
 ] as const;
@@ -47,6 +48,8 @@ function WelcomeModal() {
   const [step, setStep] = useState<"welcome" | "setup">("welcome");
 
   const saveAndGo = () => {
+    // Hoppa-över / gäst sätter bara greeted — namn lämnas tomt så
+    // gäst-bannern (#42) visas. Inloggning lovas aldrig.
     if (name.trim()) setProfile({ name: name.trim(), level });
     dismissGreeting();
   };
@@ -166,11 +169,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  // Öppna/stäng styrs av mus, inte :hover/:focus-within — fokus på en länk
+  // skulle annars hålla menyn öppen efter att pekaren lämnat.
   const handleEnter = () => {
     if (leaveTimer.current) clearTimeout(leaveTimer.current);
     setOpen(true);
   };
 
+  // 80 ms: gap mellan barn-element ska inte flimra, men stängningen ska kännas omedelbar.
   const handleLeave = () => {
     leaveTimer.current = setTimeout(() => setOpen(false), 80);
   };
@@ -178,7 +184,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-full w-full overflow-hidden">
 
-      {/* First-visit modal */}
+      {/* Modal först efter `ready` — annars SSR-gissning mot localStorage. */}
       {ready && !greeted && <WelcomeModal />}
 
       {/* ── Hover-open sidenav ───────────────────────────────── */}
