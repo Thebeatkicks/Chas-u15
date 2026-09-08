@@ -8,23 +8,6 @@ import { COPY } from "./copy";
 import { LEVELS, levelLabel } from "./levels";
 import { initials, useProfile, type Profile } from "./profile-store";
 
-/* ── icons ────────────────────────────────────────────────────── */
-function DojoIcon() {
-  return (
-    <svg viewBox="0 0 20 20" className="h-5 w-5 shrink-0 fill-current" aria-hidden>
-      <path d="M10 2a8 8 0 1 1 0 16A8 8 0 0 1 10 2Zm0 1.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13Zm0 2a1 1 0 0 1 1 1v3.17l2.12 2.12a1 1 0 1 1-1.41 1.42L9.29 10.7A1 1 0 0 1 9 10V6.5a1 1 0 0 1 1-1Z" />
-    </svg>
-  );
-}
-
-function ChevronIcon() {
-  return (
-    <svg viewBox="0 0 16 16" className="h-3 w-3 shrink-0 fill-current opacity-40" aria-hidden>
-      <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
 /* ── level colour accent ──────────────────────────────────────── */
 const LEVEL_DOT: Record<string, string> = {
   beginner:  "bg-emerald-500",
@@ -32,17 +15,11 @@ const LEVEL_DOT: Record<string, string> = {
   developer: "bg-[var(--seal)]",
 };
 
-// #33: bara Dojo här. Profil-länken under Dojo togs bort; kortet i botten är kvar.
-const NAV = [
-  { href: "/", label: "Dojo", Icon: DojoIcon },
-] as const;
-
 /* ══════════════════════════════════════════════════════════════ */
 /* Welcome modal — shown once to first-time visitors             */
 /* ══════════════════════════════════════════════════════════════ */
 function WelcomeModal() {
   const { setProfile, dismissGreeting } = useProfile();
-  const router = useRouter();
   const [name, setName] = useState("");
   const [level, setLevel] = useState<Profile["level"]>("beginner");
   const [step, setStep] = useState<"welcome" | "setup">("welcome");
@@ -220,35 +197,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Divider */}
         <div className="mx-3 h-px bg-[var(--line)]" />
 
-        {/* Nav items */}
-        <nav className="mt-3 flex flex-col gap-1 px-2">
-          {NAV.map(({ href, label, Icon }) => {
-            const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-            return (
-              <Link
-                key={href}
-                href={href}
-                className={`flex items-center gap-3 rounded-xl px-2.5 py-2.5 transition-colors ${
-                  active
-                    ? "bg-[var(--ink)] text-[var(--paper-raised)]"
-                    : "text-[var(--ink-soft)] hover:bg-[var(--paper-deep)] hover:text-[var(--ink)]"
-                }`}
-                aria-current={active ? "page" : undefined}
-              >
-                <Icon />
-                <span className={`text-sm font-medium whitespace-nowrap transition-opacity duration-150 ${open ? "opacity-100 delay-75" : "opacity-0"}`}>
-                  {label}
-                </span>
-                {active && (
-                  <span className={`ml-auto transition-opacity duration-150 ${open ? "opacity-100 delay-75" : "opacity-0"}`}>
-                    <ChevronIcon />
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
+        {/* Hem-länken är brand-marken ovan. Dojo-raden (klock-ikon + etikett)
+            togs bort inför redovisningen — den duplicerade "/" och tog plats
+            från trådlistan som #43 faktiskt behöver visa. */}
         {threads.length > 0 ? (
           <div className="mt-4 min-h-0 px-2">
             <p

@@ -5,7 +5,7 @@
 ## Klart
 | Issue | PR | Bevis |
 |---|---|---|
-| #59 kodkommentarer | `issue-59-comments` | Varför/constraints i `components/**` + `app/**` utom `app/api`. Ingen körbar rad ändrad. |
+| #59 kodkommentarer | `issue-59-comments` | Varför/constraints i `components/**` + `app/**` utom `app/api`. PR #69 behålls. Dojo-raden bort (duplicerade hem). |
 | #63 demo (solo) | handoff | Live 2026-09-07: tomt läge, gäst, Enter, closure på nybörjare, MDN-källor, tråd i menyn. |
 
 ## Inte klart + varför
@@ -13,7 +13,7 @@
 - **#46 TTS** — medvetet inte tagen. Stretch, och en trasig knapp i demon kostar mer än den ger.
 
 ## Beslut jag tagit
-Inga funktionsbeslut. Kommentars-PR:en rör inte beteende.
+Inga nya produktfunktioner. Dojo-nav togs bort för att den duplicerade `/`.
 
 ## Blockerar / blockeras av
 Blockerar inte. Väntar på grupptider för #63.

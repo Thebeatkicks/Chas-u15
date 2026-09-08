@@ -17,7 +17,7 @@ export function EmptyState({
         師
       </div>
       <p className="text-[11px] font-semibold tracking-[0.18em] text-[var(--seal)] uppercase">
-        {name ? `Välkommen, ${name}` : "Dojo"}
+        {name ? `Välkommen, ${name}` : COPY.wordmark}
       </p>
       <h2 className="mt-2 font-serif text-3xl tracking-tight text-[var(--ink)]">
         {COPY.emptyTitle}

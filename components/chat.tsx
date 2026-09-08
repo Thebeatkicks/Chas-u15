@@ -33,7 +33,7 @@ export function Chat() {
   if (!mounted) {
     return (
       <div className="flex flex-1 items-center justify-center text-sm text-[var(--ink-soft)]">
-        Öppnar dojon…
+        Öppnar…
       </div>
     );
   }
@@ -80,17 +80,19 @@ function ChatSession() {
 
   // Speglar den pågående sessionen till trådlistan.
   //
-  // `savedSignature` bryter en oändlig renderloop (issue #64): saveThread()
-  // uppdaterar `threads` i providern, vilket renderar om den här komponenten,
-  // varpå useChat lämnar ut en ny `messages`-referens — även när innehållet är
-  // oförändrat. Utan vakt blir det spara → rendera → spara i all oändlighet,
-  // vilket React avbryter med "Maximum update depth exceeded" mitt i ett
-  // streamat svar (rått felmeddelande i chattbubblan, avbruten fetch).
+  // `savedSignature` bryter en oändlig renderloop (issue #64 / PR #69,
+  // orchestratorn): saveThread() uppdaterar `threads` i providern, vilket
+  // renderar om den här komponenten, varpå useChat lämnar ut en ny
+  // `messages`-referens — även när innehållet är oförändrat. Utan vakt
+  // blir det spara → rendera → spara i all oändlighet, vilket React avbryter
+  // med "Maximum update depth exceeded" mitt i ett streamat svar (rått
+  // felmeddelande i chattbubblan, avbruten fetch).
   //
   // Signaturen jämför innehåll i stället för referens. Under streaming ingår
   // bara antalet meddelanden, så tråden dyker upp i menyn direkt när frågan
   // skickas — men texten som växer fram chunk för chunk utlöser inte en
   // skrivning per chunk. När strömmen är klar sparas svaret i sin helhet.
+  // Behålls som den är — loopen är den rätta fixen, inte en debounce.
   const savedSignature = useRef("");
 
   useEffect(() => {

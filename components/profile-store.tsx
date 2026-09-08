@@ -71,6 +71,10 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 function readThreads(): SavedThread[] {
+  // Inte samma som readJson: en kapad/handredigerad nyckel kan parse:a till
+  // objekt eller sträng. Då kraschar `.map` i menyn. Krav från #43: tom lista,
+  // aldrig throw. Poster utan id/title hoppas över så en halv-skriven rad
+  // inte tar ner resten.
   try {
     const raw = localStorage.getItem(THREADS_KEY);
     if (!raw) return [];
