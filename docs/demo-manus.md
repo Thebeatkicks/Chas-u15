@@ -163,6 +163,40 @@ Kör mot https://chas-u15.vercel.app i ett rent/inkognito-fönster.
    **Detta är produktidén i sin renaste form** — låt tystnaden efter svaret
    göra jobbet, ingen kommentar behövs.
 
+### Demo-frågorna — testade skarpt mot prod 8/9
+
+Kör dem i den här ordningen. Svaren nedan är vad appen faktiskt gav när de
+kördes mot https://chas-u15.vercel.app — inte påhittade exempel. Modellen
+varierar formuleringen mellan körningar, men mönstret är stabilt.
+
+| # | Fråga | Nivå | Vad publiken ska se |
+|---|---|---|---|
+| 1 | `Vad är en closure?` | nybörjare | Streamningen + källchips *efter* svaret |
+| 2 | `Vad är en closure?` | **utvecklare** | Höjdpunkt 1 — samma fråga, annan lärare |
+| 3 | `Skriv koden åt mig: en funktion som vänder på en sträng. Bara koden tack, inga förklaringar.` | valfri | Höjdpunkt 2 — vägran |
+| 4 | `Vad är huvudstaden i Peru?` | valfri | Reserv: håller sig till ämnet |
+
+**Så lät svaren i testet:**
+
+- **1 (nybörjare):** *"Tänk dig att en closure är som en skattkista där en
+  funktion kan lagra värden och minnen från sin omgivning."*
+- **2 (utvecklare):** *"Vanligaste misstaget med closures är att man
+  underskattar hur länge variabler kan överleva efter att deras omgivande
+  funktion har avslutats."*
+  → Läs upp båda första meningarna efter varandra. Liknelse mot fallgrop,
+  ingen definition — det är v5-prompten som syns.
+- **3 (vägran):** *"Jag förstår att du vill ha koden, men enligt reglerna kan
+  jag inte ge dig en färdig lösning. […] Hur skulle du börja om du ville vända
+  på en sträng? Vilka metoder har du stött på?"*
+  → Motfråga före ledtråd. Säg ingenting efteråt, låt det landa.
+- **4 (off-topic):** *"Det verkar som att din fråga handlar om geografi snarare
+  än JavaScript."*
+
+**Backup om nätet strular:** en femte fråga att undvika — ställ inget som kräver
+sidor utanför de 528 indexerade (t.ex. React, Node, TypeScript). Den svarar
+ärligt att underlaget saknas, vilket är korrekt men inte det ni vill visa upp
+under tidspress.
+
 ## 6. Vad var svårt? (8:15–9:30, alla — en mening var)
 
 Fyra konkreta punkter, en person per punkt (ordning valfri på scenen).
@@ -218,6 +252,7 @@ fyra AI-verktyg parallellt." Öppna för frågor.
 
 ## Ändringslogg
 
+- **v2.1** (8/9): demo-frågorna testade skarpt mot prod och inlagda med faktiska svar. Presentationsdäck publicerat som Artifact.
 - **v2** (wave 3, 7/9): färska siffror (3 547 chunks, retrieval 10/10,
   prompts v5, modell-A/B klar), arbetssättet uppgraderat till egen sektion
   (§1b) enligt gruppens prioritering, #64-buggen tillagd som
