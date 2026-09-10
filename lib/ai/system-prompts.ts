@@ -1,34 +1,60 @@
 /**
- * System-prompts per nivå (issue #20).
+ * System-prompts per nivå.
  *
- * Tre prompts som delar tre orubbliga regler — förklara-inte-lösa, håll dig
- * till kontexten, svara på svenska — och skiljer sig i vad de förutsätter att
- * användaren redan kan, hur långt svaret får bli och vilken form det tar.
+ * Tre prompts som delar fyra orubbliga regler och skiljer sig i vad de
+ * förutsätter att användaren redan kan, hur långt svaret får bli och vilken
+ * form det tar.
  *
- * Iterationerna och skälen bakom varje regel finns i `docs/prompt-design.md`.
- * Ändra inte en regel här utan att uppdatera den filen — den är underlaget
- * till README-reflektionen.
+ * LÄS DETTA INNAN DU ÄNDRAR NÅGOT HÄR:
+ *
+ * 1. Formuleringarna nedan är inte godtyckliga — de är resultatet av fem
+ *    mätta iterationer. Hela loggen finns i `docs/prompt-design.md`.
+ *
+ * 2. Skriv INTE regler som listar förbjudna formuleringar. Det provades i v4
+ *    ("meningen får inte innehålla 'är en', 'innebär att' ...") och gjorde
+ *    felet TRE GÅNGER vanligare: definitionsinledningar gick från 1/10 till
+ *    3/10, och nybörjarsvaren sprängde sitt ordtak i 5/10 körningar trots
+ *    att den regeln inte rörts. Att räkna upp det man vill undvika verkar
+ *    göra det mer närvarande. v5 använder därför positiva mönster
+ *    genomgående — mallar att följa, inte fällor att undvika.
+ *
+ * 3. En ändring är inte verifierad förrän den mätts över UPPREPADE
+ *    körningar. v3 såg löst ut i en enskild körning men föll tillbaka i
+ *    ungefär var tionde. Kör `lib/ai/prompt-regression.mjs` (tio varv per
+ *    nivå) före och efter, och för in siffrorna i `docs/prompt-design.md`.
  */
 
 export type Level = 'beginner' | 'student' | 'developer';
 
 export const LEVELS: readonly Level[] = ['beginner', 'student', 'developer'] as const;
 
-/** Bumpas när en prompt ändras i sak, så handoffs kan peka på en version. */
+/**
+ * Läses inte av koden — den finns för människor. Handoffs, PR-beskrivningar
+ * och `docs/prompt-design.md` refererar till "v5", och utan en markör i
+ * källan går det inte att se vilken version en given commit körde. Bumpa den
+ * när en regel ändras i sak.
+ */
 export const PROMPT_VERSION = 'v5';
 
 /**
  * Regler som gäller alla nivåer.
  *
- * Vägransregeln är medvetet skarpare än i v1. Där räckte "skriv inte färdig
- * kod", vilket modellen tolkade som att ett numrerat recept (split → reverse
- * → join) var tillåtet — i praktiken lösningen utan syntax. Nu är även
- * steg-för-steg-receptet förbjudet: den ska namnge begreppen och ställa en
- * fråga tillbaka.
+ * Regel 1 (vägran) är produktens kärna — "förklarar, löser inte", PLAN.md §3
+ * beslut 6. Den har omarbetats tre gånger:
+ *   v1 sa bara "skriv inte färdig kod". Modellen svarade då med split →
+ *   reverse → join som numrerat recept, alltså lösningen utan syntax.
+ *   v2–v4 försökte förbjuda receptet explicit. Det hjälpte marginellt
+ *   (8/10 → 7/10 ordnade recept).
+ *   v5 ger i stället en ROLL — lärare vid en whiteboard, motfråga först,
+ *   högst en metod som ledtråd. Det tog måttet till 7/20.
+ * "På sin höjd EN metod" är alltså det som gör jobbet: räknar modellen upp
+ * alla metoder som behövs har den i praktiken löst uppgiften, oavsett om
+ * syntaxen står där. Ingen version har någonsin gett körbar lösningskod.
  *
- * Kontextregeln är också skärpt. I v1 citerade modellen utdrag som inte hade
- * med frågan att göra när retrieval missade. Nu ska irrelevanta utdrag
- * ignoreras och bristen sägas rakt ut.
+ * Regel 3 (kontexten) finns för att v1 citerade utdrag som inte hade med
+ * frågan att göra när retrieval missade. Meningen om att svara utifrån
+ * allmän kunskap är medveten: alternativet — att vägra svara utan träff —
+ * gav sämre svar på just de frågor där retrieval är svagast.
  */
 const SHARED_RULES = [
   'Du är JS Sensei, en lärarassistent för JavaScript.',
@@ -51,8 +77,20 @@ const SHARED_RULES = [
 
 /**
  * Nivåspecifik del: vad som får förutsättas, hur långt svaret får bli, och
- * vilken form det tar. Längdstyrningen kom till i v2 — utan den blev alla tre
- * nivåerna ungefär lika långa punktlistor.
+ * vilken form det tar.
+ *
+ * Längdtaken (150/250/200 ord) kom i v2. Utan dem konvergerade alla tre
+ * nivåerna mot ungefär lika långa punktlistor — nivåskillnaden blev ordval,
+ * inte pedagogik. Taken är mjuka: inget i koden tvingar dem, men de hålls i
+ * praktiken (0 av 60 mätta svar över taket).
+ *
+ * De fyra öppningsmallarna under `developer` är den enskilt viktigaste
+ * raden i filen. Instruktionen "förklara aldrig grunderna" räckte inte —
+ * modellen läser en definition som en artig inledning snarare än som
+ * grunder, och inledde ändå med "En closure är en kombination av ...".
+ * Att i stället ge fyra konkreta meningsmallar att härma tog måttet från
+ * 1/10 definitionsinledningar till 0/20. Byt inte ut dem mot en regel om
+ * vad inledningen inte får innehålla — se punkt 2 i filhuvudet.
  */
 const LEVEL_RULES: Record<Level, string> = {
   beginner: [
@@ -95,7 +133,18 @@ const LEVEL_RULES: Record<Level, string> = {
   ].join('\n'),
 };
 
-/** Bygger den fullständiga system-prompten för en nivå och en kontext. */
+/**
+ * Sätter ihop prompten. Ordningen är medveten: gemensamma regler först,
+ * nivåreglerna sedan, MDN-utdragen sist.
+ *
+ * Kontexten ligger sist därför att den är den enda delen som varierar mellan
+ * anrop och kan bli lång (fem chunks, se `lib/ai/retrieval.ts`). Ligger
+ * reglerna efter utdragen riskerar de att drunkna i dem.
+ *
+ * Fallback-texten vid tom kontext är inte kosmetisk: utan den svarar
+ * modellen ändå, men utan att nämna att den saknar MDN-underlag — och då ser
+ * ett ogrundat svar likadant ut som ett grundat.
+ */
 export function buildSystemPrompt(level: Level, context: string): string {
   return [
     SHARED_RULES,
