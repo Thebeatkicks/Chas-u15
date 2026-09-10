@@ -3,7 +3,7 @@
 > Index över git + issues, aldrig egen sanning. Git vinner vid konflikt.
 > Arkiv: `docs/state-archive/` (wave 0–2 roterade dit).
 
-**Senast uppdaterad:** 2026-09-05 kväll (#59/#60 klara, #61 PR öppen)
+**Senast uppdaterad:** 2026-09-10 fm — REDOVISNING IMORGON. Allt utom demo-repetitionen (#63) är klart.
 **Aktuell wave:** 3 — **polish, dokumentation och demo. INGEN ny funktionskod**
 (undantag: villkorad stretch #46). Live: https://chas-u15.vercel.app
 **Redovisning:** tors 11/9 · **Slutinlämning:** mån 14/9 23:59
@@ -26,13 +26,13 @@
 
 | Issue | Ägare | Lifecycle | Not |
 |---|---|---|---|
-| #59 kodkommentarer | ALLA | Henrik proven (PR #65), övriga planned | **betygskrav** — en PR per person |
+| #59 kodkommentarer | ALLA | **proven** | Alla fyra: PR #65, #70, #71, #72. Betygskravet uppfyllt |
 | #60 smoke 3×3 | Henrik | **proven** | `docs/smoke-runs/wave-3.md`, godkänd med anmärkning → #64 |
 | #61 README v3 + inlämning | Henrik | **proven** | PR #66 mergad + docs/inlamning.md |
 | #62 wave-2-handoff | Fastuo | **proven** | PR #67 — alla fyra wave 2-handoffs nu inne |
 | #63 demo-repetition ×2 | ALLA | planned | tidtagning, inkognito, live |
 | #64 React-krasch vid streaming | orchestrator | **proven** | PR #69 (`9617cde`): renderloop, ej race. Verifierad lokalt (7 trådar) + prod (3 trådar), ren konsol |
-| #68 sanity-doc 6/10→10/10 | Yasmin | planned | dokumentationsinkonsekvens, läsarfälla vid kodgranskning |
+| #68 sanity-doc | Yasmin | **proven** | PR #70 — resan 6→6→10 dokumenterad |
 | #46 TTS | stretch | planned | ENDAST om eget spår klart |
 
 ## Kända rester
