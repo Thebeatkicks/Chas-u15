@@ -1,5 +1,14 @@
 "use client";
 
+/**
+ * Profil + trådar lever i localStorage — #33-beslutet. Ingen Supabase-auth
+ * före redovisningen. Providern sitter i root-layout så sidomenyn och chatten
+ * delar samma lista utan props-drilling.
+ *
+ * `greeted` startar som `true` så SSR/första paint inte flashar modalen; den
+ * slås på först efter läsning. Trasig JSON / icke-array i trådnyckeln ger `[]`
+ * (#43-kravet) i stället för att knäcka hela appen.
+ */
 import {
   createContext,
   useCallback,
@@ -62,6 +71,10 @@ function readJson<T>(key: string, fallback: T): T {
 }
 
 function readThreads(): SavedThread[] {
+  // Inte samma som readJson: en kapad/handredigerad nyckel kan parse:a till
+  // objekt eller sträng. Då kraschar `.map` i menyn. Krav från #43: tom lista,
+  // aldrig throw. Poster utan id/title hoppas över så en halv-skriven rad
+  // inte tar ner resten.
   try {
     const raw = localStorage.getItem(THREADS_KEY);
     if (!raw) return [];
@@ -86,6 +99,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const stored = readJson<Partial<Profile>>(PROFILE_KEY, {});
+    // Okända värden (gammal nyckel, redigerad storage) faller till beginner
+    // så att nästa POST inte 400:ar på ogiltig `level`.
     const level =
       stored.level === "student" || stored.level === "developer"
         ? stored.level
@@ -121,6 +136,8 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const saveThread = useCallback((thread: SavedThread) => {
+    // Cap 12: localStorage-kvoten är liten; äldre trådar dumpas, samma id
+    // upsertas så streaming-uppdateringar inte duplicerar raden i menyn.
     setThreads((prev) =>
       [thread, ...prev.filter((item) => item.id !== thread.id)].slice(0, 12),
     );

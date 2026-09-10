@@ -26,12 +26,14 @@ function asThreadTitle(messages: UIMessage[]) {
 }
 
 export function Chat() {
+  // ChatSession läser localStorage via useProfile. SSR + klientens lagrade
+  // namn/trådar ger annars hydration-mismatch (Next-overlay mitt i demon).
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   if (!mounted) {
     return (
       <div className="flex flex-1 items-center justify-center text-sm text-[var(--ink-soft)]">
-        Öppnar dojon…
+        Öppnar…
       </div>
     );
   }
@@ -78,17 +80,19 @@ function ChatSession() {
 
   // Speglar den pågående sessionen till trådlistan.
   //
-  // `savedSignature` bryter en oändlig renderloop (issue #64): saveThread()
-  // uppdaterar `threads` i providern, vilket renderar om den här komponenten,
-  // varpå useChat lämnar ut en ny `messages`-referens — även när innehållet är
-  // oförändrat. Utan vakt blir det spara → rendera → spara i all oändlighet,
-  // vilket React avbryter med "Maximum update depth exceeded" mitt i ett
-  // streamat svar (rått felmeddelande i chattbubblan, avbruten fetch).
+  // `savedSignature` bryter en oändlig renderloop (issue #64 / PR #69,
+  // orchestratorn): saveThread() uppdaterar `threads` i providern, vilket
+  // renderar om den här komponenten, varpå useChat lämnar ut en ny
+  // `messages`-referens — även när innehållet är oförändrat. Utan vakt
+  // blir det spara → rendera → spara i all oändlighet, vilket React avbryter
+  // med "Maximum update depth exceeded" mitt i ett streamat svar (rått
+  // felmeddelande i chattbubblan, avbruten fetch).
   //
   // Signaturen jämför innehåll i stället för referens. Under streaming ingår
   // bara antalet meddelanden, så tråden dyker upp i menyn direkt när frågan
   // skickas — men texten som växer fram chunk för chunk utlöser inte en
   // skrivning per chunk. När strömmen är klar sparas svaret i sin helhet.
+  // Behålls som den är — loopen är den rätta fixen, inte en debounce.
   const savedSignature = useRef("");
 
   useEffect(() => {
@@ -144,6 +148,8 @@ function ChatSession() {
     const text = input.trim();
     if (!text || busy) return;
     clearError();
+    // `level` i body — engelskt id. useChat skickar messages som UIMessage
+    // (parts[], inte content) vilket är AI SDK v7 / kontraktets §2.
     sendMessage({ text }, { body: { level: profile.level } });
     setInput("");
   };
@@ -245,6 +251,8 @@ function ChatSession() {
         )}
       </main>
 
+      {/* pointer-events-none på wrappern så gradienten inte fångar klick
+          på meddelanden bakom; formuläret slår på pointer-events igen. */}
       <footer className="pointer-events-none absolute bottom-0 left-0 right-0 z-10">
         <div className="pointer-events-auto mx-auto w-full max-w-3xl px-4 pb-4 pt-6"
           style={{ background: "linear-gradient(to top, var(--paper) 60%, transparent)" }}>
@@ -299,6 +307,9 @@ function ChatSession() {
               rows={1}
               onChange={(event) => setInput(event.target.value)}
               onKeyDown={(event) => {
+                // Textarea submit:ar inte formulär på Enter (till skillnad
+                // från <input>). IME-Enter under svensk sammansättning ska
+                // inte skicka — därför isComposing-vakten (#42 / #60).
                 if (event.nativeEvent.isComposing) return;
                 if (event.shiftKey) return;
                 if (event.key !== "Enter") return;

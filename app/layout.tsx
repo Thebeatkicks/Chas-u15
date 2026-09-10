@@ -25,6 +25,8 @@ export const metadata: Metadata = {
   description: "Förklarar, löser inte — en JavaScript-lärarassistent.",
 };
 
+// `lang="sv"` för skärmläsare och demo. ProfileProvider måste wrappa
+// AppShell så navens trådlista och ChatSession delar samma localStorage.
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html

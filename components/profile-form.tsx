@@ -39,6 +39,8 @@ export function ProfileForm() {
         className="mt-8 space-y-6"
         onSubmit={(event) => {
           event.preventDefault();
+          // setProfile skriver redan till localStorage per tangenttryck;
+          // submit är bara bekräftelse + tillbaka till dojon.
           setSaved(true);
           window.setTimeout(() => router.push("/"), 700);
         }}

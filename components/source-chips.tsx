@@ -1,5 +1,10 @@
 import type { UIMessage } from "@ai-sdk/react";
 
+/**
+ * Källor kommer som `source-url`-parts, inte som text. Kontraktets §5 skickar
+ * dem EFTER `text-end` så de inte syns medan svaret streamar (skissens
+ * designbeslut 5). Tom lista ⇒ null, så tomma svar inte får en tom "Källor"-rad.
+ */
 function sourceParts(message: UIMessage) {
   return message.parts.filter(
     (part): part is Extract<UIMessage["parts"][number], { type: "source-url" }> =>
@@ -22,7 +27,7 @@ export function SourceChips({ message }: { message: UIMessage }) {
             <a
               href={part.url}
               target="_blank"
-              rel="noreferrer"
+              rel="noreferrer" // ny flik: demon ska inte navigera bort från chatten
               className="inline-flex rounded-full border border-[var(--seal)]/70 bg-[var(--paper-raised)] px-2.5 py-1 text-xs text-[var(--seal-deep)] hover:bg-[#f3e2d6]"
             >
               {part.title ?? part.url}

@@ -17,7 +17,7 @@ export function EmptyState({
         師
       </div>
       <p className="text-[11px] font-semibold tracking-[0.18em] text-[var(--seal)] uppercase">
-        {name ? `Välkommen, ${name}` : "Dojo"}
+        {name ? `Välkommen, ${name}` : COPY.wordmark}
       </p>
       <h2 className="mt-2 font-serif text-3xl tracking-tight text-[var(--ink)]">
         {COPY.emptyTitle}
@@ -30,6 +30,8 @@ export function EmptyState({
           <li key={suggestion}>
             <button
               type="button"
+              // Fyller inputen, skickar inte — demo-manuset vill att vi
+              // skriver frågan så det syns att chatten är live.
               onClick={() => onPickSuggestion(suggestion)}
               className="rounded-full border border-[var(--line)] bg-[var(--paper-raised)] px-3.5 py-2 text-sm text-[var(--ink-soft)] hover:border-[var(--seal)] hover:text-[var(--seal)]"
             >

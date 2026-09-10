@@ -12,8 +12,12 @@ import remarkGfm from "remark-gfm";
 
 /**
  * Progressive markdown: re-parse the full buffer on every stream chunk.
- * Incomplete fences (` ``` ` without a closer) would otherwise swallow the
- * rest of the answer — close them so the open block still highlights.
+ *
+ * Constraint: count of ``` must be even or the rest of the answer is eaten
+ * as "code". We cannot wait for a matching closer — the model is still
+ * writing. Odd count ⇒ append a closer so the open block still highlights.
+ * Counting tokens, not open/close pairs: a fence is always three backticks
+ * whether it has a language tag or not.
  */
 function closeOpenFences(markdown: string) {
   const fences = markdown.match(/```/g)?.length ?? 0;
@@ -75,6 +79,8 @@ export function MarkdownMessage({
     <div className="sensei-md">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
+        // highlight.js CSS-fil skippas — tokenfärgerna i globals.css är
+        // skrivna mot den mörka editor-ytan så temat inte krockar med pappret.
         rehypePlugins={[rehypeHighlight]}
         components={{
           pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,

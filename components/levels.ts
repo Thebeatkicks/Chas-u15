@@ -1,3 +1,7 @@
+/**
+ * Nivå-id:n är de engelska kontraktsvärdena (`docs/api-contract.md` §3).
+ * UI:t visar svenska etiketter — att skicka "nybörjare" ger 400 från routen.
+ */
 export type Level = "beginner" | "student" | "developer";
 
 export const LEVELS: readonly {
