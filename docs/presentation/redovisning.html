@@ -1,0 +1,377 @@
+<title>JS Sensei Redovisning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;600;700&family=Source+Sans+3:wght@300;400;600&family=JetBrains+Mono:wght@400;600&display=swap">
+
+<style>
+  /* JS Sensei — redovisningsdäck.
+     Medvetet enkelriktat mörkt tema: körs på projektor i föreläsningssal,
+     där ett ljust helskärmsfält bländar. Allt målas explicit så sidan håller
+     oavsett värdens tema. */
+  :root {
+    --sumi:      #12100E;   /* varmt bläcksvart, inte rent svart */
+    --sumi-lift: #1C1917;   /* upphöjd yta */
+    --sumi-edge: #2E2A26;   /* linjer */
+    --washi:     #F5F0E6;   /* varm papperstext */
+    --washi-dim: #A8A096;   /* dämpad, varm hue-bias */
+    --jade:      #4FA88B;   /* appens teal, lyft för mörk botten */
+    --seal:      #C1443A;   /* hanko-rött — sparsamt */
+
+    --display: "Noto Serif JP", Georgia, serif;
+    --body: "Source Sans 3", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--sumi);
+    color: var(--washi);
+    font-family: var(--body);
+    overflow: hidden;
+    height: 100vh;
+  }
+
+  /* ---------- scenen ---------- */
+  #stage { position: relative; height: 100vh; width: 100%; }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    padding: clamp(2.5rem, 6vw, 6rem);
+    padding-right: clamp(2.5rem, 22vw, 16rem);  /* ma — luft till höger */
+    gap: clamp(1rem, 2.2vh, 1.75rem);
+  }
+  .slide.on { display: flex; animation: rise .55s cubic-bezier(.2,.7,.3,1) both; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(1.6rem); }
+    to   { opacity: 1; transform: none; }
+  }
+  /* barnen kommer in strax efter sin slide, i läsordning */
+  .slide.on > * { animation: rise .5s cubic-bezier(.2,.7,.3,1) both; }
+  .slide.on > *:nth-child(1) { animation-delay: .06s; }
+  .slide.on > *:nth-child(2) { animation-delay: .13s; }
+  .slide.on > *:nth-child(3) { animation-delay: .20s; }
+  .slide.on > *:nth-child(4) { animation-delay: .27s; }
+  .slide.on > *:nth-child(5) { animation-delay: .34s; }
+  .slide.on > *:nth-child(6) { animation-delay: .41s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slide.on, .slide.on > * { animation: none; }
+  }
+
+  /* ---------- typografi ---------- */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: clamp(.7rem, 1vw, .85rem);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--jade);
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2.8rem, 7.5vw, 6.5rem);
+    line-height: 1.02;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h2 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4.6vw, 3.9rem);
+    line-height: 1.1;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    font-size: clamp(1.05rem, 1.9vw, 1.6rem);
+    line-height: 1.5;
+    color: var(--washi-dim);
+    max-width: 34ch;
+    margin: 0;
+  }
+  p { margin: 0; }
+
+  /* ---------- listor ---------- */
+  .points { display: flex; flex-direction: column; gap: clamp(.7rem, 1.6vh, 1.3rem); margin: 0; padding: 0; list-style: none; max-width: 62ch; }
+  .points li { display: grid; grid-template-columns: auto 1fr; gap: 1rem; align-items: baseline; font-size: clamp(.98rem, 1.6vw, 1.35rem); line-height: 1.45; }
+  .points .k { font-family: var(--mono); font-size: .75em; color: var(--jade); letter-spacing: .1em; padding-top: .15em; }
+  .points strong { color: var(--washi); font-weight: 600; }
+  .points span.t { color: var(--washi-dim); }
+
+  /* ---------- siffror ---------- */
+  .figures { display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 5vw, 4.5rem); align-items: flex-end; }
+  .fig { display: flex; flex-direction: column; gap: .3rem; }
+  .fig .n { font-family: var(--mono); font-weight: 600; font-size: clamp(2.2rem, 6vw, 4.6rem); line-height: 1; font-variant-numeric: tabular-nums; }
+  .fig .n.win { color: var(--jade); }
+  .fig .n.was { color: var(--washi-dim); font-size: clamp(1.4rem, 3vw, 2.4rem); }
+  .fig .l { font-size: clamp(.8rem, 1.1vw, 1rem); color: var(--washi-dim); max-width: 22ch; line-height: 1.35; }
+  .arrow { font-family: var(--mono); color: var(--seal); font-size: clamp(1.4rem, 3vw, 2.4rem); align-self: center; }
+
+  /* ---------- citat / svarsprov ---------- */
+  .quotes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: clamp(1rem, 2.5vw, 2rem); max-width: 68rem; }
+  .quote { border-left: 2px solid var(--jade); padding: .2rem 0 .2rem 1.1rem; display: flex; flex-direction: column; gap: .5rem; }
+  .quote.seal { border-left-color: var(--seal); }
+  .quote .who { font-family: var(--mono); font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--washi-dim); }
+  .quote .q { font-size: clamp(.95rem, 1.4vw, 1.15rem); line-height: 1.5; }
+
+  code, .mono { font-family: var(--mono); font-size: .9em; color: var(--jade); }
+
+  /* ---------- demo-frågor ---------- */
+  .asks { display: flex; flex-direction: column; gap: clamp(.6rem, 1.5vh, 1rem); max-width: 60rem; margin: 0; padding: 0; list-style: none; }
+  .ask { display: grid; grid-template-columns: auto 1fr; gap: 1rem 1.1rem; align-items: baseline; padding: clamp(.6rem, 1.4vh, .9rem) 0; border-bottom: 1px solid var(--sumi-edge); }
+  .ask:last-child { border-bottom: 0; }
+  .ask .step { font-family: var(--mono); font-size: .78rem; color: var(--seal); letter-spacing: .1em; }
+  .ask .txt { font-family: var(--mono); font-size: clamp(.9rem, 1.35vw, 1.1rem); color: var(--washi); line-height: 1.4; }
+  .ask .why { grid-column: 2; font-size: clamp(.82rem, 1.1vw, .98rem); color: var(--washi-dim); line-height: 1.4; }
+
+  /* ---------- sigill (slide-nummer) ---------- */
+  .seal-mark {
+    position: fixed; top: clamp(1.4rem, 3vw, 2.6rem); right: clamp(1.4rem, 3vw, 2.6rem);
+    width: clamp(2.6rem, 4vw, 3.4rem); height: clamp(2.6rem, 4vw, 3.4rem);
+    border: 2px solid var(--seal); border-radius: 4px;
+    display: grid; place-items: center;
+    font-family: var(--mono); font-weight: 600; font-size: clamp(.85rem, 1.3vw, 1.05rem);
+    color: var(--seal); font-variant-numeric: tabular-nums;
+    background: rgba(193,68,58,.07);
+  }
+
+  /* ---------- talarstöd ---------- */
+  .cue {
+    position: fixed; bottom: clamp(1.4rem, 3vw, 2.4rem); left: clamp(2.5rem, 6vw, 6rem);
+    display: flex; gap: 1.2rem; align-items: baseline;
+    font-family: var(--mono); font-size: clamp(.72rem, 1vw, .85rem);
+    color: var(--washi-dim); letter-spacing: .05em;
+  }
+  .cue .who { color: var(--jade); }
+  .cue .time { font-variant-numeric: tabular-nums; }
+
+  /* ---------- framsteg ---------- */
+  .rail { position: fixed; left: 0; right: 0; bottom: 0; height: 2px; background: var(--sumi-edge); }
+  .rail > i { display: block; height: 100%; background: var(--jade); transition: width .45s cubic-bezier(.2,.7,.3,1); }
+
+  .hint { position: fixed; bottom: clamp(1.4rem, 3vw, 2.4rem); right: clamp(1.4rem, 3vw, 2.6rem); font-family: var(--mono); font-size: .72rem; color: var(--sumi-edge); letter-spacing: .08em; }
+
+  /* ---------- titelsidan ---------- */
+  .kanji { font-family: var(--display); font-weight: 700; font-size: clamp(4rem, 13vw, 11rem); line-height: .85; color: var(--jade); opacity: .16; position: absolute; right: clamp(2rem, 8vw, 9rem); top: 50%; transform: translateY(-50%); pointer-events: none; user-select: none; }
+  .byline { display: flex; flex-wrap: wrap; gap: .5rem 1.6rem; font-family: var(--mono); font-size: clamp(.78rem, 1.1vw, .95rem); color: var(--washi-dim); }
+  .byline b { color: var(--washi); font-weight: 400; }
+
+  /* ---------- demo-paus ---------- */
+  .slide.pause { justify-content: center; align-items: flex-start; }
+  .pause h2 { font-size: clamp(2.6rem, 8vw, 6rem); color: var(--seal); }
+  .url { font-family: var(--mono); font-size: clamp(1rem, 2vw, 1.6rem); color: var(--jade); }
+
+  :focus-visible { outline: 2px solid var(--jade); outline-offset: 3px; }
+</style>
+
+<div id="stage">
+
+  <!-- 1 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Henrik" data-time="0:00–0:30">
+    <div class="kanji">師</div>
+    <p class="eyebrow">Chas u15 · AI-baserad webbapplikation</p>
+    <h1>JS Sensei</h1>
+    <p class="lede">En lärarassistent för JavaScript som förklarar — men aldrig löser åt dig.</p>
+    <div class="byline">
+      <span><b>Henrik</b> orchestrator</span>
+      <span><b>Yasmin</b> data &amp; RAG</span>
+      <span><b>Fastuo</b> AI &amp; backend</span>
+      <span><b>Ernest</b> frontend</span>
+    </div>
+  </section>
+
+  <!-- 2 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Henrik" data-time="0:30–2:00">
+    <p class="eyebrow">Arbetssättet</p>
+    <h2>Fyra personer, fyra AI-verktyg,<br>ett regelverk</h2>
+    <ul class="points">
+      <li><span class="k">VERKTYG</span><span class="t">Claude Code ×2, Codex, Cursor — parallellt, i en orchestrator-modell där varje person har en egen planerande session.</span></li>
+      <li><span class="k">BEVIS</span><span class="t">Ett paket går <strong>planned → merged → proven</strong>. "Proven" kräver att vägen körts på det <strong>deployade</strong> bygget. Källkodstester räcker inte.</span></li>
+      <li><span class="k">HANDOFF</span><span class="t">Varje avslutad session lämnar en skriftlig överlämning med konkret bevis — inte "det funkar", utan kommandot och utdatan. Över 20 i repot.</span></li>
+    </ul>
+    <p class="lede" style="max-width:52ch">Verktygen skrev koden. Reglerna runt dem gjorde att fyra parallella agenter inte sprang isär.</p>
+  </section>
+
+  <!-- 3 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Henrik" data-time="1:15 in i §1b">
+    <p class="eyebrow">Arbetssättet · två lärdomar</p>
+    <h2>Det som gick fel först</h2>
+    <ul class="points">
+      <li><span class="k">WAVE 0</span><span class="t"><strong>Beroenden inuti en sprint serialiserar arbetet.</strong> Kontraktet blockerade mocken som blockerade gränssnittet — alla väntade på varandra.</span></li>
+      <li><span class="k">FIXEN</span><span class="t"><strong>Sveprincipen:</strong> allt en person behöver ska finnas <em>innan</em> sprinten öppnar. Beroenden läggs på sprintgränsen. Wave 1 och 2 blev raka svep utan väntetider.</span></li>
+      <li><span class="k">BEVIS</span><span class="t">API-kontraktet skrevs före koden. Gränssnittet byggdes mot en mock — när riktig RAG byttes in krävdes <strong>noll kodändringar</strong>.</span></li>
+    </ul>
+  </section>
+
+  <!-- 4 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Henrik" data-time="2:00–2:45">
+    <p class="eyebrow">Arkitektur</p>
+    <h2>Svaren är grundade i<br>riktig dokumentation</h2>
+    <ul class="points">
+      <li><span class="k">DATA</span><span class="t">MDN:s officiella innehållsrepo — klonat, inte skrapat. CC-BY-SA, och vi citerar källan i varje svar.</span></li>
+      <li><span class="k">KEDJAN</span><span class="t"><span class="mono">fråga → embedding → vektorsökning i pgvector → kontext → gpt-4o-mini → streamat svar + källor</span></span></li>
+      <li><span class="k">DRIFT</span><span class="t">Next.js på Vercel. API-routes <em>är</em> backenden — ingen separat server att drifta.</span></li>
+    </ul>
+    <p class="lede" style="max-width:50ch">RAG finns för att en naken språkmodell svarar självsäkert fel om JavaScript-detaljer — och en kursdeltagare kan inte se skillnaden.</p>
+  </section>
+
+  <!-- 5 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Yasmin" data-time="2:45–4:15">
+    <p class="eyebrow">RAG-kedjan · mätt, inte gissat</p>
+    <h2>Sökkvaliteten gick från<br>sex av tio till tio av tio</h2>
+    <div class="figures">
+      <div class="fig"><span class="n">528</span><span class="l">kuraterade MDN-sidor</span></div>
+      <div class="fig"><span class="n">3 547</span><span class="l">chunks med embeddings i pgvector</span></div>
+      <div class="fig"><span class="n was">6/10</span><span class="l">första mätningen</span></div>
+      <div class="arrow">→</div>
+      <div class="fig"><span class="n win">10/10</span><span class="l">rätt sida i topp-3 efter två åtgärder</span></div>
+    </div>
+    <ul class="points">
+      <li><span class="k">1</span><span class="t"><strong>Hybrid-chunkning.</strong> Dela per rubrik i stället för fast storlek — "Variable hoisting" blir en egen chunk i stället för att begravas i 2 800 tecken om variabelscope.</span></li>
+      <li><span class="k">2</span><span class="t"><strong>Query-normalisering.</strong> Korta frågor expanderas till hela meningar före embedding, och jämförelsefrågor söks både som fras och per begrepp — med <strong>varvade</strong> träffar.</span></li>
+    </ul>
+  </section>
+
+  <!-- 6 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Yasmin" data-time="4:00 in i §3">
+    <p class="eyebrow">Varför varvningen var nyckeln</p>
+    <h2>"Skillnaden mellan<br>let och const"</h2>
+    <p class="lede" style="max-width:56ch">Sorterar man ihop två sökningars träffar på likhet tar det starkare begreppet alla platserna. Därför syntes <code>let</code> aldrig bredvid <code>const</code> — halva jämförelsen saknades i varje svar.</p>
+    <div class="quotes">
+      <div class="quote seal"><span class="who">Före — källor</span><span class="q"><code>const</code> · <code>const</code> · en orelaterad regex-sida</span></div>
+      <div class="quote"><span class="who">Efter — källor</span><span class="q"><code>const</code> · <code>let</code> · Language overview</span></div>
+    </div>
+    <p class="lede" style="max-width:52ch">Vi visste att det var 6/10 för att vi hade mätt. Utan mätning hade vi trott att sökningen fungerade.</p>
+  </section>
+
+  <!-- 7 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Fastuo" data-time="4:15–5:45">
+    <p class="eyebrow">Nivåanpassning</p>
+    <h2>Samma fråga,<br>tre olika lärare</h2>
+    <div class="quotes">
+      <div class="quote"><span class="who">Nybörjare</span><span class="q">"Tänk dig att en closure är som en <strong>skattkista</strong> där en funktion kan lagra värden och minnen från sin omgivning."</span></div>
+      <div class="quote"><span class="who">Utvecklare</span><span class="q">"<strong>Vanligaste misstaget</strong> med closures är att man underskattar hur länge variabler kan överleva efter att deras omgivande funktion har avslutats."</span></div>
+    </div>
+    <p class="lede" style="max-width:56ch">Nybörjaren får en liknelse. Utvecklaren får en fallgrop — och aldrig en definition, för den regeln vann först när vi styrde <em>formen på första meningen</em> i stället för innehållet.</p>
+  </section>
+
+  <!-- 8 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Fastuo" data-time="5:00 in i §4">
+    <p class="eyebrow">Prompt-design · fem versioner</p>
+    <h2>Att förbjuda mer<br>gjorde det sämre</h2>
+    <ul class="points">
+      <li><span class="k">MÄTNING</span><span class="t">En regressionssvit kör samma fråga 10–20 gånger per nivå och räknar hur ofta reglerna faktiskt följs. En enda körning bevisar ingenting — svaren varierar.</span></li>
+      <li><span class="k">V4</span><span class="t"><strong>Förbudslistan tredubblade felet.</strong> Att räkna upp förbjudna formuleringar ordagrant gjorde dem vanligare — 1/10 blev 3/10 — och regelmassan trängde undan en orörd längdregel.</span></li>
+      <li><span class="k">V5</span><span class="t"><strong>Positiva mönster i stället för förbud.</strong> Öppningar att följa, en roll för vägran. Resultat: <strong>0/20</strong> definitionsinledningar, <strong>0/20</strong> över ordtaket.</span></li>
+    </ul>
+  </section>
+
+  <!-- 9 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Fastuo" data-time="5:30 in i §4">
+    <p class="eyebrow">Modellval · också mätt</p>
+    <h2>Tre modeller,<br>identiska prompts</h2>
+    <div class="figures">
+      <div class="fig"><span class="n win">1,9 s</span><span class="l">gpt-4o-mini till första token — <strong>vald</strong></span></div>
+      <div class="fig"><span class="n">1,5 s</span><span class="l">claude-haiku-4.5 — snabbast och pedagogiskt trevligast, men bröt mot ordtaken</span></div>
+      <div class="fig"><span class="n" style="color:var(--seal)">17 s</span><span class="l">gpt-5-mini — diskad på latens</span></div>
+    </div>
+    <p class="lede" style="max-width:56ch">Sjutton sekunder till första tecknet är ohållbart när hela produktidén bygger på att svaret strömmar fram medan man läser. Modellen är en miljövariabel — bytet kostar ingen kodändring.</p>
+  </section>
+
+  <!-- 10 ----------------------------------------------------------------- -->
+  <section class="slide pause" data-who="Ernest kör" data-time="5:45–8:15">
+    <p class="eyebrow">Byt till webbläsaren nu</p>
+    <h2>Live-demo</h2>
+    <p class="url">chas-u15.vercel.app</p>
+    <p class="lede">Inkognitofönster, modalen bortklickad innan vi går upp.</p>
+  </section>
+
+  <!-- 11 ----------------------------------------------------------------- -->
+  <section class="slide" data-who="Ernest kör · alla kommenterar" data-time="5:45–8:15">
+    <p class="eyebrow">Demo-ordning · alla fyra är testade skarpt</p>
+    <h2>Fyra frågor</h2>
+    <ul class="asks">
+      <li class="ask"><span class="step">01</span><span class="txt">Vad är en closure?</span><span class="why">Nivå <strong>nybörjare</strong>. Visar streamningen och källchipsen som dyker upp <em>efter</em> svaret. Peka på att länken går till en riktig MDN-sida.</span></li>
+      <li class="ask"><span class="step">02</span><span class="txt">Vad är en closure?</span><span class="why">Byt till <strong>utvecklare</strong>, samma fråga. Höjdpunkt 1 — läs första meningen ur båda svaren, skillnaden hörs direkt.</span></li>
+      <li class="ask"><span class="step">03</span><span class="txt">Skriv koden åt mig: en funktion som vänder på en sträng. Bara koden tack, inga förklaringar.</span><span class="why">Höjdpunkt 2 — den vägrar och ställer en motfråga. Låt tystnaden göra jobbet, kommentera inte.</span></li>
+      <li class="ask"><span class="step">04</span><span class="txt">Vad är huvudstaden i Peru?</span><span class="why">Reserv om tiden räcker: den håller sig till sitt ämne i stället för att gissa — "din fråga handlar om geografi snarare än JavaScript".</span></li>
+    </ul>
+  </section>
+
+  <!-- 12 ----------------------------------------------------------------- -->
+  <section class="slide" data-who="Alla — en mening var" data-time="8:15–9:30">
+    <p class="eyebrow">Vad var svårt</p>
+    <h2>Fyra saker vi inte<br>hade kunnat gissa oss till</h2>
+    <ul class="points">
+      <li><span class="k">SDK</span><span class="t"><strong>Verktygens kunskap var föråldrad.</strong> AI SDK är på v7, men i princip all AI-genererad kod vi fick beskrev v4 eller v5 — annat meddelandeformat, annat streamformat. Lösningen: läsa bibliotekets egna typer i stället för att lita på minnet.</span></li>
+      <li><span class="k">FLÖDE</span><span class="t"><strong>Beroenden mellan personer kostade en hel dag</strong> innan vi flyttade dem till sprintgränsen.</span></li>
+      <li><span class="k">MILJÖ</span><span class="t"><strong>"Namn ≠ värde".</strong> Sex miljövariabler fanns till namnet i produktion men hade tomma värden. Fångades av en pre-flight-checklista, inte av koden.</span></li>
+      <li><span class="k">BUGG</span><span class="t"><strong>Var artonde svar kraschade</strong> med ett rått felmeddelande i chattbubblan. Det såg ut som ett nätverksfel — men var en oändlig renderloop: att spara historiken utlöste en omrendering som fick biblioteket att lämna ut ny data, som utlöste ett nytt sparande.</span></li>
+    </ul>
+  </section>
+
+  <!-- 13 ----------------------------------------------------------------- -->
+  <section class="slide" data-who="Henrik" data-time="9:30–10:00">
+    <p class="eyebrow">Avslut</p>
+    <h2>En assistent som lär ut<br>i stället för att lösa</h2>
+    <ul class="points">
+      <li><span class="k">GRUNDAD</span><span class="t">Varje svar bygger på MDN-innehåll som användaren kan kontrollera på en klickning. Källorna kommer från de chunkar sökningen hämtade — aldrig från modellens text.</span></li>
+      <li><span class="k">MÄTT</span><span class="t">Sökkvalitet, promptregler och modellval avgjordes med siffror, inte tyckande.</span></li>
+      <li><span class="k">BYGGD</span><span class="t">Av fyra personer och fyra AI-verktyg på åtta dagar — med bevis för varje steg.</span></li>
+    </ul>
+    <p class="lede" style="max-width:46ch">Andra assistenter ger dig fisken. JS Sensei lär dig fiska.</p>
+    <p class="url">chas-u15.vercel.app</p>
+  </section>
+
+</div>
+
+<div class="seal-mark" id="mark">1</div>
+<div class="cue"><span class="who" id="who">Henrik</span><span class="time" id="time">0:00–0:30</span></div>
+<div class="hint">← → mellanslag · F helskärm</div>
+<div class="rail"><i id="bar"></i></div>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const mark = document.getElementById('mark');
+  const who  = document.getElementById('who');
+  const time = document.getElementById('time');
+  const bar  = document.getElementById('bar');
+  let i = 0;
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('on', k === i));
+    const s = slides[i];
+    mark.textContent = i + 1;
+    who.textContent  = s.dataset.who  || '';
+    time.textContent = s.dataset.time || '';
+    bar.style.width  = ((i + 1) / slides.length * 100) + '%';
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); show(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(i - 1); }
+    else if (e.key === 'Home') show(0);
+    else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen?.();
+    }
+  });
+
+  // Klick framåt, men inte när man markerar text att läsa upp.
+  document.addEventListener('click', () => {
+    if (!String(window.getSelection())) show(i + 1);
+  });
+
+  show(0);
+</script>
