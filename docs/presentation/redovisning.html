@@ -107,6 +107,15 @@
   .points strong { color: var(--washi); font-weight: 600; }
   .points span.t { color: var(--washi-dim); }
 
+  /* ---------- organisationsdiagram ---------- */
+  .orgchart {
+    width: 100%;
+    max-width: 60rem;
+    /* Höjden får inte konkurrera ut rubrik och avslutsrad på en låg projektor. */
+    max-height: 54vh;
+    height: auto;
+  }
+
   /* ---------- wave-resan ---------- */
   .waves {
     display: grid;
@@ -229,13 +238,99 @@
   <!-- 2 ------------------------------------------------------------------ -->
   <section class="slide" data-who="Henrik" data-time="0:30–2:00">
     <p class="eyebrow">Arbetssättet</p>
-    <h2>Fyra personer, fyra AI-verktyg,<br>ett regelverk</h2>
-    <ul class="points">
-      <li><span class="k">VERKTYG</span><span class="t">Claude Code, Codex och Cursor — parallellt, i en orchestrator-modell där varje person har en egen planerande session. Fastuo <strong>bytte verktyg</strong> mellan wave 0 och 1 — lärdomarna höll över båda.</span></li>
-      <li><span class="k">BEVIS</span><span class="t">Ett paket går <strong>planned → merged → proven</strong>. "Proven" kräver att vägen körts på det <strong>deployade</strong> bygget. Källkodstester räcker inte.</span></li>
-      <li><span class="k">HANDOFF</span><span class="t">Varje avslutad session lämnar en skriftlig överlämning med konkret bevis — inte "det funkar", utan kommandot och utdatan. Över 20 i repot.</span></li>
-    </ul>
-    <p class="lede" style="max-width:52ch">Verktygen skrev koden. Reglerna runt dem gjorde att fyra parallella agenter inte sprang isär.</p>
+    <h2>Fyra personer, tre AI-verktyg,<br>ett regelverk</h2>
+
+    <svg class="orgchart" viewBox="0 0 940 430" role="img"
+         aria-labelledby="org-t" preserveAspectRatio="xMidYMid meet">
+      <title id="org-t">Henrik som main orchestrator skickar startprompts till
+        Yasmin, Fastuo och Ernest. Var och en kör en egen orchestrator med en
+        kodsession per issue, och lämnar tillbaka en handoff med bevis.</title>
+
+      <defs>
+        <marker id="tipDown" viewBox="0 0 10 10" refX="5" refY="9"
+                markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 0 L5 9 L10 0 Z" fill="var(--jade)"/>
+        </marker>
+        <marker id="tipUp" viewBox="0 0 10 10" refX="5" refY="1"
+                markerWidth="7" markerHeight="7" orient="auto">
+          <path d="M0 10 L5 1 L10 10 Z" fill="var(--seal)"/>
+        </marker>
+      </defs>
+
+      <!-- main orchestrator -->
+      <rect x="310" y="4" width="320" height="86" rx="6"
+            fill="var(--sumi-lift)" stroke="var(--jade)" stroke-width="2"/>
+      <text x="470" y="36" text-anchor="middle" fill="var(--washi)"
+            font-family="var(--display)" font-weight="600" font-size="26">Henrik</text>
+      <text x="470" y="59" text-anchor="middle" fill="var(--jade)"
+            font-family="var(--mono)" font-size="13" letter-spacing="1.6">MAIN ORCHESTRATOR</text>
+      <text x="470" y="80" text-anchor="middle" fill="var(--washi-dim)"
+            font-family="var(--body)" font-size="14">planerar · granskar · mergar · öppnar nästa wave</text>
+
+      <!-- ned: startprompt · upp: handoff -->
+      <line x1="437" y1="92" x2="437" y2="178" stroke="var(--jade)"
+            stroke-width="2" marker-end="url(#tipDown)"/>
+      <line x1="503" y1="178" x2="503" y2="92" stroke="var(--seal)"
+            stroke-width="2" marker-end="url(#tipUp)"/>
+      <text x="423" y="126" text-anchor="end" fill="var(--jade)"
+            font-family="var(--mono)" font-size="15">startprompt</text>
+      <text x="423" y="147" text-anchor="end" fill="var(--washi-dim)"
+            font-family="var(--body)" font-size="13">mål · filägarskap · beviskrav</text>
+      <text x="517" y="126" fill="var(--seal)"
+            font-family="var(--mono)" font-size="15">handoff</text>
+      <text x="517" y="147" fill="var(--washi-dim)"
+            font-family="var(--body)" font-size="13">vad som gjordes · beviset</text>
+
+      <!-- fördelning till de tre spåren -->
+      <path d="M190 188 H750 M190 188 V214 M470 188 V214 M750 188 V214"
+            stroke="var(--sumi-edge)" stroke-width="2" fill="none"/>
+
+      <g font-family="var(--body)">
+        <rect x="80" y="214" width="220" height="124" rx="6"
+              fill="var(--sumi-lift)" stroke="var(--sumi-edge)" stroke-width="2"/>
+        <text x="100" y="245" fill="var(--washi)" font-family="var(--display)"
+              font-weight="600" font-size="22">Yasmin</text>
+        <text x="100" y="269" fill="var(--jade)" font-family="var(--mono)"
+              font-size="12" letter-spacing="1.4">DATA &amp; RAG</text>
+        <text x="100" y="293" fill="var(--washi-dim)" font-size="14">MDN-urval, chunkning,</text>
+        <text x="100" y="312" fill="var(--washi-dim)" font-size="14">embeddings, sökkvalitet</text>
+        <text x="100" y="331" fill="var(--washi-dim)" font-size="12" font-family="var(--mono)">Claude Code</text>
+
+        <rect x="360" y="214" width="220" height="124" rx="6"
+              fill="var(--sumi-lift)" stroke="var(--sumi-edge)" stroke-width="2"/>
+        <text x="380" y="245" fill="var(--washi)" font-family="var(--display)"
+              font-weight="600" font-size="22">Fastuo</text>
+        <text x="380" y="269" fill="var(--jade)" font-family="var(--mono)"
+              font-size="12" letter-spacing="1.4">AI &amp; BACKEND</text>
+        <text x="380" y="293" fill="var(--washi-dim)" font-size="14">API-kontrakt, RAG-route,</text>
+        <text x="380" y="312" fill="var(--washi-dim)" font-size="14">prompts, modellval</text>
+        <text x="380" y="331" fill="var(--washi-dim)" font-size="12" font-family="var(--mono)">Codex → Claude Code</text>
+
+        <rect x="640" y="214" width="220" height="124" rx="6"
+              fill="var(--sumi-lift)" stroke="var(--sumi-edge)" stroke-width="2"/>
+        <text x="660" y="245" fill="var(--washi)" font-family="var(--display)"
+              font-weight="600" font-size="22">Ernest</text>
+        <text x="660" y="269" fill="var(--jade)" font-family="var(--mono)"
+              font-size="12" letter-spacing="1.4">FRONTEND &amp; UX</text>
+        <text x="660" y="293" fill="var(--washi-dim)" font-size="14">skiss, chattgränssnitt,</text>
+        <text x="660" y="312" fill="var(--washi-dim)" font-size="14">nivåväljare, källchips</text>
+        <text x="660" y="331" fill="var(--washi-dim)" font-size="12" font-family="var(--mono)">Cursor</text>
+      </g>
+
+      <!-- vad som händer inuti varje spår -->
+      <path d="M190 338 V366 M470 338 V366 M750 338 V366"
+            stroke="var(--sumi-edge)" stroke-width="2" stroke-dasharray="3 4" fill="none"/>
+      <g font-family="var(--body)" font-size="13" fill="var(--washi-dim)" text-anchor="middle">
+        <text x="190" y="386">egen orchestrator</text>
+        <text x="190" y="405">→ en session per issue</text>
+        <text x="470" y="386">egen orchestrator</text>
+        <text x="470" y="405">→ en session per issue</text>
+        <text x="750" y="386">egen orchestrator</text>
+        <text x="750" y="405">→ en session per issue</text>
+      </g>
+    </svg>
+
+    <p class="lede" style="max-width:60ch">Varje handoff bär ett <strong>bevis</strong> — inte "det funkar", utan kommandot och utdatan. Ett paket är klart först när vägen körts på det <strong>deployade</strong> bygget.</p>
   </section>
 
   <!-- 3 ------------------------------------------------------------------ -->
