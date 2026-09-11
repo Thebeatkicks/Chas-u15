@@ -107,6 +107,43 @@
   .points strong { color: var(--washi); font-weight: 600; }
   .points span.t { color: var(--washi-dim); }
 
+  /* ---------- wave-resan ---------- */
+  .waves {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+    gap: clamp(1rem, 2.5vw, 2.2rem);
+    margin: 0; padding: 0; list-style: none;
+    max-width: 72rem;
+  }
+  .waves > li {
+    display: flex; flex-direction: column; gap: .45rem;
+    padding-top: .8rem;
+    border-top: 2px solid var(--sumi-edge);
+  }
+  /* Sista sprinten bär sigillfärgen — den är den vi står i just nu. */
+  .waves > li:last-child { border-top-color: var(--seal); }
+  .waves .w {
+    font-family: var(--mono); font-size: clamp(.7rem, .95vw, .82rem);
+    letter-spacing: .16em; text-transform: uppercase; color: var(--jade);
+  }
+  .waves > li:last-child .w { color: var(--seal); }
+  .waves .d {
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(1.05rem, 1.8vw, 1.5rem); line-height: 1.15;
+  }
+  .waves .sub {
+    margin: .25rem 0 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: .35rem;
+  }
+  .waves .sub li {
+    font-size: clamp(.82rem, 1.15vw, 1rem); line-height: 1.4;
+    color: var(--washi-dim); padding-left: .9rem; position: relative;
+  }
+  .waves .sub li::before {
+    content: "·"; position: absolute; left: 0; color: var(--jade);
+  }
+  .waves .sub strong { color: var(--washi); font-weight: 600; }
+
   /* ---------- siffror ---------- */
   .figures { display: flex; flex-wrap: wrap; gap: clamp(1.5rem, 5vw, 4.5rem); align-items: flex-end; }
   .fig { display: flex; flex-direction: column; gap: .3rem; }
@@ -202,7 +239,7 @@
   </section>
 
   <!-- 3 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Henrik" data-time="1:15 in i §1b">
+  <section class="slide" data-who="Henrik" data-time="i arbetssätts-delen">
     <p class="eyebrow">Arbetssättet · två lärdomar</p>
     <h2>Det som gick fel först</h2>
     <ul class="points">
@@ -214,6 +251,50 @@
 
   <!-- 4 ------------------------------------------------------------------ -->
   <section class="slide" data-who="Henrik" data-time="2:00–2:45">
+    <p class="eyebrow">Arbetssättet · resan</p>
+    <h2>Fyra sprintar,<br>åtta dagar</h2>
+    <ul class="waves">
+      <li>
+        <span class="w">Wave 0</span>
+        <span class="d">Setup</span>
+        <ul class="sub">
+          <li>Repo, deploy live, Supabase med pgvector</li>
+          <li>528 MDN-sidor valda med script — inte handplock</li>
+          <li><strong>API-kontraktet skrevs före koden</strong></li>
+        </ul>
+      </li>
+      <li>
+        <span class="w">Wave 1</span>
+        <span class="d">Kärnan live</span>
+        <ul class="sub">
+          <li>Ingestion, RAG-route, chat-UI med nivåväljare</li>
+          <li>Hela kedjan i produktion</li>
+          <li>Sökkvaliteten mätt första gången: <strong>6/10</strong></li>
+        </ul>
+      </li>
+      <li>
+        <span class="w">Wave 2</span>
+        <span class="d">Kvalitet</span>
+        <ul class="sub">
+          <li>Retrieval <strong>6/10 → 10/10</strong></li>
+          <li>Prompts v1 → v5, modellval avgjort</li>
+          <li>Markdown, kodblock, trådlista</li>
+        </ul>
+      </li>
+      <li>
+        <span class="w">Wave 3</span>
+        <span class="d">Polish</span>
+        <ul class="sub">
+          <li>Systematisk genomkörning hittade en bugg</li>
+          <li>Kodkommentarer, dokumentation, repetition</li>
+          <li><strong>Ingen ny funktionskod</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 5 ------------------------------------------------------------------ -->
+  <section class="slide" data-who="Henrik" data-time="2:45–3:15">
     <p class="eyebrow">Arkitektur</p>
     <h2>Svaren är grundade i<br>riktig dokumentation</h2>
     <ul class="points">
@@ -225,7 +306,7 @@
   </section>
 
   <!-- 5 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Yasmin" data-time="2:45–4:15">
+  <section class="slide" data-who="Yasmin" data-time="3:15–4:30">
     <p class="eyebrow">RAG-kedjan · mätt, inte gissat</p>
     <h2>Sökkvaliteten gick från<br>sex av tio till tio av tio</h2>
     <div class="figures">
@@ -242,7 +323,7 @@
   </section>
 
   <!-- 6 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Yasmin" data-time="4:00 in i §3">
+  <section class="slide" data-who="Yasmin" data-time="i RAG-delen">
     <p class="eyebrow">Varför varvningen var nyckeln</p>
     <h2>"Skillnaden mellan<br>let och const"</h2>
     <p class="lede" style="max-width:56ch">Sorterar man ihop två sökningars träffar på likhet tar det starkare begreppet alla platserna. Därför syntes <code>let</code> aldrig bredvid <code>const</code> — halva jämförelsen saknades i varje svar.</p>
@@ -254,7 +335,7 @@
   </section>
 
   <!-- 7 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Fastuo" data-time="4:15–5:45">
+  <section class="slide" data-who="Fastuo" data-time="4:30–5:45">
     <p class="eyebrow">Nivåanpassning</p>
     <h2>Samma fråga,<br>tre olika lärare</h2>
     <div class="quotes">
@@ -265,7 +346,7 @@
   </section>
 
   <!-- 8 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Fastuo" data-time="5:00 in i §4">
+  <section class="slide" data-who="Fastuo" data-time="i prompt-delen">
     <p class="eyebrow">Prompt-design · fem versioner</p>
     <h2>Att förbjuda mer<br>gjorde det sämre</h2>
     <ul class="points">
@@ -276,7 +357,7 @@
   </section>
 
   <!-- 9 ------------------------------------------------------------------ -->
-  <section class="slide" data-who="Fastuo" data-time="5:30 in i §4">
+  <section class="slide" data-who="Fastuo" data-time="i prompt-delen">
     <p class="eyebrow">Modellval · också mätt</p>
     <h2>Tre modeller,<br>identiska prompts</h2>
     <div class="figures">
