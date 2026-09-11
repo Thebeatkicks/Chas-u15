@@ -14,9 +14,9 @@ Notering från live: helmeningsfrågor träffar bättre än nyckelord — utnytt
 Bevis: sanity-körningen igen, före/efter-tabell. Mål ≥8/10.
 
 **W2-Y2: Regressionskörning + uppdaterad sanity-rapport** efter tuning +
-efter Fastuos #20 (svaren ändras). Dokumentera i samma fil, daterat.
+efter Faustos #20 (svaren ändras). Dokumentera i samma fil, daterat.
 
-## Fastuo (AI/backend) — svarskvalitet
+## Fausto (AI/backend) — svarskvalitet
 
 **W2-F0: Prompt-svagheterna ur `docs/prompt-design.md`** (#20 blev KLAR i
 wave 1 — detta är uppföljningen den själv listar): vägran räknar upp metoder
@@ -44,7 +44,7 @@ kvalitetshöjning för demon.
 
 ## Henrik (orchestrator/infra) — berättelsen
 
-**W2-H1: README v2** — väv in alla fyra AI-reflektionerna (kräver Fastuos +
+**W2-H1: README v2** — väv in alla fyra AI-reflektionerna (kräver Faustos +
 Ernests handoffs!), env-lärdomen ("namn ≠ värde"), modell-A/B-resultatet.
 
 **W2-H2: Demo-manus v1** (`docs/demo-manus.md`) — 10 min: produktidé,

@@ -2,7 +2,7 @@
 
 **Issue:** #21 — UI mot riktiga routen + riktiga källchips
 **Branch/PR:** `issue-21-status`
-**Status:** klar mot mock (noll-ändring när Fastuos route ersätter mocken)
+**Status:** klar mot mock (noll-ändring när Faustos route ersätter mocken)
 
 ## Vad ändrades
 

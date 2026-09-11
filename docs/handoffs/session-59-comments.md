@@ -23,7 +23,7 @@ Polish inför demo (samma PR, ingen ny funktion):
 - PR #69 läst: rotorsak var saveThread → ny messages-referens → loop. Kommentarerna stämmer.
 
 ## Inte klart / avvikelser
-- #63 gruppens ×2 kräver Henrik/Yasmin/Fastuo — kan inte stängas i den här PR:en.
+- #63 gruppens ×2 kräver Henrik/Yasmin/Fausto — kan inte stängas i den här PR:en.
 - #46 TTS tas inte (stretch; trasig knapp i demon kostar mer).
 
 ## Nästa session bör börja med

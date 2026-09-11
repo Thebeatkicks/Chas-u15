@@ -93,7 +93,7 @@ test-id:n (1–6) borta.
   ville gå vidare; de valde att öppna PR:en själva. Branchen `ingestion-v1`
   är pushad till origin, och färdig titel/body gavs till användaren i
   chatten (samma innehåll som ovan, formaterat som PR-body).
-- **Ping i gruppkanalen (Henrik/Fastuo/Ernest)** gjordes inte — ingen
+- **Ping i gruppkanalen (Henrik/Fausto/Ernest)** gjordes inte — ingen
   Slack/gruppkanal-verktyg tillgängligt i den här miljön, bara
   cross-session-meddelanden till namnlösa peer-sessioner (`chas-u15-4b`
   m.fl.) som jag inte kunde mappa tillförlitligt till en specifik person.
@@ -124,6 +124,6 @@ test-id:n (1–6) borta.
 ## Nästa session bör börja med
 
 Öppna PR:et manuellt (branch `ingestion-v1` redan pushad, titel/body i
-chatt-svaret ovan), pinga Henrik/Fastuo/Ernest (välj vem som är
+chatt-svaret ovan), pinga Henrik/Fausto/Ernest (välj vem som är
 tillgänglig) i gruppkanalen för review, och **stanna där** — börja inte på
 #18 förrän PR:et är öppnat och review begärd.

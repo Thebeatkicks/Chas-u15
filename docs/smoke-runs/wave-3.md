@@ -139,7 +139,7 @@ för avbruten ström), inte i backend-routen — inga 500:or sågs någonsin på
 `/api/chat`.
 
 **Åtgärd:** [#64](https://github.com/Thebeatkicks/Chas-u15/issues/64) öppnad
-för detta — Ernest/Fastuo äger `components/**` respektive
+för detta — Ernest/Fausto äger `components/**` respektive
 streaming-hanteringen.
 
 ---
@@ -173,7 +173,7 @@ streaming-hanteringen.
 - [ ] **Ej körbart här** (`vercel logs` kräver länkat/autentiserat CLI, inte
       tillgängligt i den här sessionen). Ingen 500 sågs i klientens
       nätverksflik under hela körningen (alla `/api/chat`-svar var `200`,
-      inklusive de tre som klienten avbröt). Henrik/Fastuo bör köra
+      inklusive de tre som klienten avbröt). Henrik/Fausto bör köra
       `vercel logs https://chas-u15.vercel.app` en gång för att utesluta
       dolda serverfel som inte syns klientsidan.
 

@@ -21,7 +21,7 @@ prototyper …) körs mot `match_documents` — dokumentera vilka sidor som rank
 topp-3 och om rätt sida finns där. Fil: `docs/retrieval-sanity.md`. Detta blir
 baseline för wave 2:s tuning. Bevis: filen med resultaten.
 
-## Fastuo (AI/backend)
+## Fausto (AI/backend)
 
 **W1-F1: Riktig RAG-route bakom kontraktet**
 `/api/chat`: embedda senaste frågan → `match_documents` (threshold + count som

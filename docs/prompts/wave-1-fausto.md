@@ -1,4 +1,4 @@
-# Startprompt — Fastuo — Wave 1 (personlig orchestrator)
+# Startprompt — Fausto — Wave 1 (personlig orchestrator)
 
 > Klistra in nedanför linjen i en ny Codex-session (personlig orchestrator;
 > en kod-session per issue som förut).
@@ -38,7 +38,7 @@ beroende av väntande PR — båda mot `main`). Vänta aldrig.
 **Nycklar:** allt via `.env.local` — aldrig i kod/loggar/PR. Publikt repo.
 
 **Handoff:** session-handoff per issue; när svepet är klart (eller tors
-kväll): `docs/handoffs/wave-1-fastuo.md` i PR — **AI-reflektionen täcker
+kväll): `docs/handoffs/wave-1-fausto.md` i PR — **AI-reflektionen täcker
 wave 0 och 1** (wave 0-handoffen hoppades över).
 
 **Hård stopp per issue:** bevis-raden uppfylld. Retrieval-tuning och

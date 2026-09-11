@@ -9,7 +9,7 @@
 | #63 demo (solo) | handoff | Live 2026-09-07: tomt läge, gäst, Enter, closure på nybörjare, MDN-källor, tråd i menyn. |
 
 ## Inte klart + varför
-- **#63 gruppens ×2** — kräver Henrik (klocka), Yasmin, Fastuo. Solo-körning räcker inte för issuen.
+- **#63 gruppens ×2** — kräver Henrik (klocka), Yasmin, Fausto. Solo-körning räcker inte för issuen.
 - **#46 TTS** — medvetet inte tagen. Stretch, och en trasig knapp i demon kostar mer än den ger.
 
 ## Beslut jag tagit

@@ -45,10 +45,10 @@ Meddela i gruppkanalen att repot är öppet för kloning.
 
 ## Main orchestrators egna wave 0-uppgifter (utanför kod-sessions)
 
-- [ ] Skicka startprompterna (`docs/prompts/wave-0-*.md`) till Yasmin, Fastuo, Ernest
+- [ ] Skicka startprompterna (`docs/prompts/wave-0-*.md`) till Yasmin, Fausto, Ernest
 - [ ] Dela OpenRouter-nyckeln i privata gruppchatten (ALDRIG GitHub) + sätta
       spending-limit; be Yasmin dela Supabase-uppgifterna samma väg
-- [ ] Lägga till Yasmin, Fastuo, Ernest som collaborators (issue #3)
+- [ ] Lägga till Yasmin, Fausto, Ernest som collaborators (issue #3)
 - [ ] Efter #1: dispatcha #2 (Vercel) och #3 (wave 1-issues + bräda)
 - [ ] Avstämning mån kväll: reconciliera handoffs, uppdatera STATE.md/state.json,
       lös knutar

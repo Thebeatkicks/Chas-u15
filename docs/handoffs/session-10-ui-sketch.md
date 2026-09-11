@@ -28,9 +28,9 @@ Ingen kod under `app/` eller `components/`.
 ## Överraskningar
 
 - Default-nivå i skissen är **Nybörjare**. #12 bör följa det om inte
-  gruppen säger annat när Fastuos kontrakt landar.
+  gruppen säger annat när Faustos kontrakt landar.
 
 ## Nästa session bör börja med
 
-Vänta på Fastuos `docs/api-contract.md` + mock (#7/#8), sen bygg #11
+Vänta på Faustos `docs/api-contract.md` + mock (#7/#8), sen bygg #11
 mot den skissen.

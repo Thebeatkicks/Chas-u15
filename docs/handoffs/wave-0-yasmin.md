@@ -44,7 +44,7 @@ omdefiniering behövs, bara en notis om tidslinjen.
   i MDN-repot. Använt i både #5 och #6, bör återanvändas i #17.
 
 ## Blockerar / blockeras av
-- **#17 (ingestion 528, Fastuo/Ernest väntar indirekt på RAG-routen som bygger
+- **#17 (ingestion 528, Fausto/Ernest väntar indirekt på RAG-routen som bygger
   på detta) kan starta** — schema, urval och embedding-kedjan är alla bevisade.
   Viktigt för den sessionen att veta: `documents`-tabellen har redan 6 rader
   (id=1 dummy-rad från #4:s självtest, id=2–6 från #6:s spike) — ingestionen

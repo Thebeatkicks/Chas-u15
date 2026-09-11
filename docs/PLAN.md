@@ -1,7 +1,7 @@
 # JS Sensei — Projektplan
 
 > Chas u15 · Gruppuppgift: AI-baserad webbapplikation
-> Team: Henrik (orchestrator/infra), Yasmin (data/RAG), Fastuo (AI/backend), Ernest (frontend/UX)
+> Team: Henrik (orchestrator/infra), Yasmin (data/RAG), Fausto (AI/backend), Ernest (frontend/UX)
 > Redovisning: **tors 11 sep** · Slutinlämning: **mån 14 sep 23:59**
 
 ## 1. Produkten

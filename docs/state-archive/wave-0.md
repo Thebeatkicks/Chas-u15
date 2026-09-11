@@ -13,9 +13,9 @@ lämnas i wave 1-handoffen istället.
 | #4 Supabase-schema | Yasmin | proven | PR #15 `a9d2da5`, självtest similarity 1.0 |
 | #5 MDN-urval | Yasmin | proven | PR #14 `907d0b9`, 528 sidor + script |
 | #6 embedding-spike | Yasmin | **carry-over → w1** | blockerades av service role-nyckel |
-| #7 API-kontrakt | Fastuo | proven | PR #16 `f9cff5c` |
-| #8 mock-route | Fastuo→orch | proven | `fc490e5`, curl-verifierad mot kontraktet |
-| #9 chat-spike | Fastuo | **carry-over → w1** | — |
+| #7 API-kontrakt | Fausto | proven | PR #16 `f9cff5c` |
+| #8 mock-route | Fausto→orch | proven | `fc490e5`, curl-verifierad mot kontraktet |
+| #9 chat-spike | Fausto | **carry-over → w1** | — |
 | #10 UI-skiss | Ernest | proven | PR #13 `3ed9658` |
 | #11 chatkomponent | Ernest | **carry-over → w1** | — |
 | #12 nivåväljare | Ernest | **carry-over → w1** | — |

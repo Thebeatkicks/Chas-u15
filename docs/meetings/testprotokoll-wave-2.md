@@ -26,7 +26,7 @@ hälsningsmodalen först, full 3×3-matris körs efter #20.
 
 UI-notering:
 
-## Fastuo
+## Fausto
 
 | Fråga | Nivå | Svar OK? | Källor OK? | Kommentar |
 |---|---|---|---|---|

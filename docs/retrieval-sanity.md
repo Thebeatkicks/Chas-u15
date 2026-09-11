@@ -303,7 +303,7 @@ Query-time-normalisering eller sönderdelning av jämförande frågor (t.ex.
 "skillnaden mellan let och const" → två separata sökningar, en per begrepp,
 med union av träffarna) skulle sannolikt lösa #2 och liknande
 jämförelsefrågor mer robust än vidare chunkningsjustering. Det hör hemma i
-`lib/ai/retrieval.ts` (Fastuos yta, #19/#38) — rör INTE den filen härifrån
+`lib/ai/retrieval.ts` (Faustos yta, #19/#38) — rör INTE den filen härifrån
 per issue #37:s filägarskapsregel. Dokumenteras här som rekommendation till
 den sessionen istället.
 
@@ -319,7 +319,7 @@ inte produktionens faktiska hämtningsparametrar.
 # Slut-checkpoint wave 2 — issue #38 (2026-09-04)
 
 > Svarar på: stämmer sanity-baselinen fortfarande nu när både retrieval-
-> tuningen (#37) och Fastuos promptjusteringar (#39) ligger på `main`?
+> tuningen (#37) och Faustos promptjusteringar (#39) ligger på `main`?
 > Samma metod som baseline och #37s efter-mätning (samma 10 frågor, samma
 > ordning, topp-3, `similarity_threshold=0.0`, embed → `match_documents()`
 > RPC). Testscriptet (`scratchpad/retrieval-sanity.ts`, ej committat — se
@@ -360,7 +360,7 @@ anrop, inte en verklig förändring. Samma sex frågor godkända (1, 4, 5, 7, 8,
 förblir den regression #37s efter-mätning identifierade (målsidan trängs
 fortfarande ut av `Function.prototype.apply()`).
 
-**Slutsats:** Fastuos promptjusteringar (#39) påverkar — precis som
+**Slutsats:** Faustos promptjusteringar (#39) påverkar — precis som
 förväntat — inte retrieval-siffrorna. `match_documents()`-anropet i
 `lib/ai/retrieval.ts` sker före prompten någonsin används; en ändring i hur
 `system-prompts.ts` formulerar svaret runt de hämtade dokumenten kan inte
@@ -440,7 +440,7 @@ här.
 > **6/10 (baseline) → 6/10 (efter #37) → 10/10 (efter #52)** är poängen,
 > och alla tre tidigare mätningar står orörda.
 
-Fastuo (@Argentino010) implementerade query-time-normalisering i
+Fausto (@Argentino010) implementerade query-time-normalisering i
 `lib/ai/retrieval.ts` (issue #52, [PR #54](https://github.com/Thebeatkicks/Chas-u15/pull/54),
 mergad 2026-09-04) — precis den rekommendation som stod kvar oimplementerad
 i slut-checkpointens "Rekommendation till nästa steg" ovan. Två steg,
@@ -459,7 +459,7 @@ båda mätta separat på den här filens egen 10-frågorssvit
    baseline och #37s efter-mätning. Interleaving löser det sista gapet:
    **9/10 → 10/10**.
 
-Fastuos fullständiga före/efter-tabell (hans commit-message, PR #54) mot
+Faustos fullständiga före/efter-tabell (hans commit-message, PR #54) mot
 den här filens egen svit och kriterium:
 
 | Fråga | Före (#37) | Efter (#52) |
@@ -481,7 +481,7 @@ De fyra frågor som stod olösta genom både baseline och #37 (#2 let/const,
 **Ja** nu — precis de fyra rotorsaksanalysen ovan identifierade som
 marginalfall (0,0006–0,0098 similarity bakom rank 3), löst av frågans egen
 formulering snarare än ytterligare chunkningsjustering. Se PR #54 för
-Fastuos fulla resonemang, kostnadsavvägning (jämförelsefrågor kör tre
+Faustos fulla resonemang, kostnadsavvägning (jämförelsefrågor kör tre
 embeddings parallellt istället för en) och de alternativa strategier som
 mättes och förkastades (engelska nyckelord: ingen förbättring; sönderdelning
 utan interleaving: 5/10, bröt dessutom `==`/`===`).

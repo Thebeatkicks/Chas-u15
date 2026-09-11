@@ -18,7 +18,7 @@ Inget. Stretch #46 (TTS) togs inte.
 - Paket till #41 lades i PR:en (sveprincipen) — Henrik pingas med samma lista.
 
 ## Blockerar / blockeras av
-- Blockerar inte Fastuo/Yasmin. Paketen i #41 behöver Henriks OK vid merge.
+- Blockerar inte Fausto/Yasmin. Paketen i #41 behöver Henriks OK vid merge.
 
 ## AI-reflektion (obligatorisk, 2–3 meningar)
 Cursor kunde bygga tre stacked PR:ar snabbt, men det var lätt att släppa in extra UX från wave 1 i fel issue — den här waven tvingade en-PR-per-issue. Markdown-paketen var den enda grind jag inte äger; att pinga Henrik med exakt lista först och sedan lägga dem i PR:en undvek väntan utan att gömma beroendet. Största lärdomen: bevis i PR-bodyn (Enter faktiskt skickade, trasig localStorage kraschade inte) är mer värt än "det ser bra ut".

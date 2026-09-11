@@ -14,7 +14,7 @@ Ingen ny funktionskod — det här är polish före redovisningen på torsdag.
 Två uppgifter:
 
 1. Issue #68 (10 min): docs/retrieval-sanity.md säger fortfarande 6/10, men
-   sviten är 10/10 sedan Fastuos query-normalisering (#52, PR #54). Lägg till
+   sviten är 10/10 sedan Faustos query-normalisering (#52, PR #54). Lägg till
    ett daterat slutavsnitt: 6/10 baseline → 6/10 efter min chunkning → 10/10
    efter #52. Behåll historiken, resan 6→10 är bra material.
 
@@ -30,7 +30,7 @@ En PR per uppgift. Bocka av dig i #59 med en kommentar när du är klar.
 
 ---
 
-## Fastuo (Codex) — en uppgift, ~45 min
+## Fausto (Codex) — en uppgift, ~45 min
 
 ```
 Wave 3 i JS Sensei (github.com/Thebeatkicks/Chas-u15). Läs STATE.md först.
@@ -82,7 +82,7 @@ Demo-repetition inför torsdag. Manus: docs/demo-manus.md (v2 — läs din egen
 sektion före vi ses).
 
 Uppdelning: Henrik öppnar + arbetssättet + arkitektur, Yasmin RAG-kedjan,
-Fastuo prompts + modellval, Ernest kör tangentbordet under live-demon.
+Fausto prompts + modellval, Ernest kör tangentbordet under live-demon.
 Alla säger en mening var under "Vad var svårt".
 
 Två genomkörningar:

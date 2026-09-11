@@ -24,10 +24,10 @@ för #59.
 
 ---
 
-## Fastuo (Codex)
+## Fausto (Codex)
 
 Wave 3 i JS Sensei. Mitt spår:
-1. **#62** — min wave-2-handoff saknas (`docs/handoffs/wave-2-fastuo.md`).
+1. **#62** — min wave-2-handoff saknas (`docs/handoffs/wave-2-fausto.md`).
    AI-reflektionen är det viktiga: v4-lärdomen att förbudslistor gjorde felen
    *vanligare*, att mäta över upprepade körningar istället för en, och
    regex-falsklarmet i A/B-testet. Den går rakt in i README:ns reflektion.
@@ -67,6 +67,6 @@ Kod-session i JS Sensei. Mitt spår:
    källchip och verifiera att MDN-sidan öppnas.
 2. **#59** — kommentarsgranskning av repo-roten/konfig (litet).
 3. **#61** — README v3 + `docs/inlamning.md` (Canvas-checklista). Vänta med
-   reflektionsdelen tills Fastuos #62 landat.
+   reflektionsdelen tills Faustos #62 landat.
 
 Hård stopp: när #60:s körning är dokumenterad och #61:s PR är öppnad.

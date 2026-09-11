@@ -14,7 +14,7 @@
 
 ## Inte klart + varför
 
-- Verifiering mot Fastuos *riktiga* RAG-route (#19) när den mergas.
+- Verifiering mot Faustos *riktiga* RAG-route (#19) när den mergas.
   Ska kräva noll UI-kod. Görs då, rapporteras som kontraktsbugg vid avvikelse.
 
 ## Beslut jag tagit
@@ -27,7 +27,7 @@
 ## Blockerar / blockeras av
 
 - Andra kan nu chatta mot mocken i UI:t.
-- Jag väntar på Fastuos #19 för noll-ändringskollen i #21.
+- Jag väntar på Faustos #19 för noll-ändringskollen i #21.
 
 ## AI-reflektion (wave 0 och 1)
 
@@ -42,4 +42,4 @@ istället för `"beginner"`.
 ## Main orchestrator bör först
 
 Merga UI-stacken mot main så smoke-test (#23) kan köras i webbläsaren,
-sedan be mig verifiera noll-ändring när Fastuos riktiga route landar.
+sedan be mig verifiera noll-ändring när Faustos riktiga route landar.

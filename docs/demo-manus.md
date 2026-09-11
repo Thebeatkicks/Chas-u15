@@ -16,7 +16,7 @@ följer allas spår, så ingen behöver prata utanför sitt eget område:
 |---|---|
 | **Henrik** | Öppnar (produktidé) och stänger (svårigheter-summering + tid). Håller klockan. |
 | **Yasmin** | RAG-kedjan: data, embeddings, retrieval. |
-| **Fastuo** | AI-tekniken: system-prompts per nivå, "förklara inte lös". |
+| **Fausto** | AI-tekniken: system-prompts per nivå, "förklara inte lös". |
 | **Ernest** | Kör tangentbord/mus under live-demot (byggde UI:t, kan flödet utantill). |
 
 Alla fyra pratar under "Vad var svårt" (en mening var, se §5) — det är den
@@ -54,8 +54,8 @@ demo-risk, inte bara en bugg:
 > av AI" — men vi driver det längre än kravet: fyra personer, tre olika
 > AI-verktyg, ett gemensamt regelverk.
 
-**Tre verktyg parallellt:** Claude Code (Henrik, Yasmin och Fastuo), Codex
-(Fastuo i wave 0) och Cursor (Ernest). Fastuo bytte från Codex till Claude Code
+**Tre verktyg parallellt:** Claude Code (Henrik, Yasmin och Fausto), Codex
+(Fausto i wave 0) och Cursor (Ernest). Fausto bytte från Codex till Claude Code
 mellan wave 0 och 1 — och samma lärdom höll över båda: modellen är svag när den
 svarar ur minnet, stark när den läser det faktiska artefakten.
 
@@ -123,7 +123,7 @@ Datakällan är MDN:s officiella innehållsrepo, inte skrapat material.
   *Poängen att göra på scenen: vi visste att det var 6/10 för att vi hade mätt.
   Utan mätning hade vi trott att sökningen fungerade.*
 
-## 4. Nivåanpassning och "förklara inte lös" (4:15–5:45, Fastuo)
+## 4. Nivåanpassning och "förklara inte lös" (4:15–5:45, Fausto)
 
 - En egen system-prompt per nivå, inte bara "svara enklare" — nybörjare får en
   liknelse och 150 ord, utvecklare får mekanism och fallgropar

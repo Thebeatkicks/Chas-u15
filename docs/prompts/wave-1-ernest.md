@@ -26,7 +26,7 @@ svaret med `level`, så allt jag bygger går att verifiera direkt.
    nätverksfliken.
 3. **#21** Riktiga källchips + status: klickbara MDN-länkar (ny flik),
    `status === 'streaming'` → skrivindikator + låst knapp, felvisning
-   (`error` + `errorText`). När Fastuos riktiga route mergas: verifiera att
+   (`error` + `errorText`). När Faustos riktiga route mergas: verifiera att
    NOLL kodändring krävdes — avvikelse rapporteras som kontraktsbugg.
 4. **#22** Tomt läge: kanoniska copyn, tre förslagschips som fyller inputen,
    MDN-footer, försvinner vid första meddelandet.

@@ -24,14 +24,14 @@ Läs först: `docs/PLAN.md` (hela planen), `STATE.md`, `docs/handoffs/TEMPLATE-s
 - **#12** Nivåväljare (nybörjare/student/utvecklare) som skickar `level` i
   requesten enligt `docs/api-contract.md`
 
-**Mitt filägarskap:** `app/**` utom `app/api/**` (Fastuos), samt `components/**`
+**Mitt filägarskap:** `app/**` utom `app/api/**` (Faustos), samt `components/**`
 och `docs/ui-sketch.md`. Jag rör inte API-routes, scripts eller repo-roten.
 
 **Ordning och beroenden:**
 1. Börja med **#10** — kräver varken repo eller kod. Dela skissen i gruppkanalen.
-2. **#11** när Henriks scaffold (#1) och Fastuos mock-route (#8) är mergade.
+2. **#11** när Henriks scaffold (#1) och Faustos mock-route (#8) är mergade.
    Kontraktet i `docs/api-contract.md` (#7) är min sanning för request/svar —
-   godkänn det i Fastuos PR innan jag bygger.
+   godkänn det i Faustos PR innan jag bygger.
 3. **#12** direkt efter #11 (samma filer, kan vara samma branch om det går fort).
 
 **Nycklar:** Wave 0-UI:t behöver inga API-nycklar (mocken är lokal). Om

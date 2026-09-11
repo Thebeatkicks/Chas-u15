@@ -21,7 +21,7 @@ Läs först: `docs/PLAN.md` (hela planen), `STATE.md`, `docs/handoffs/TEMPLATE-s
 - **#6** Embedding-spike mot OpenRouter (5 sidor in i databasen, similarity-test)
 
 **Mitt filägarskap:** Supabase-projektet, `docs/db-schema.md`, `docs/mdn-selection.md`, `scripts/**`.
-Jag rör inget under `app/` eller `components/` — det ägs av Fastuo och Ernest.
+Jag rör inget under `app/` eller `components/` — det ägs av Fausto och Ernest.
 
 **Ordning och beroenden:**
 1. Börja med **#5** (kräver inte repot — Henriks scaffold #1 måste mergas innan vi kan pusha kod).

@@ -117,4 +117,4 @@ Startsidan renderades även visuellt i webbläsaren mot `localhost:3000`
 
 Issue #2 — koppla repot till Vercel och få en grön deploy av samma scaffold,
 sedan #3 (wave 1-issues + bräda); parallellt är repot öppet för kloning för
-Yasmin, Fastuo och Ernest.
+Yasmin, Fausto och Ernest.

@@ -46,7 +46,7 @@ i waven). PR #29 (wave-0-handoffen) är också fortfarande öppen och omergad.
   gruppen som ett standardmönster om ingen har `gh` installerat.
 
 ## Blockerar / blockeras av
-- **#19 (Fastuo, riktig RAG-route)** kan nu bygga mot en fylld `documents`-
+- **#19 (Fausto, riktig RAG-route)** kan nu bygga mot en fylld `documents`-
   tabell (1738 riktiga chunks, inte testdata) — men bör känna till att
   retrieval-baseline bara är 6/10 i topp-3 just nu (se `docs/retrieval-sanity.md`).
   Det är förväntat och wave 2:s jobb, inte en bugg i #19:s route, men värt att

@@ -5,7 +5,7 @@ En lärarassistent för JavaScript som **förklarar, inte löser**. Välj nivå
 grundat i MDN:s dokumentation — med källhänvisningar.
 
 > Chas u15 — Gruppuppgift: AI-baserad webbapplikation.
-> Team: Henrik (orchestrator/infra) · Yasmin (data/RAG) · Fastuo (AI/backend) · Ernest (frontend/UX)
+> Team: Henrik (orchestrator/infra) · Yasmin (data/RAG) · Fausto (AI/backend) · Ernest (frontend/UX)
 
 ## Teknik
 
@@ -33,7 +33,7 @@ Planen, arkitekturen och alla beslut finns i [docs/PLAN.md](docs/PLAN.md).
 Läget just nu indexeras i [STATE.md](STATE.md).
 
 Vi jobbade i en **orchestrator/session-modell** med tre AI-verktyg parallellt
-(Claude Code, Codex och Cursor — Fastuo bytte från Codex till Claude Code
+(Claude Code, Codex och Cursor — Fausto bytte från Codex till Claude Code
 mellan wave 0 och 1). Henrik som main
 orchestrator skickade **startprompts** i början av varje wave; var och en
 startade en **personlig orchestrator** i sitt eget verktyg, som i sin tur gav
@@ -61,7 +61,7 @@ waven serialiserade arbetet
 > alla fem iterationer (inklusive v4:s misslyckande med förbudslistor),
 > modell-A/B-slutsatsen och integrationsbuggen med stackade PR:er. De fyra
 > personliga AI-reflektionerna från wave 0–1 står kvar under "Vad var svårt?"
-> — wave 2:s reflektioner (Yasmin, Ernest, Fastuo) finns i
+> — wave 2:s reflektioner (Yasmin, Ernest, Fausto) finns i
 > [docs/handoffs/](docs/handoffs/) och vävs in i slutversionen.
 
 ### Vilken ny AI-teknik/bibliotek identifierade vi och hur tillämpade vi det?
@@ -249,7 +249,7 @@ API-kontraktets §8 (`useChat` + `DefaultChatTransport` + `parts`) mer värt
 byggdes strikt mot kontraktet passade mocken direkt, och den enda fällan var
 att råka skicka `"nybörjare"` i stället för `"beginner"`.
 
-**Fastuo**: Bytte verktyg från Codex till Claude Code mellan wave 0 och 1,
+**Fausto**: Bytte verktyg från Codex till Claude Code mellan wave 0 och 1,
 och lärdomen höll över båda: AI:n är svag när den svarar ur minnet — den
 ville skriva API-kontraktet mot AI SDK v5, som var aktuell i dess
 träningsdata, vilket hade spräckt Ernests `useChat` vid första

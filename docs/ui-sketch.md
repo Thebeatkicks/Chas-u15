@@ -67,7 +67,7 @@ En kolumn, maxbredd ~42rem, centrerad. Det räcker för MVP-resan:
 
 ## Vad #11 och #12 ska bygga (inte den här issuen)
 
-- **#11** — de tre zonerna, `useChat` mot `/api/chat`, streamad text, källchips under svar. Följ Fastuos kontrakt i `docs/api-contract.md` när den finns.
+- **#11** — de tre zonerna, `useChat` mot `/api/chat`, streamad text, källchips under svar. Följ Faustos kontrakt i `docs/api-contract.md` när den finns.
 - **#12** — nivåväljaren skickar `level` i request-body. Default: `nybörjare` (första segmentet).
 
 ## Inte i den här skissen

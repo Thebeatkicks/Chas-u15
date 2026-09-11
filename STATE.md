@@ -20,7 +20,7 @@
 - **Integrationsfix**: `COPY.inputPlaceholder` tappades vid squash-merge av
   stackade PR:er → typecheck bruten ~10 min (`7f8bb4a`). Lärdom: stackade
   PR:er ska byggas mot main efter varje merge, inte bara mot sin egen bas.
-- Rester: Fastuos wave-2-handoff (→ #62), stretch #46 (→ wave 3).
+- Rester: Faustos wave-2-handoff (→ #62), stretch #46 (→ wave 3).
 
 ## Lifecycle per packet (wave 3)
 
@@ -29,7 +29,7 @@
 | #59 kodkommentarer | ALLA | **proven** | Alla fyra: PR #65, #70, #71, #72. Betygskravet uppfyllt |
 | #60 smoke 3×3 | Henrik | **proven** | `docs/smoke-runs/wave-3.md`, godkänd med anmärkning → #64 |
 | #61 README v3 + inlämning | Henrik | **proven** | PR #66 mergad + docs/inlamning.md |
-| #62 wave-2-handoff | Fastuo | **proven** | PR #67 — alla fyra wave 2-handoffs nu inne |
+| #62 wave-2-handoff | Fausto | **proven** | PR #67 — alla fyra wave 2-handoffs nu inne |
 | #63 demo-repetition ×2 | ALLA | planned | tidtagning, inkognito, live |
 | #64 React-krasch vid streaming | orchestrator | **proven** | PR #69 (`9617cde`): renderloop, ej race. Verifierad lokalt (7 trådar) + prod (3 trådar), ren konsol |
 | #68 sanity-doc | Yasmin | **proven** | PR #70 — resan 6→6→10 dokumenterad |

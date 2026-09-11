@@ -37,9 +37,9 @@ minnet av vad den skulle innehålla:
 - [ ] Wave 2:s resultat är invävda: retrieval 6/10 → 10/10, prompt-designens
       fem iterationer (inkl. v4:s förbudslistor-lärdom), modell-A/B,
       integrationsbuggen med stackade PR:er — **klart**, se README v3.
-- [ ] Wave 2:s personliga AI-reflektioner (Yasmin, Ernest, Fastuo) är
+- [ ] Wave 2:s personliga AI-reflektioner (Yasmin, Ernest, Fausto) är
       tillagda — **väntar på [#62](https://github.com/Thebeatkicks/Chas-u15/issues/62)**
-      (Fastuos wave-2-handoff). Måste vara klart innan denna rad kan kryssas.
+      (Faustos wave-2-handoff). Måste vara klart innan denna rad kan kryssas.
 - [ ] Licens/attribution för MDN-innehållet (CC-BY-SA) syns i README
 
 ## 3. Alla svarar på de tre frågorna
@@ -55,7 +55,7 @@ muntligt/individuellt** om det efterfrågas — kryssa din egen rad:
 
 - [ ] Henrik har läst README:s tre svar och kan stå för dem
 - [ ] Yasmin har läst README:s tre svar och kan stå för dem
-- [ ] Fastuo har läst README:s tre svar och kan stå för dem
+- [ ] Fausto har läst README:s tre svar och kan stå för dem
 - [ ] Ernest har läst README:s tre svar och kan stå för dem
 
 ## 4. Kodgranskningen (separat skriftlig inlämning, #59)
@@ -66,7 +66,7 @@ som README-inlämningen ovan, men klar i samma buffertfönster:
 
 - [ ] Henrik: repo-roten, konfig — [PR #65](https://github.com/Thebeatkicks/Chas-u15/pull/65)
 - [ ] Yasmin: `scripts/**`
-- [ ] Fastuo: `lib/ai/**`, `app/api/chat/route.ts`
+- [ ] Fausto: `lib/ai/**`, `app/api/chat/route.ts`
 - [ ] Ernest: `components/**`, `app/**`
 - [ ] Alla fyra PR:er mergade till `main` innan slutinlämning
 

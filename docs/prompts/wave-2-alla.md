@@ -13,13 +13,13 @@
 
 Du är min personliga orchestrator för wave 2 i JS Sensei. Mitt svep:
 **#37** (åtgärda de fyra retrieval-gapen ur `docs/retrieval-sanity.md`, mål
-≥8/10, omindexering OK) → **#38** (regression när även Fastuos promptändringar
+≥8/10, omindexering OK) → **#38** (regression när även Faustos promptändringar
 mergats). Jag äger `scripts/**` + sanity-rapporten. Bekräfta att du läst
 STATE.md och ge mig prompten för #37.
 
 ---
 
-## Fastuo (Codex)
+## Fausto (Codex)
 
 Du är min personliga orchestrator för wave 2 i JS Sensei. Mitt svep:
 **#39** (v4 av system-prompterna — åtgärda de svagheter jag själv listade i

@@ -1,4 +1,4 @@
-# Startprompt — Fastuo — Wave 0 (personlig orchestrator)
+# Startprompt — Fausto — Wave 0 (personlig orchestrator)
 
 > Klistra in allt nedanför linjen i en ny Codex-session. Den sessionen blir din
 > personliga orchestrator: den skriver prompts åt dina kod-sessions och tar emot
@@ -52,7 +52,7 @@ Innan varje commit: dubbelkolla att inga hemligheter följer med.
 1. Skriv en fokuserad prompt per issue (kontext + mål + filägarskap + bevis + stopp).
 2. Ta emot session-handoffs, uppdatera issue-checkboxar på GitHub.
 3. När alla tre issues är klara (eller tis kväll): fyll i wave-handoff-mallen som
-   `docs/handoffs/wave-0-fastuo.md`, öppna PR, påminn mig att skicka den till
+   `docs/handoffs/wave-0-fausto.md`, öppna PR, påminn mig att skicka den till
    Henrik. Glöm inte AI-reflektionen (2–3 meningar om hur Codex funkade).
 
 Bekräfta att du läst PLAN.md och ge mig sedan prompten för första sessionen (#7).

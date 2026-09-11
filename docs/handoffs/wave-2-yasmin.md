@@ -10,7 +10,7 @@
 | Issue | PR | Bevis (hur testat) |
 |---|---|---|
 | #37 Åtgärda retrieval-gap, mål ≥8/10 | #51 (mergad) | Hybrid rubrik-chunkning (`##` primär, `###` fallback, fast delning sista utväg) + sidtitel i embedding-text (inte lagrad `content`) + boilerplate-filter. Full ombindexering, 528 sidor → 3547 chunks. Daterad efter-mätning: **6/10** (mål ej nått — se "Inte klart"). Ett av fyra namngivna gap (#7, hoisting) helt fixat; tre (#2/#3/#6) gick från tydliga förluster till near-misses (<0,01 similarity från topp-3); en ny liten regression (#9, "this"). |
-| #38 Regression efter #37 + Fastuos #39 | #53 (öppen, review begärd av Fausto) | Ny daterad körning, samma 10 frågor/metod, efter att både #37 och #39 landat på `main`. Resultat identiskt med #37s efter-mätning (6/10, avvikelser bara på fjärde decimalen — flyttalsbrus). Bekräftar att promptändringar inte påverkar retrieval, som väntat (`match_documents()` körs innan prompten används). |
+| #38 Regression efter #37 + Faustos #39 | #53 (öppen, review begärd av Fausto) | Ny daterad körning, samma 10 frågor/metod, efter att både #37 och #39 landat på `main`. Resultat identiskt med #37s efter-mätning (6/10, avvikelser bara på fjärde decimalen — flyttalsbrus). Bekräftar att promptändringar inte påverkar retrieval, som väntat (`match_documents()` körs innan prompten används). |
 
 ## Inte klart + varför
 **#37s mål (≥8/10) nåddes inte** — landade på 6/10. De tre kvarvarande gapen
@@ -22,9 +22,9 @@ distraktorsidor än delmängden räknade med. Jag frågade dig om vi skulle
 investera i ytterligare en tuning-runda; du valde att **acceptera 6/10 och gå
 vidare**, eftersom kvarvarande gap enligt sessionens egen analys sitter i
 embeddingrymden på ett sätt corpus-side chunkning inte ensamt kan lösa —
-query-time-ändringar i `lib/ai/retrieval.ts` (Fastuos yta) är den
+query-time-ändringar i `lib/ai/retrieval.ts` (Faustos yta) är den
 sannolikt effektiva fixen. Det beslutet blev en frivillig uppföljningsissue,
-**#52** (Fastuo).
+**#52** (Fausto).
 
 ## Beslut jag tagit
 - **Accepterade 6/10 som slutresultat för #37** (ditt beslut, mitt förslag)
@@ -43,7 +43,7 @@ sannolikt effektiva fixen. Det beslutet blev en frivillig uppföljningsissue,
   retrieval.ts`-ägaren istf att röra filen själv. Blev #52.
 
 ## Blockerar / blockeras av
-- **#52** (Fastuo, frivillig) är den enda öppna tråden ur mitt arbete denna
+- **#52** (Fausto, frivillig) är den enda öppna tråden ur mitt arbete denna
   wave — inte min issue, ingen brådska.
 - PR #53 väntar på Faustos review (begärd via GitHub `requested_reviewers`).
 - Inget blockerar mig.
