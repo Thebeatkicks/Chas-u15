@@ -32,8 +32,9 @@ pnpm dev
 Planen, arkitekturen och alla beslut finns i [docs/PLAN.md](docs/PLAN.md).
 Läget just nu indexeras i [STATE.md](STATE.md).
 
-Vi jobbade i en **orchestrator/session-modell** med fyra AI-verktyg parallellt
-— ett per person (Claude Code ×2, Codex, Cursor). Henrik som main
+Vi jobbade i en **orchestrator/session-modell** med tre AI-verktyg parallellt
+(Claude Code, Codex och Cursor — Fastuo bytte från Codex till Claude Code
+mellan wave 0 och 1). Henrik som main
 orchestrator skickade **startprompts** i början av varje wave; var och en
 startade en **personlig orchestrator** i sitt eget verktyg, som i sin tur gav
 prompts för en session per issue. En avslutad session lämnade en
@@ -60,9 +61,8 @@ waven serialiserade arbetet
 > alla fem iterationer (inklusive v4:s misslyckande med förbudslistor),
 > modell-A/B-slutsatsen och integrationsbuggen med stackade PR:er. De fyra
 > personliga AI-reflektionerna från wave 0–1 står kvar under "Vad var svårt?"
-> — wave 2:s reflektioner (Yasmin, Ernest, Fastuo) läggs till när
-> [#62](https://github.com/Thebeatkicks/Chas-u15/issues/62) (Fastuos
-> wave-2-handoff) har landat, så alla tre kommer in i samma svep.
+> — wave 2:s reflektioner (Yasmin, Ernest, Fastuo) finns i
+> [docs/handoffs/](docs/handoffs/) och vävs in i slutversionen.
 
 ### Vilken ny AI-teknik/bibliotek identifierade vi och hur tillämpade vi det?
 
@@ -97,14 +97,14 @@ mock-route implementerade kontraktet i wave 0 så att UI:t kunde byggas mot ett
 riktigt streamande API innan RAG-routen fanns. Poängen: frontenden ska inte
 behöva ändras när mocken byts mot riktig RAG.
 
-Vi använde också **AI som utvecklingsverktyg** genom hela projektet — fyra
-verktyg parallellt (Claude Code ×2, Codex, Cursor) i en orchestrator/session-
+Vi använde också **AI som utvecklingsverktyg** genom hela projektet — tre
+verktyg parallellt (Claude Code, Codex och Cursor) i en orchestrator/session-
 modell där varje avslutad session lämnar en skriftlig handoff med konkret bevis
 ([docs/handoffs/](docs/handoffs/)).
 
-Den skarpa ingestion-körningen skrev **1 738 chunks** ur alla 528 sidor till
+Den första ingestion-körningen (wave 1, fast chunkstorlek) skrev **1 738 chunks** ur alla 528 sidor till
 `documents` (radantalet verifierat oberoende via en egen REST-`HEAD`-fråga,
-inte bara scriptets egen logg). Retrieval-baseline låg på **6/10** rätt sida
+inte bara scriptets egen logg). Efter wave 2:s hybrid-chunkning är siffran **3 547 chunks**. Retrieval-baseline låg på **6/10** rätt sida
 i topp-3 över tio testfrågor ([docs/retrieval-sanity.md](docs/retrieval-sanity.md))
 — de fyra missarna är namngivna och verifierat att vara renodlade
 retrieval-gap, inte täckningsluckor, och är wave 2:s startlista (#37).

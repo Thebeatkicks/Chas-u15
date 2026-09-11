@@ -51,11 +51,15 @@ demo-risk, inte bara en bugg:
 ## 1b. Arbetssättet (0:30–2:00, Henrik)
 
 > Gruppens uttalade prioritet #1. Detta är också G-kravet "utvecklad med stöd
-> av AI" — men vi driver det längre än kravet: fyra personer, fyra olika
+> av AI" — men vi driver det längre än kravet: fyra personer, tre olika
 > AI-verktyg, ett gemensamt regelverk.
 
-**Fyra verktyg parallellt:** Claude Code ×2 (Henrik, Yasmin), Codex (Fastuo),
-Cursor (Ernest). **Orchestrator-modell:** en main orchestrator planerar och
+**Tre verktyg parallellt:** Claude Code (Henrik, Yasmin och Fastuo), Codex
+(Fastuo i wave 0) och Cursor (Ernest). Fastuo bytte från Codex till Claude Code
+mellan wave 0 och 1 — och samma lärdom höll över båda: modellen är svag när den
+svarar ur minnet, stark när den läser det faktiska artefakten.
+
+**Orchestrator-modell:** en main orchestrator planerar och
 granskar, varje person har en egen orchestrator-session som delar ut en
 kod-session per issue. Varje avslutad session lämnar en **skriftlig handoff
 med konkret bevis** — inte "det funkar", utan kommandot och utdatan som visar
